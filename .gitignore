@@ -1,0 +1,35 @@
+# Dependencias
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dev-only files
+ANIMACIONES.md
+CONTEXTO_PROYECTO.md
+PROMPT-CLAUDE-CODE.md
+.agents/
+skills-lock.json
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/settings.json
+.idea/
+*.suo
+*.user

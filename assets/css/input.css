@@ -1,0 +1,113 @@
+/* ── Self-hosted fonts ── */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700 800;
+  font-display: swap;
+  src: url('../fonts/montserrat-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700 800;
+  font-display: swap;
+  src: url('../fonts/montserrat-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base ── */
+body {
+  background-color: #141313;
+  color: #e5e2e1;
+  font-family: 'Inter', sans-serif;
+}
+
+.font-h1,
+.font-h2,
+.font-h3 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ── Language Toggle ── */
+.lang-es {
+  display: none;
+}
+
+html[data-lang="es"] .lang-en {
+  display: none;
+}
+
+html[data-lang="es"] .lang-es {
+  display: block;
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  background-color: #e0e0e0;
+  color: #0a0a0a;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  border: 1px solid #b0b0b0;
+  color: #b0b0b0;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  border-color: #e0e0e0;
+  color: #e0e0e0;
+  background-color: rgba(176, 176, 176, 0.1);
+}
+
+/* ── Cards ── */
+.structural-card {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  transition: border-color 0.3s ease;
+}
+
+.structural-card:hover {
+  border-color: #b0b0b0;
+}
+
+/* ── WhatsApp FAB ── */
+#whatsapp-options {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ── Responsive ── */
+@media (max-width: 767px) {
+  .text-h1 { font-size: 28px; line-height: 1.15; }
+  .text-h2 { font-size: 22px; line-height: 1.2; }
+  .text-h3 { font-size: 18px; line-height: 1.2; }
+  .text-body-lg { font-size: 15px; line-height: 1.6; }
+  .py-section-padding { padding-top: 56px; padding-bottom: 56px; }
+  .px-margin-edge { padding-left: 20px; padding-right: 20px; }
+}

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html class="dark" data-lang="en" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="description"
+    content="Zycor Construction LLC — Expert Framing, Interior & Exterior Renovation and Roofing in New Jersey. Licensed & Insured." />
+  <title>ZYCOR CONSTRUCTION | Framing, Roofing & Renovation in New Jersey</title>
+
+  <link rel="stylesheet" href="assets/css/input.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://zycorconstruction.com/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ZYCOR CONSTRUCTION | Framing, Roofing & Renovation in New Jersey" />
+  <meta property="og:description"
+    content="Expert Framing, Interior & Exterior Renovation and Roofing in New Jersey. Licensed & Insured." />
+  <meta property="og:url" content="https://zycorconstruction.com/" />
+  <meta property="og:image" content="https://zycorconstruction.com/assets/images/og-image.jpg" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="es_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ZYCOR CONSTRUCTION | Framing, Roofing & Renovation in NJ" />
+  <meta name="twitter:description"
+    content="Expert Framing, Interior & Exterior Renovation and Roofing in New Jersey." />
+  <meta name="twitter:image" content="https://zycorconstruction.com/assets/images/og-image.jpg" />
+</head>
+
+<body class="bg-background text-on-surface selection:bg-primary-fixed-dim selection:text-primary-container">
+
+  <!-- ══ NAVBAR ══ -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-surface-variant">
+    <nav class="flex justify-between items-center w-full px-margin-edge py-4 max-w-container-max mx-auto">
+      <a href="#">
+        <div class="flex items-center gap-4">
+          <img alt="ZC Logo" class="h-12 md:h-14 w-auto" src="assets/images/services/Logo.webp" />
+      </a>
+      <a href="#hero">
+        <span
+          class="hidden sm:inline text-body-lg font-h1 font-bold text-on-surface dark:text-primary-fixed tracking-tighter uppercase">ZYCOR
+          CONSTRUCTION
+        </span>
+      </a>
+
+      </div>
+      <div class="hidden md:flex items-center gap-8 font-label-caps text-label-caps">
+        <a class="text-outline dark:text-outline-variant hover:text-primary transition-colors duration-300"
+          href="#hero">
+          <span class="lang-en">Start</span>
+          <span class="lang-es">Inicio</span>
+        </a>
+        <a class="text-outline dark:text-outline-variant hover:text-primary transition-colors duration-300"
+          href="#services">
+          <span class="lang-en">Services</span>
+          <span class="lang-es">Servicios</span>
+        </a>
+        <a class="text-outline dark:text-outline-variant hover:text-primary transition-colors duration-300"
+          href="#insurance">
+          <span class="lang-en">Insurance & Warranty</span>
+          <span class="lang-es">Seguro y Garantía</span>
+        </a>
+        <a class="text-outline dark:text-outline-variant hover:text-primary transition-colors duration-300"
+          href="#contact">
+          <span class="lang-en">Contact</span>
+          <span class="lang-es">Contacto</span>
+        </a>
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="flex items-center border border-outline-variant p-1 rounded-sm font-lang-toggle text-lang-toggle">
+          <button class="px-2 py-1 transition-all" id="toggle-en">
+            <span class="text-on-surface opacity-100 border-b-2 border-primary-fixed pb-0.5" id="en-text">EN</span>
+          </button>
+          <span class="text-outline mx-1">|</span>
+          <button class="px-2 py-1 transition-all" id="toggle-es">
+            <span class="text-outline opacity-50" id="es-text">ES</span>
+          </button>
+        </div>
+        <a class="hidden lg:block bg-primary text-on-primary font-label-caps text-label-caps px-6 py-3 rounded-sm scale-95 active:scale-90 transition-all font-bold"
+          href="#contact">
+          <span class="lang-en">GET QUOTE</span>
+          <span class="lang-es">COTIZAR</span>
+        </a>
+        <button class="md:hidden flex flex-col gap-1.5 p-2" id="menu-toggle" aria-label="Open menu">
+          <span class="block w-6 h-0.5 bg-on-surface transition-all duration-300 origin-center" id="bar-1"></span>
+          <span class="block w-6 h-0.5 bg-on-surface transition-all duration-300" id="bar-2"></span>
+          <span class="block w-6 h-0.5 bg-on-surface transition-all duration-300 origin-center" id="bar-3"></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ══ MOBILE MENU ══ -->
+  <div class="fixed inset-0 z-40 bg-background flex flex-col items-center justify-center gap-12 md:hidden"
+    id="mobile-menu" style="opacity:0; pointer-events:none; transition: opacity 0.3s ease;">
+    <nav class="flex flex-col items-center gap-8">
+      <a class="font-h2 text-h2 text-outline hover:text-primary transition-colors uppercase tracking-widest"
+        href="#hero">
+        <span class="lang-en">Start</span>
+        <span class="lang-es">Inicio</span>
+      </a>
+      <a class="font-h2 text-h2 text-outline hover:text-primary transition-colors uppercase tracking-widest"
+        href="#services">
+        <span class="lang-en">Services</span>
+        <span class="lang-es">Servicios</span>
+      </a>
+      <a class="font-h2 text-h2 text-outline hover:text-primary transition-colors uppercase tracking-widest"
+        href="#insurance">
+        <span class="lang-en">Insurance</span>
+        <span class="lang-es">Seguro</span>
+      </a>
+      <a class="font-h2 text-h2 text-outline hover:text-primary transition-colors uppercase tracking-widest"
+        href="#contact">
+        <span class="lang-en">Contact</span>
+        <span class="lang-es">Contacto</span>
+      </a>
+    </nav>
+    <a class="btn-primary font-label-caps text-label-caps px-10 py-5 rounded-sm font-bold uppercase tracking-widest"
+      href="#contact">
+      <span class="lang-en">GET A FREE QUOTE</span>
+      <span class="lang-es">OBTÉN UNA COTIZACIÓN</span>
+    </a>
+  </div>
+
+  <main class="pt-20">
+
+    <!-- ══ HERO ══ -->
+    <section id="hero" class="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-margin-edge">
+      <div id="hero-bg"
+        class="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-surface-container-high via-background to-background opacity-60">
+      </div>
+      <div class="relative z-10 text-center max-w-4xl">
+        <img id="hero-logo" alt="ZC Construction Emblem"
+          class="w-72 sm:w-80 md:w-96 lg:w-[28rem] mx-auto mb-4 md:mb-8 opacity-90 drop-shadow-[0_0_30px_rgba(201,198,197,0.2)]"
+          src="assets/images/services/Logo.webp" />
+        <h1 id="hero-title" class="font-h1 text-h1 text-on-background mb-6 tracking-tighter uppercase">
+          <span class="lang-en">We Build & Protect Your Home</span>
+          <span class="lang-es">Construimos y Protegemos tu Hogar</span>
+        </h1>
+        <p id="hero-subtitle" class="font-body-lg text-body-lg text-outline-variant max-w-2xl mx-auto mb-10">
+          <span class="lang-en">Quality, precision, and results that last. Schedule your free inspection today and get a
+            clear, no-obligation estimate. Contact us now and secure your spot on our schedule.</span>
+          <span class="lang-es">Calidad, precisión y resultados duraderos. Agenda tu inspección gratuita hoy y obtén un
+            presupuesto claro sin compromiso. Contáctanos y asegura tu lugar en nuestra agenda.</span>
+        </p>
+        <div id="hero-ctas" class="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <a class="btn-primary font-label-caps text-label-caps px-10 py-5 rounded-sm font-bold w-full sm:w-auto text-center tracking-widest"
+            href="#contact">
+            <span class="lang-en">GET A FREE QUOTE</span>
+            <span class="lang-es">OBTÉN UNA COTIZACIÓN GRATIS</span>
+          </a>
+          <a class="btn-secondary font-label-caps text-label-caps px-10 py-5 rounded-sm font-bold w-full sm:w-auto text-center tracking-widest"
+            href="#services">
+            <span class="lang-en">VIEW SERVICES</span>
+            <span class="lang-es">VER SERVICIOS</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SERVICES ══ -->
+    <section class="py-section-padding px-margin-edge max-w-container-max mx-auto" id="services">
+      <div class="mb-16">
+        <h2 class="font-h2 text-h2 text-on-background uppercase mb-2">
+          <span class="lang-en">Core Services</span>
+          <span class="lang-es">Servicios Principales</span>
+        </h2>
+        <div class="w-24 h-1 bg-primary"></div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+        <!-- Framing -->
+        <div class="md:col-span-8 group relative overflow-hidden structural-card rounded-lg h-[280px] md:h-[500px]">
+          <img alt="Framing Service"
+            class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+            src="assets/images/services/construccion-proceso.webp" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-5 md:p-10">
+            <span class="font-label-caps text-label-caps text-primary mb-4 block">01</span>
+            <h3 class="font-h3 text-h3 mb-4 uppercase">
+              <span class="lang-en">Framing</span>
+              <span class="lang-es">Estructuras</span>
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant max-w-md">
+              <span class="lang-en">We specialize in all types of framing — from structural repairs to full new
+                construction. We reinforce damaged structures, build porches, handle additions, and construct complete
+                framing systems.</span>
+              <span class="lang-es">Nos especializamos en todo tipo de encuadrado — desde reparaciones estructurales
+                hasta construcción nueva. Reforzamos estructuras, construimos porches, manejamos ampliaciones y sistemas
+                completos de enmarcado.</span>
+            </p>
+          </div>
+        </div>
+        <!-- Remodeling -->
+        <div class="md:col-span-4 group relative overflow-hidden structural-card rounded-lg h-[280px] md:h-[500px]">
+          <img alt="Interior & Exterior Renovation"
+            class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+            src="assets/images/services/durante.webp" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-5 md:p-10">
+            <span class="font-label-caps text-label-caps text-primary mb-4 block">02</span>
+            <h3 class="font-h3 text-h3 mb-4 uppercase">
+              <span class="lang-en">Interior & Exterior Renovation</span>
+              <span class="lang-es">Remodelación Interior y Exterior</span>
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">
+              <span class="lang-en">From kitchens and bathrooms to full exterior upgrades. Quality materials and
+                professional execution for long-lasting results.</span>
+              <span class="lang-es">Desde cocinas y baños hasta renovaciones exteriores completas. Materiales de calidad
+                y ejecución profesional para resultados duraderos.</span>
+            </p>
+          </div>
+        </div>
+        <!-- Roofing -->
+        <div class="md:col-span-12 group relative overflow-hidden structural-card rounded-lg h-[240px] md:h-[400px]">
+          <img alt="Roofing Service"
+            class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700"
+            src="assets/images/services/techado.webp" />
+          <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+          <div class="absolute inset-y-0 left-0 p-6 md:p-12 flex flex-col justify-center">
+            <span class="font-label-caps text-label-caps text-primary mb-4 block">03</span>
+            <h3 class="font-h3 text-h3 mb-4 uppercase">
+              <span class="lang-en">Roofing Solutions</span>
+              <span class="lang-es">Soluciones de Techado</span>
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant max-w-lg">
+              <span class="lang-en">Complete roofing services including repairs and full replacements. We inspect every
+                project to identify issues and recommend the best solution — backed by a warranty of up to 10
+                years.</span>
+              <span class="lang-es">Servicios completos de techado incluyendo reparaciones y reemplazos totales.
+                Inspeccionamos cada proyecto para identificar problemas y recomendar la mejor solución, respaldada por
+                una garantía de hasta 10 años.</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ INSURANCE & WARRANTY ══ -->
+    <section class="py-section-padding px-margin-edge bg-[#1a1a1a] border-y border-surface-variant" id="insurance">
+      <div class="max-w-container-max mx-auto">
+        <div class="mb-16">
+          <h2 class="font-h2 text-h2 text-on-background uppercase mb-2">
+            <span class="lang-en">Insurance &amp; Warranty</span>
+            <span class="lang-es">Seguro y Garantía</span>
+          </h2>
+          <div class="w-24 h-1 bg-primary"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+          <!-- Insurance Card -->
+          <div class="structural-card p-6 md:p-10 flex flex-col gap-6 group">
+            <div class="flex items-center justify-between">
+              <svg xmlns="http://www.w3.org/2000/svg" class="text-primary" width="48" height="48" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+              </svg>
+              <span class="font-label-caps text-[10px] bg-primary/10 text-primary border border-primary/20 px-3 py-1">
+                <span class="lang-en">Licensed &amp; Insured in New Jersey</span>
+                <span class="lang-es">Licencia y Seguro en New Jersey</span>
+              </span>
+            </div>
+            <div>
+              <h3 class="font-h3 text-h3 mb-4 uppercase">
+                <span class="lang-en">Fully Insured</span>
+                <span class="lang-es">Totalmente Asegurados</span>
+              </h3>
+              <p class="font-body-md text-on-surface-variant">
+                <span class="lang-en">Zycor Construction LLC carries full liability insurance and workers' compensation.
+                  Our clients operate with zero financial risk on every project.</span>
+                <span class="lang-es">Zycor Construction LLC cuenta con seguro de responsabilidad civil total y
+                  compensación laboral. Nuestros clientes operan con cero riesgo financiero en cada proyecto.</span>
+              </p>
+            </div>
+          </div>
+          <!-- Warranty Card -->
+          <div class="structural-card p-6 md:p-10 flex flex-col gap-6 group">
+            <div class="flex items-center justify-between">
+              <svg xmlns="http://www.w3.org/2000/svg" class="text-primary" width="48" height="48" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 010 1.186 3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043 3.745 3.745 0 01-1.186 0 3.745 3.745 0 01-3.068 1.593c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 01-1.186 0 3.745 3.745 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296 3.745 3.745 0 010-1.186 3.745 3.745 0 01-1.593-3.068c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 010-1.186 3.745 3.745 0 011.043-3.296 3.745 3.745 0 013.296-1.043 3.745 3.745 0 011.186 0 3.745 3.745 0 013.068-1.593z" />
+              </svg>
+              <span class="font-label-caps text-[10px] bg-primary/10 text-primary border border-primary/20 px-3 py-1">
+                <span class="lang-en">Quality Guaranteed</span>
+                <span class="lang-es">Calidad Garantizada</span>
+              </span>
+            </div>
+            <div>
+              <h3 class="font-h3 text-h3 mb-4 uppercase">
+                <span class="lang-en">Our Guarantee</span>
+                <span class="lang-es">Nuestra Garantía</span>
+              </h3>
+              <p class="font-body-md text-on-surface-variant">
+                <span class="lang-en">All workmanship is backed by our structural warranty of up to 10 years. If any
+                  aspect of our work does not meet our rigorous standards, we return to make it right.</span>
+                <span class="lang-es">Toda nuestra mano de obra está respaldada por nuestra garantía estructural de
+                  hasta 10 años. Si algún aspecto no cumple con nuestros estándares, regresamos para corregirlo.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CONTACT ══ -->
+    <section class="py-section-padding px-margin-edge max-w-container-max mx-auto" id="contact">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20">
+        <div>
+          <h2 class="font-h2 text-h2 text-on-background uppercase mb-6">
+            <span class="lang-en">Let's Build</span>
+            <span class="lang-es">Construyamos</span>
+          </h2>
+          <p class="font-body-lg text-body-lg text-outline-variant mb-12">
+            <span class="lang-en">Ready to start your next heavy-duty project? Fill out the form or schedule a meeting
+              directly with our technical team.</span>
+            <span class="lang-es">¿Listo para comenzar su próximo proyecto de alto rendimiento? Complete el formulario o
+              agende una cita directamente con nuestro equipo técnico.</span>
+          </p>
+          <div class="space-y-8">
+            <div class="flex items-center gap-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="text-primary shrink-0" width="28" height="28" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+              </svg>
+              <p class="font-body-md text-on-surface">1200 Industrial Way, Newark, New Jersey, USA</p>
+            </div>
+            <div class="flex items-center gap-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="text-primary shrink-0" width="28" height="28" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
+              <p class="font-body-md text-on-surface">projects@zcconstruction.com</p>
+            </div>
+            <div class="flex items-center gap-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="text-primary shrink-0" width="28" height="28" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+              </svg>
+              <p class="font-body-md text-on-surface">· +1 (504) 644-1551 &nbsp;<br>·&nbsp;+1 (609) 205-0407</p>
+            </div>
+          </div>
+          <div class="mt-12">
+            <a class="inline-flex items-center gap-4 btn-secondary font-label-caps text-label-caps px-8 py-4 rounded-sm font-bold uppercase tracking-widest group"
+              href="https://calendly.com" target="_blank">
+              <span class="lang-en">Schedule a Meeting</span>
+              <span class="lang-es">Agendar una Cita</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="group-hover:translate-x-1 transition-transform shrink-0"
+                width="20" height="20" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="bg-surface-container-low p-8 md:p-12 border border-surface-variant rounded-sm">
+          <form class="space-y-6" id="contact-form">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label for="field-name" class="font-label-caps text-label-caps text-outline uppercase">
+                  <span class="lang-en">Name</span>
+                  <span class="lang-es">Nombre</span>
+                </label>
+                <input id="field-name"
+                  class="w-full bg-surface-dim border border-surface-variant rounded-sm px-4 py-3 focus:border-primary outline-none text-on-surface font-body-md"
+                  type="text" name="name" required />
+              </div>
+              <div class="space-y-2">
+                <label for="field-email" class="font-label-caps text-label-caps text-outline uppercase">Email</label>
+                <input id="field-email"
+                  class="w-full bg-surface-dim border border-surface-variant rounded-sm px-4 py-3 focus:border-primary outline-none text-on-surface font-body-md"
+                  type="email" name="email" required />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label for="field-phone" class="font-label-caps text-label-caps text-outline uppercase">
+                  <span class="lang-en">Phone</span>
+                  <span class="lang-es">Teléfono</span>
+                </label>
+                <input id="field-phone"
+                  class="w-full bg-surface-dim border border-surface-variant rounded-sm px-4 py-3 focus:border-primary outline-none text-on-surface font-body-md"
+                  type="tel" name="phone" />
+              </div>
+              <div class="space-y-2">
+                <label for="field-service" class="font-label-caps text-label-caps text-outline uppercase">
+                  <span class="lang-en">Service</span>
+                  <span class="lang-es">Servicio</span>
+                </label>
+                <select id="field-service"
+                  class="w-full bg-surface-dim border border-surface-variant rounded-sm px-4 py-3 focus:border-primary outline-none text-on-surface font-body-md"
+                  name="service">
+                  <option value="framing">Framing</option>
+                  <option value="renovation">Interior &amp; Exterior Renovation</option>
+                  <option value="roofing">Roofing</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <label for="field-message" class="font-label-caps text-label-caps text-outline uppercase">
+                <span class="lang-en">Message</span>
+                <span class="lang-es">Mensaje</span>
+              </label>
+              <textarea id="field-message"
+                class="w-full bg-surface-dim border border-surface-variant rounded-sm px-4 py-3 focus:border-primary outline-none text-on-surface font-body-md"
+                rows="4" name="message"></textarea>
+            </div>
+            <button
+              class="w-full btn-primary font-label-caps text-label-caps py-5 rounded-sm font-bold uppercase tracking-widest"
+              type="submit">
+              <span class="lang-en">Send Inquiry</span>
+              <span class="lang-es">Enviar Consulta</span>
+            </button>
+            <div id="form-feedback" class="hidden text-center py-3 font-body-md rounded-sm mt-4"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="bg-surface-container-lowest border-t border-surface-variant">
+    <div
+      class="flex flex-col md:flex-row justify-between items-center w-full px-margin-edge py-gutter max-w-container-max mx-auto gap-8">
+      <div class="flex flex-col items-center md:items-start gap-4">
+        <div class="flex items-center gap-4">
+          <img alt="ZC Logo Footer" class="h-8 w-auto" src="assets/images/services/Logo.webp" />
+          <span class="font-h2 text-h3 text-on-surface tracking-tighter uppercase">ZYCOR CONSTRUCTION</span>
+        </div>
+        <p class="font-body-md text-body-md text-outline">New Jersey, USA</p>
+      </div>
+      <div class="flex gap-12 font-label-caps text-label-caps">
+        <div class="flex flex-col gap-2">
+          <span class="text-primary font-bold mb-2 uppercase">Company</span>
+          <a class="text-outline hover:text-secondary-fixed transition-opacity opacity-80 hover:opacity-100" href="#">
+            <span class="lang-en">Privacy Policy</span>
+            <span class="lang-es">Política de Privacidad</span>
+          </a>
+          <a class="text-outline hover:text-secondary-fixed transition-opacity opacity-80 hover:opacity-100" href="#">
+            <span class="lang-en">Terms of Service</span>
+            <span class="lang-es">Términos de Servicio</span>
+          </a>
+        </div>
+        <div class="flex flex-col gap-2">
+          <span class="text-primary font-bold mb-2 uppercase">Connect</span>
+          <div class="flex gap-4 items-center">
+            <a class="text-on-surface hover:text-primary transition-colors"
+              href="https://www.instagram.com/zycorconstruction?igsh=MXEzMTF1bWIzbzhlaA==&utm_source=ig_contact_invite"
+              target="_blank" rel="noopener noreferrer" title="Instagram">
+              <img src="assets/icons/instagram.svg" alt="Instagram"
+                class="w-6 h-6 invert opacity-70 hover:opacity-100 transition-opacity" />
+            </a>
+            <!-- <a class="text-on-surface hover:text-primary transition-colors" href="#" title="TikTok">
+              <img src="assets/icons/tiktok.svg" alt="TikTok"
+                class="w-6 h-6 invert opacity-70 hover:opacity-100 transition-opacity" />
+            </a> -->
+            <a class="text-on-surface hover:text-primary transition-colors"
+              href="https://www.facebook.com/share/14fTeMFDBA5/?mibextid=wwXIfr" target="_blank"
+              rel="noopener noreferrer" title="Facebook">
+              <img src="assets/icons/facebook.svg" alt="Facebook"
+                class="w-6 h-6 invert opacity-70 hover:opacity-100 transition-opacity" />
+            </a>
+            <!-- <a class="text-on-surface hover:text-primary transition-colors" href="#" title="YouTube">
+              <img src="assets/icons/youtube.svg" alt="YouTube"
+                class="w-6 h-6 invert opacity-70 hover:opacity-100 transition-opacity" />
+            </a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="max-w-container-max mx-auto px-margin-edge py-8 border-t border-surface-variant text-center md:text-left">
+      <p class="font-label-caps text-label-caps text-outline opacity-60">
+        © <span id="copyright-year">2026</span> Zycor Construction LLC — New Jersey.
+        <span class="lang-en">All rights reserved.</span>
+        <span class="lang-es">Todos los derechos reservados.</span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ══ WHATSAPP FAB ══ -->
+  <div class="fixed bottom-8 right-8 z-[100]" id="whatsapp-fab">
+    <div class="absolute bottom-full right-0 mb-4 flex flex-col gap-2 transition-all duration-300 origin-bottom-right"
+      id="whatsapp-options" style="opacity:0; transform:translateY(16px); pointer-events:none;">
+      <div class="bg-surface-container-high border border-surface-variant p-4 rounded-sm shadow-xl min-w-[240px]">
+        <p class="font-label-caps text-label-caps text-primary mb-3 border-b border-surface-variant pb-2 uppercase">
+          <span class="lang-en">Contact Us</span>
+          <span class="lang-es">Contáctanos</span>
+        </p>
+        <a class="flex items-center gap-3 p-3 hover:bg-surface-variant rounded transition-colors mb-2"
+          href="https://wa.me/15046441551" target="_blank">
+          <div class="w-8 h-8 bg-[#25D366] rounded-full flex items-center justify-center">
+            <svg fill="white" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z">
+              </path>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-bold uppercase">
+              <span class="lang-en">Owner — Zycor</span>
+              <span class="lang-es">Dueño — Zycor</span>
+            </span>
+            <span class="text-[10px] text-outline opacity-70">+1 (504) 644-1551</span>
+          </div>
+        </a>
+        <a class="flex items-center gap-3 p-3 hover:bg-surface-variant rounded transition-colors"
+          href="https://wa.me/16092050407" target="_blank">
+          <div class="w-8 h-8 bg-[#25D366] rounded-full flex items-center justify-center">
+            <svg fill="white" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z">
+              </path>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-bold uppercase">
+              <span class="lang-en">Partner — Zycor</span>
+              <span class="lang-es">Socio — Zycor</span>
+            </span>
+            <span class="text-[10px] text-outline opacity-70">+1 (609) 205-0407</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <button
+      class="bg-[#25D366] text-white p-4 rounded-full shadow-[0_10px_30px_rgba(37,211,102,0.4)] transition-all active:scale-95 flex items-center justify-center"
+      id="whatsapp-toggle">
+      <svg fill="currentColor" height="32" viewBox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z">
+        </path>
+      </svg>
+    </button>
+  </div>
+
+  <script type="module" src="assets/js/main.js"></script>
+
+</body>
+
+</html>
