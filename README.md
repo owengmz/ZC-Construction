@@ -14,7 +14,7 @@ Landing page bilingüe (EN/ES) para **Zycor Construction LLC**, constructora esp
 ## Instalación local
 
 ```bash
-git clone https://github.com/TU_USUARIO/zycor-construction.git
+git clone https://github.com/owengmz/ZC-Construction.git
 cd zycor-construction
 npm install
 npm run dev        # watch mode — recarga CSS al guardar
@@ -29,13 +29,6 @@ npm run build
 ```
 
 Genera `assets/css/main.css` minificado listo para deploy.
-
-## Deploy en Vercel
-
-1. Subir el repo a GitHub
-2. Ir a [vercel.com](https://vercel.com) → New Project → importar repo
-3. Vercel detecta el sitio estático automáticamente
-4. Click en **Deploy**
 
 ## Estructura
 
