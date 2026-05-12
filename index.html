@@ -242,6 +242,71 @@
             </p>
           </div>
         </div>
+        <!--
+          Framing 
+        <div class="md:col-span-8 group relative overflow-hidden structural-card rounded-lg h-[280px] md:h-[500px]">
+          <img alt="Framing Service"
+            class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+            src="assets/images/services/construccion-proceso.webp" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-5 md:p-10">
+            <span class="font-label-caps text-label-caps text-primary mb-4 block">01</span>
+            <h3 class="font-h3 text-h3 mb-4 uppercase">
+              <span class="lang-en">Framing</span>
+              <span class="lang-es">Estructuras</span>
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant max-w-md">
+              <span class="lang-en">We specialize in all types of framing — from structural repairs to full new
+                construction. We reinforce damaged structures, build porches, handle additions, and construct complete
+                framing systems.</span>
+              <span class="lang-es">Nos especializamos en todo tipo de encuadrado — desde reparaciones estructurales
+                hasta construcción nueva. Reforzamos estructuras, construimos porches, manejamos ampliaciones y sistemas
+                completos de enmarcado.</span>
+            </p>
+          </div>
+        </div>
+         Remodeling 
+        <div class="md:col-span-4 group relative overflow-hidden structural-card rounded-lg h-[280px] md:h-[500px]">
+          <img alt="Interior & Exterior Renovation"
+            class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+            src="assets/images/services/durante.webp" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-5 md:p-10">
+            <span class="font-label-caps text-label-caps text-primary mb-4 block">02</span>
+            <h3 class="font-h3 text-h3 mb-4 uppercase">
+              <span class="lang-en">Interior & Exterior Renovation</span>
+              <span class="lang-es">Remodelación Interior y Exterior</span>
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">
+              <span class="lang-en">From kitchens and bathrooms to full exterior upgrades. Quality materials and
+                professional execution for long-lasting results.</span>
+              <span class="lang-es">Desde cocinas y baños hasta renovaciones exteriores completas. Materiales de calidad
+                y ejecución profesional para resultados duraderos.</span>
+            </p>
+          </div>
+        </div>
+         Roofing 
+        <div class="md:col-span-12 group relative overflow-hidden structural-card rounded-lg h-[240px] md:h-[400px]">
+          <img alt="Roofing Service"
+            class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700"
+            src="assets/images/services/techado.webp" />
+          <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+          <div class="absolute inset-y-0 left-0 p-6 md:p-12 flex flex-col justify-center">
+            <span class="font-label-caps text-label-caps text-primary mb-4 block">03</span>
+            <h3 class="font-h3 text-h3 mb-4 uppercase">
+              <span class="lang-en">Roofing Solutions</span>
+              <span class="lang-es">Soluciones de Techado</span>
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant max-w-lg">
+              <span class="lang-en">Complete roofing services including repairs and full replacements. We inspect every
+                project to identify issues and recommend the best solution — backed by a warranty of up to 10
+                years.</span>
+              <span class="lang-es">Servicios completos de techado incluyendo reparaciones y reemplazos totales.
+                Inspeccionamos cada proyecto para identificar problemas y recomendar la mejor solución, respaldada por
+                una garantía de hasta 10 años.</span>
+            </p>
+          </div>
+        </div>-->
       </div>
     </section>
 
@@ -306,6 +371,15 @@
                 <span class="lang-es">Toda nuestra mano de obra está respaldada por nuestra garantía estructural de
                   hasta 10 años. Si algún aspecto no cumple con nuestros estándares, regresamos para corregirlo.</span>
               </p>
+              <button id="warranty-modal-btn"
+                class="inline-flex items-center gap-2 mt-4 font-label-caps text-label-caps text-primary hover:text-primary-fixed transition-colors uppercase tracking-widest group">
+                <span class="lang-en">View Full Warranty</span>
+                <span class="lang-es">Ver Garantía Completa</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                  fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -556,6 +630,88 @@
   </div>
 
   <script type="module" src="assets/js/main.js"></script>
+  <script defer src="assets/js/warranty-modal.js"></script>
+
+  <!-- ══ WARRANTY MODAL ══ -->
+  <div id="warranty-modal" class="fixed inset-0 z-[200] hidden items-center justify-center">
+    <!-- Overlay oscuro -->
+    <div id="warranty-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+
+    <!-- Contenido del modal -->
+    <div
+      class="relative z-10 bg-surface-container-low border border-surface-variant rounded-sm max-w-2xl w-full mx-4 max-h-[85vh] overflow-y-auto p-8 md:p-12">
+
+      <!-- Botón cerrar -->
+      <button id="warranty-modal-close"
+        class="absolute top-4 right-4 text-outline hover:text-on-surface transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+          stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Título -->
+      <h3 class="font-h3 text-h3 text-on-background uppercase mb-6">
+        <span class="lang-en">Roofing Warranty</span>
+        <span class="lang-es">Garantía de Techado</span>
+      </h3>
+
+      <!-- Contenido EN -->
+      <div class="lang-en space-y-4 font-body-md text-on-surface-variant">
+        <p>At Zycor Construction LLC, we stand behind the quality of our roofing work by offering up to a
+          <strong class="text-on-surface">10-year workmanship warranty</strong>. This warranty covers
+          installation-related defects caused directly by our workmanship during the roofing installation process.
+        </p>
+        <p>If an issue is determined to be the result of an installation error performed by our team, we will inspect
+          and, if necessary, repair the affected area at no additional labor cost during the warranty period.</p>
+        <h4 class="font-h3 text-body-lg text-on-surface font-bold uppercase pt-4">Warranty Limitations</h4>
+        <p>This warranty does not cover damages caused by factors outside of our control, including but not limited
+          to:</p>
+        <ul class="list-disc list-inside space-y-1 pl-2 text-outline">
+          <li>Hurricanes, tornadoes, strong winds, or severe storms</li>
+          <li>Hail, extreme weather conditions, or natural disasters</li>
+          <li>Structural problems existing prior to installation</li>
+          <li>Improper maintenance or neglect</li>
+          <li>Damage caused by third-party modifications or repairs</li>
+          <li>Manufacturer defects in roofing materials</li>
+        </ul>
+        <p>This workmanship warranty applies only to labor and installation services provided by Zycor Construction
+          LLC. Material warranties remain the responsibility of the manufacturer.</p>
+        <p class="text-outline italic text-sm pt-2">We strongly recommend that all property owners maintain active
+          homeowner's insurance coverage to protect against damages caused by weather events or other unforeseen
+          circumstances beyond our control.</p>
+      </div>
+
+      <!-- Contenido ES -->
+      <div class="lang-es space-y-4 font-body-md text-on-surface-variant">
+        <p>En Zycor Construction LLC, respaldamos la calidad de nuestro trabajo de techado ofreciendo una
+          <strong class="text-on-surface">garantía de mano de obra de hasta 10 años</strong>. Esta garantía cubre
+          defectos relacionados con la instalación causados directamente por nuestra mano de obra durante el proceso
+          de instalación.
+        </p>
+        <p>Si se determina que un problema es resultado de un error de instalación realizado por nuestro equipo,
+          inspeccionaremos y, si es necesario, repararemos el área afectada sin costo adicional de mano de obra
+          durante el período de garantía.</p>
+        <h4 class="font-h3 text-body-lg text-on-surface font-bold uppercase pt-4">Limitaciones de la Garantía</h4>
+        <p>Esta garantía no cubre daños causados por factores fuera de nuestro control, incluyendo pero no limitado
+          a:</p>
+        <ul class="list-disc list-inside space-y-1 pl-2 text-outline">
+          <li>Huracanes, tornados, vientos fuertes o tormentas severas</li>
+          <li>Granizo, condiciones climáticas extremas o desastres naturales</li>
+          <li>Problemas estructurales existentes antes de la instalación</li>
+          <li>Mantenimiento inadecuado o negligencia</li>
+          <li>Daños causados por modificaciones o reparaciones de terceros</li>
+          <li>Defectos de fábrica en los materiales de techado</li>
+        </ul>
+        <p>Esta garantía de mano de obra aplica únicamente a los servicios de mano de obra e instalación
+          proporcionados por Zycor Construction LLC. Las garantías de materiales son responsabilidad del
+          fabricante.</p>
+        <p class="text-outline italic text-sm pt-2">Recomendamos encarecidamente que todos los propietarios
+          mantengan una cobertura activa de seguro de vivienda para protegerse contra daños causados por eventos
+          climáticos u otras circunstancias imprevistas fuera de nuestro control.</p>
+      </div>
+    </div>
+  </div>
 
 </body>
 
