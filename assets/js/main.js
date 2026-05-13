@@ -5,6 +5,7 @@ import './lang-toggle.js';
 import './whatsapp-fab.js';
 import './mobile-menu.js';
 import './contact-form.js';
+import './warranty-modal.js';
 
 import { initHeroBg } from './animations/hero/heroBg.js';
 import { initHeroEntrance } from './animations/hero/heroEntrance.js';
