@@ -42,14 +42,5 @@ export function initHeroExit() {
         ease: HERO.ease.exit,
       },
       0.08
-    )
-    .to(
-      '#hero-ctas > *',
-      {
-        autoAlpha: 0,
-        y: -12,
-        ease: HERO.ease.exit,
-      },
-      0.12
     );
 }
