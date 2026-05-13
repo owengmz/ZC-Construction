@@ -42,17 +42,17 @@
   <!-- ══ NAVBAR ══ -->
   <header class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-surface-variant">
     <nav class="flex justify-between items-center w-full px-margin-edge py-4 max-w-container-max mx-auto">
-      <a href="#">
-        <div class="flex items-center gap-4">
-          <img alt="ZC Logo" class="h-12 md:h-14 w-auto" src="assets/images/services/Logo.webp" />
-      </a>
-      <a href="#hero">
-        <span
-          class="hidden sm:inline text-body-lg font-h1 font-bold text-on-surface dark:text-primary-fixed tracking-tighter uppercase">ZYCOR
-          CONSTRUCTION
-        </span>
-      </a>
-
+      <div class="flex items-center gap-4">
+        <a href="#">
+          <img alt="ZC Construction" width="320" height="213" class="h-12 md:h-14 w-auto"
+            src="assets/images/services/logo-navbar.webp" />
+        </a>
+        <a href="#hero">
+          <span
+            class="hidden sm:inline text-body-lg font-h1 font-bold text-on-surface dark:text-primary-fixed tracking-tighter uppercase">ZYCOR
+            CONSTRUCTION
+          </span>
+        </a>
       </div>
       <div class="hidden md:flex items-center gap-8 font-label-caps text-label-caps">
         <a class="text-outline dark:text-outline-variant hover:text-primary transition-colors duration-300"
@@ -64,6 +64,11 @@
           href="#services">
           <span class="lang-en">Services</span>
           <span class="lang-es">Servicios</span>
+        </a>
+        <a class="text-outline dark:text-outline-variant hover:text-primary transition-colors duration-300"
+          href="#portfolio">
+          <span class="lang-en">Our Work</span>
+          <span class="lang-es">Trabajos</span>
         </a>
         <a class="text-outline dark:text-outline-variant hover:text-primary transition-colors duration-300"
           href="#insurance">
@@ -115,6 +120,11 @@
         <span class="lang-es">Servicios</span>
       </a>
       <a class="font-h2 text-h2 text-outline hover:text-primary transition-colors uppercase tracking-widest"
+        href="#portfolio">
+        <span class="lang-en">Our Work</span>
+        <span class="lang-es">Trabajos</span>
+      </a>
+      <a class="font-h2 text-h2 text-outline hover:text-primary transition-colors uppercase tracking-widest"
         href="#insurance">
         <span class="lang-en">Insurance</span>
         <span class="lang-es">Seguro</span>
@@ -136,13 +146,17 @@
 
     <!-- ══ HERO ══ -->
     <section id="hero" class="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-margin-edge">
-      <div id="hero-bg"
-        class="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-surface-container-high via-background to-background opacity-60">
+      <!-- TODO: Reemplazar src con la imagen real de construcción (mínimo 1920px de ancho) -->
+      <div id="hero-bg" class="absolute inset-0 z-0">
+        <img src="/assets/images/services/fondoHero.webp" alt="fondo" class="w-full h-full object-cover" loading="eager"
+          decoding="async" />
       </div>
-      <div class="relative z-10 text-center max-w-4xl">
-        <img id="hero-logo" alt="ZC Construction Emblem"
+      <!-- Overlay oscuro para legibilidad -->
+      <div class="absolute inset-0 z-[1] bg-gradient-to-b from-black/70 via-black/60 to-background"></div>
+      <div class="relative z-[2] text-center max-w-4xl">
+        <img id="hero-logo" alt="ZC Construction Emblem" width="800" height="533"
           class="w-72 sm:w-80 md:w-96 lg:w-[28rem] mx-auto mb-4 md:mb-8 opacity-90 drop-shadow-[0_0_30px_rgba(201,198,197,0.2)]"
-          src="assets/images/services/Logo.webp" />
+          src="assets/images/services/logo-hero.webp" />
         <h1 id="hero-title" class="font-h1 text-h1 text-on-background mb-6 tracking-tighter uppercase">
           <span class="lang-en">We Build & Protect Your Home</span>
           <span class="lang-es">Construimos y Protegemos tu Hogar</span>
@@ -157,7 +171,7 @@
     </section>
 
     <!-- ══ SERVICES ══ -->
-    <section class="py-section-padding px-margin-edge max-w-container-max mx-auto" id="services">
+    <section class="pt-section-padding pb-16 px-margin-edge max-w-container-max mx-auto" id="services">
       <div class="mb-16">
         <h2 class="font-h2 text-h2 text-on-background uppercase mb-2">
           <span class="lang-en">Core Services</span>
@@ -170,9 +184,10 @@
         <div class="md:col-span-8 group relative overflow-hidden structural-card rounded-lg h-[280px] md:h-[500px]">
           <img alt="Framing Service"
             class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
-            src="assets/images/services/construccion-proceso.webp" />
+            src="assets/images/services/framing.webp" />
           <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-5 md:p-10">
+          <div
+            class="absolute bottom-0 left-0 right-0 p-8 md:p-10 max-h-[65%] md:max-h-none overflow-y-auto service-card-text">
             <span class="font-label-caps text-label-caps text-primary mb-4 block">01</span>
             <h3 class="font-h3 text-h3 mb-4 uppercase">
               <span class="lang-en">Framing</span>
@@ -186,15 +201,19 @@
                 hasta construcción nueva. Reforzamos estructuras, construimos porches, manejamos ampliaciones y sistemas
                 completos de enmarcado.</span>
             </p>
+          </div>
+          <div
+            class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-black/60 to-transparent pointer-events-none md:hidden">
           </div>
         </div>
         <!-- Remodeling -->
         <div class="md:col-span-4 group relative overflow-hidden structural-card rounded-lg h-[280px] md:h-[500px]">
           <img alt="Interior & Exterior Renovation"
             class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
-            src="assets/images/services/durante.webp" />
+            src="assets/images/services/remodelacion.webp" />
           <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-5 md:p-10">
+          <div
+            class="absolute bottom-0 left-0 right-0 p-8 md:p-10 max-h-[65%] md:max-h-none overflow-y-auto service-card-text">
             <span class="font-label-caps text-label-caps text-primary mb-4 block">02</span>
             <h3 class="font-h3 text-h3 mb-4 uppercase">
               <span class="lang-en">Interior & Exterior Renovation</span>
@@ -206,15 +225,19 @@
               <span class="lang-es">Desde cocinas y baños hasta renovaciones exteriores completas. Materiales de calidad
                 y ejecución profesional para resultados duraderos.</span>
             </p>
+          </div>
+          <div
+            class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-black/60 to-transparent pointer-events-none md:hidden">
           </div>
         </div>
         <!-- Roofing -->
         <div class="md:col-span-12 group relative overflow-hidden structural-card rounded-lg h-[240px] md:h-[400px]">
           <img alt="Roofing Service"
             class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700"
-            src="assets/images/services/techado.webp" />
+            src="assets/images/services/roofing.webp" />
           <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
-          <div class="absolute inset-y-0 left-0 p-6 md:p-12 flex flex-col justify-center">
+          <div
+            class="absolute bottom-0 left-0 right-0 p-8 md:p-10 max-h-[65%] md:max-h-none overflow-y-auto service-card-text">
             <span class="font-label-caps text-label-caps text-primary mb-4 block">03</span>
             <h3 class="font-h3 text-h3 mb-4 uppercase">
               <span class="lang-en">Roofing Solutions</span>
@@ -229,77 +252,112 @@
                 una garantía de hasta 10 años.</span>
             </p>
           </div>
-        </div>
-        <!--
-          Framing 
-        <div class="md:col-span-8 group relative overflow-hidden structural-card rounded-lg h-[280px] md:h-[500px]">
-          <img alt="Framing Service"
-            class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
-            src="assets/images/services/construccion-proceso.webp" />
-          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-5 md:p-10">
-            <span class="font-label-caps text-label-caps text-primary mb-4 block">01</span>
-            <h3 class="font-h3 text-h3 mb-4 uppercase">
-              <span class="lang-en">Framing</span>
-              <span class="lang-es">Estructuras</span>
-            </h3>
-            <p class="font-body-md text-body-md text-on-surface-variant max-w-md">
-              <span class="lang-en">We specialize in all types of framing — from structural repairs to full new
-                construction. We reinforce damaged structures, build porches, handle additions, and construct complete
-                framing systems.</span>
-              <span class="lang-es">Nos especializamos en todo tipo de encuadrado — desde reparaciones estructurales
-                hasta construcción nueva. Reforzamos estructuras, construimos porches, manejamos ampliaciones y sistemas
-                completos de enmarcado.</span>
-            </p>
+          <div
+            class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-black/60 to-transparent pointer-events-none md:hidden">
           </div>
         </div>
-         Remodeling 
-        <div class="md:col-span-4 group relative overflow-hidden structural-card rounded-lg h-[280px] md:h-[500px]">
-          <img alt="Interior & Exterior Renovation"
-            class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
-            src="assets/images/services/durante.webp" />
-          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-5 md:p-10">
-            <span class="font-label-caps text-label-caps text-primary mb-4 block">02</span>
-            <h3 class="font-h3 text-h3 mb-4 uppercase">
-              <span class="lang-en">Interior & Exterior Renovation</span>
-              <span class="lang-es">Remodelación Interior y Exterior</span>
-            </h3>
-            <p class="font-body-md text-body-md text-on-surface-variant">
-              <span class="lang-en">From kitchens and bathrooms to full exterior upgrades. Quality materials and
-                professional execution for long-lasting results.</span>
-              <span class="lang-es">Desde cocinas y baños hasta renovaciones exteriores completas. Materiales de calidad
-                y ejecución profesional para resultados duraderos.</span>
-            </p>
+      </div>
+    </section>
+
+    <!-- ══ OUR WORK ══ -->
+    <section class="pt-16 py-section-padding pb-16 px-margin-edge max-w-container-max mx-auto" id="portfolio">
+      <div class="mb-16">
+        <h2 class="font-h2 text-h2 text-on-background uppercase mb-2">
+          <span class="lang-en">Our Work</span>
+          <span class="lang-es">Nuestros Trabajos</span>
+        </h2>
+        <div class="w-24 h-1 bg-primary"></div>
+        <p class="font-body-lg text-body-lg text-outline-variant mt-4 max-w-2xl">
+          <span class="lang-en">Real results from real projects. See the transformation our clients experience.</span>
+          <span class="lang-es">Resultados reales de proyectos reales. Mira la transformación que nuestros clientes
+            experimentan.</span>
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+
+        <!-- Proyecto 1 -->
+        <div class="group">
+          <p class="font-label-caps text-label-caps text-primary mb-3 uppercase">
+            <span class="lang-en">Framing — Newark, NJ</span>
+            <span class="lang-es">Estructuras — Newark, NJ</span>
+          </p>
+          <div class="grid grid-cols-2 gap-2">
+            <button class="lightbox-trigger relative overflow-hidden rounded-sm aspect-[4/3] cursor-pointer"
+              data-index="0">
+              <img src="assets/images/services/framing.webp" alt="Project 1 Before"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy" />
+              <span
+                class="absolute bottom-0 left-0 right-0 bg-black/70 text-center font-label-caps text-[10px] text-outline py-1 uppercase tracking-widest">Before</span>
+            </button>
+            <button class="lightbox-trigger relative overflow-hidden rounded-sm aspect-[4/3] cursor-pointer"
+              data-index="1">
+              <img src="assets/images/services/techado.webp" alt="Project 1 After"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy" />
+              <span
+                class="absolute bottom-0 left-0 right-0 bg-primary/80 text-center font-label-caps text-[10px] text-on-primary py-1 uppercase tracking-widest">After</span>
+            </button>
           </div>
         </div>
-         Roofing 
-        <div class="md:col-span-12 group relative overflow-hidden structural-card rounded-lg h-[240px] md:h-[400px]">
-          <img alt="Roofing Service"
-            class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700"
-            src="assets/images/services/techado.webp" />
-          <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
-          <div class="absolute inset-y-0 left-0 p-6 md:p-12 flex flex-col justify-center">
-            <span class="font-label-caps text-label-caps text-primary mb-4 block">03</span>
-            <h3 class="font-h3 text-h3 mb-4 uppercase">
-              <span class="lang-en">Roofing Solutions</span>
-              <span class="lang-es">Soluciones de Techado</span>
-            </h3>
-            <p class="font-body-md text-body-md text-on-surface-variant max-w-lg">
-              <span class="lang-en">Complete roofing services including repairs and full replacements. We inspect every
-                project to identify issues and recommend the best solution — backed by a warranty of up to 10
-                years.</span>
-              <span class="lang-es">Servicios completos de techado incluyendo reparaciones y reemplazos totales.
-                Inspeccionamos cada proyecto para identificar problemas y recomendar la mejor solución, respaldada por
-                una garantía de hasta 10 años.</span>
-            </p>
+
+        <!-- Proyecto 2 -->
+        <div class="group">
+          <p class="font-label-caps text-label-caps text-primary mb-3 uppercase">
+            <span class="lang-en">Roofing — Trenton, NJ</span>
+            <span class="lang-es">Techado — Trenton, NJ</span>
+          </p>
+          <div class="grid grid-cols-2 gap-2">
+            <button class="lightbox-trigger relative overflow-hidden rounded-sm aspect-[4/3] cursor-pointer"
+              data-index="2">
+              <img src="assets/images/services/roofing.webp" alt="Project 2 Before"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy" />
+              <span
+                class="absolute bottom-0 left-0 right-0 bg-black/70 text-center font-label-caps text-[10px] text-outline py-1 uppercase tracking-widest">Before</span>
+            </button>
+            <button class="lightbox-trigger relative overflow-hidden rounded-sm aspect-[4/3] cursor-pointer"
+              data-index="3">
+              <img src="assets/images/services/roofing01.webp" alt="Project 2 After"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy" />
+              <span
+                class="absolute bottom-0 left-0 right-0 bg-primary/80 text-center font-label-caps text-[10px] text-on-primary py-1 uppercase tracking-widest">After</span>
+            </button>
           </div>
-        </div>-->
+        </div>
+
+        <!-- Proyecto 3 -->
+        <div class="group">
+          <p class="font-label-caps text-label-caps text-primary mb-3 uppercase">
+            <span class="lang-en">Renovation — Jersey City, NJ</span>
+            <span class="lang-es">Remodelación — Jersey City, NJ</span>
+          </p>
+          <div class="grid grid-cols-2 gap-2">
+            <button class="lightbox-trigger relative overflow-hidden rounded-sm aspect-[4/3] cursor-pointer"
+              data-index="4">
+              <img src="assets/images/services/remodelacion interior.webp" alt="Project 3 Before"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy" />
+              <span
+                class="absolute bottom-0 left-0 right-0 bg-black/70 text-center font-label-caps text-[10px] text-outline py-1 uppercase tracking-widest">Before</span>
+            </button>
+            <button class="lightbox-trigger relative overflow-hidden rounded-sm aspect-[4/3] cursor-pointer"
+              data-index="5">
+              <img src="assets/images/services/remodelacion despues.webp" alt="Project 3 After"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy" />
+              <span
+                class="absolute bottom-0 left-0 right-0 bg-primary/80 text-center font-label-caps text-[10px] text-on-primary py-1 uppercase tracking-widest">After</span>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ══ INSURANCE & WARRANTY ══ -->
-    <section class="py-section-padding px-margin-edge bg-[#1a1a1a] border-y border-surface-variant" id="insurance">
+    <section class="pt-16 py-section-padding pb-16 px-margin-edge bg-[#1a1a1a] border-y border-surface-variant"
+      id="insurance">
       <div class="max-w-container-max mx-auto">
         <div class="mb-16">
           <h2 class="font-h2 text-h2 text-on-background uppercase mb-2">
@@ -375,7 +433,7 @@
     </section>
 
     <!-- ══ CONTACT ══ -->
-    <section class="py-section-padding px-margin-edge max-w-container-max mx-auto" id="contact">
+    <section class="pt-16 py-section-padding px-margin-edge max-w-container-max mx-auto" id="contact">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20">
         <div>
           <h2 class="font-h2 text-h2 text-on-background uppercase mb-6">
@@ -396,7 +454,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
               </svg>
-              <p class="font-body-md text-on-surface">1200 Industrial Way, Newark, New Jersey, USA</p>
+              <p class="font-body-md text-on-surface">7 Clover Path Apt. D, Maple Shade, NJ, USA</p>
             </div>
             <div class="flex items-center gap-6">
               <svg xmlns="http://www.w3.org/2000/svg" class="text-primary shrink-0" width="28" height="28" fill="none"
@@ -501,23 +559,12 @@
       class="flex flex-col md:flex-row justify-between items-center w-full px-margin-edge py-gutter max-w-container-max mx-auto gap-8">
       <div class="flex flex-col items-center md:items-start gap-4">
         <div class="flex items-center gap-4">
-          <img alt="ZC Logo Footer" class="h-8 w-auto" src="assets/images/services/Logo.webp" />
+          <img alt="ZC Logo Footer" class="h-8 w-auto" src="assets/images/services/logo-footer.webp" />
           <span class="font-h2 text-h3 text-on-surface tracking-tighter uppercase">ZYCOR CONSTRUCTION</span>
         </div>
         <p class="font-body-md text-body-md text-outline">New Jersey, USA</p>
       </div>
       <div class="flex gap-12 font-label-caps text-label-caps">
-        <div class="flex flex-col gap-2">
-          <span class="text-primary font-bold mb-2 uppercase">Company</span>
-          <a class="text-outline hover:text-secondary-fixed transition-opacity opacity-80 hover:opacity-100" href="#">
-            <span class="lang-en">Privacy Policy</span>
-            <span class="lang-es">Política de Privacidad</span>
-          </a>
-          <a class="text-outline hover:text-secondary-fixed transition-opacity opacity-80 hover:opacity-100" href="#">
-            <span class="lang-en">Terms of Service</span>
-            <span class="lang-es">Términos de Servicio</span>
-          </a>
-        </div>
         <div class="flex flex-col gap-2">
           <span class="text-primary font-bold mb-2 uppercase">Connect</span>
           <div class="flex gap-4 items-center">
@@ -543,6 +590,18 @@
             </a> -->
           </div>
         </div>
+        <div class="flex flex-col gap-2">
+          <span class="text-primary font-bold mb-2 uppercase">Company</span>
+          <a class="text-outline hover:text-secondary-fixed transition-opacity opacity-80 hover:opacity-100" href="#">
+            <span class="lang-en">Privacy Policy</span>
+            <span class="lang-es">Política de Privacidad</span>
+          </a>
+          <a class="text-outline hover:text-secondary-fixed transition-opacity opacity-80 hover:opacity-100" href="#">
+            <span class="lang-en">Terms of Service</span>
+            <span class="lang-es">Términos de Servicio</span>
+          </a>
+        </div>
+
       </div>
     </div>
     <div

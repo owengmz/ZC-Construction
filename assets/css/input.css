@@ -102,6 +102,23 @@ html[data-lang="es"] .lang-es {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
+/* ── Scrollbar sutil para cards de servicios en mobile ── */
+.service-card-text::-webkit-scrollbar {
+  width: 3px;
+}
+.service-card-text::-webkit-scrollbar-track {
+  background: transparent;
+}
+.service-card-text::-webkit-scrollbar-thumb {
+  background: rgba(201, 198, 197, 0.3);
+  border-radius: 3px;
+}
+@media (min-width: 768px) {
+  .service-card-text::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* ── Responsive ── */
 @media (max-width: 767px) {
   .text-h1 { font-size: 28px; line-height: 1.15; }

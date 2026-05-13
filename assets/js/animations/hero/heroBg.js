@@ -7,14 +7,14 @@ export function initHeroBg() {
   const section = document.getElementById('hero');
 
   gsap.from(bg, {
-    autoAlpha: 0,
-    scale: 1.1,
+    opacity: 0,
+    scale: 1.15,
     duration: HERO.duration.bg,
     ease: HERO.ease.bg,
   });
 
   gsap.to(bg, {
-    scale: 1.14,
+    y: 80,
     ease: 'none',
     scrollTrigger: {
       trigger: section,

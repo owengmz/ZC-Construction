@@ -6,7 +6,7 @@ export function initHeroEntrance() {
 
   tl
     .from('#hero-logo', {
-      autoAlpha: 0,
+      opacity: 0,
       scale: 0.78,
       rotation: -4,
       duration: HERO.duration.logo,
@@ -14,7 +14,7 @@ export function initHeroEntrance() {
     .from(
       '#hero-title',
       {
-        autoAlpha: 0,
+        opacity: 0,
         y: 60,
         duration: HERO.duration.title,
       },
@@ -23,7 +23,7 @@ export function initHeroEntrance() {
     .from(
       '#hero-subtitle',
       {
-        autoAlpha: 0,
+        opacity: 0,
         y: 30,
         filter: 'blur(8px)',
         duration: HERO.duration.subtitle,
@@ -33,7 +33,7 @@ export function initHeroEntrance() {
     .from(
       '#hero-ctas > *',
       {
-        autoAlpha: 0,
+        opacity: 0,
         y: 24,
         scale: 0.94,
         duration: HERO.duration.ctas,
