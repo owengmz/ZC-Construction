@@ -5,22 +5,31 @@ Landing page bilingüe (EN/ES) para **Zycor Construction LLC**, constructora esp
 ## Stack
 
 - HTML5 semántico
-- Tailwind CSS (instalación local via npm)
-- JavaScript vanilla (sin dependencias)
-- Google Fonts: Montserrat + Inter
-- Iconos: SVG inline (Heroicons) + archivos SVG locales para redes sociales
+- Tailwind CSS local + PostCSS + Autoprefixer
+- JavaScript vanilla con módulos ES
+- Vite como servidor de desarrollo y builder
+- GSAP para animaciones y ScrollTrigger
+- Tipografía local: Montserrat + Inter en WOFF2
+- SVG inline para iconos + SVG locales para redes sociales
+- Formspree para envío de formulario de contacto
 - Deploy: GitHub + Vercel
 
 ## Instalación local
 
 ```bash
 git clone https://github.com/owengmz/ZC-Construction.git
-cd zycor-construction
+cd zc-construction
 npm install
-npm run dev        # watch mode — recarga CSS al guardar
+npm run dev
 ```
 
-Abrir `index.html` en el navegador o usar Live Server en VS Code.
+Luego abrir `index.html` en el navegador o usar el servidor de desarrollo de Vite.
+
+## Scripts disponibles
+
+- `npm run dev` — inicia el modo de desarrollo con hot reload
+- `npm run build` — genera la versión de producción en `dist/`
+- `npm run preview` — sirve el build de producción localmente
 
 ## Build para producción
 
@@ -28,30 +37,52 @@ Abrir `index.html` en el navegador o usar Live Server en VS Code.
 npm run build
 ```
 
-Genera `assets/css/main.css` minificado listo para deploy.
+Genera una versión lista para deploy en la carpeta `dist/`.
 
-## Estructura
+## Estructura del proyecto
 
 ```
 zc-construction/
 ├── index.html
 ├── package.json
+├── package-lock.json
 ├── tailwind.config.js
-├── .gitignore
+├── postcss.config.js
+├── vite.config.js
+├── vercel.json
+├── public/
+│   └── site.webmanifest
+├── dist/                ← build de producción generado
+├── assets/
+│   ├── css/
+│   │   ├── input.css    ← fuente Tailwind
+│   │   └── main.css     ← CSS compilado
+│   ├── fonts/           ← tipografías WOFF2 locales
+│   ├── icons/           ← SVGs locales de redes sociales
+│   ├── images/
+│   │   └── services/    ← fotos de servicios
+│   └── js/
+│       ├── animations/  ← animaciones GSAP por sección
+│       ├── contact-form.js
+│       ├── lang-toggle.js
+│       ├── lightbox.js
+│       ├── main.js
+│       ├── mobile-menu.js
+│       ├── warranty-modal.js
+│       └── whatsapp-fab.js
 ├── README.md
-├── CONTEXTO_PROYECTO.md
-└── assets/
-    ├── css/
-    │   ├── input.css        ← fuente Tailwind
-    │   └── main.css         ← CSS compilado
-    ├── js/
-    │   ├── lang-toggle.js   ← toggle EN/ES
-    │   ├── whatsapp-fab.js  ← FAB desplegable WhatsApp
-    │   └── mobile-menu.js   ← menú hamburguesa
-    ├── images/
-    │   └── services/        ← Logo.webp + fotos de servicios
-    └── icons/               ← SVGs de redes sociales
+└── .gitignore
 ```
+
+## Funcionalidades principales
+
+- Página responsive con menú móvil
+- Toggle de idioma EN/ES con persistencia en localStorage
+- Zoom lightbox para galería de imágenes
+- Botón flotante de WhatsApp con opciones desplegables
+- Modal de garantía con cierre por overlay y Escape
+- Formulario de contacto que envía a Formspree
+- Animaciones de entrada y scroll con GSAP
 
 ## Contacto del cliente
 
