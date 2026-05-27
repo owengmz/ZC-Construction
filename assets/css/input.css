@@ -40,10 +40,15 @@
 @tailwind utilities;
 
 /* ── Base ── */
+html {
+  overflow-x: hidden;
+}
+
 body {
   background-color: #141313;
   color: #e5e2e1;
   font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
 }
 
 .font-h1,

@@ -40,7 +40,7 @@
 <body class="bg-background text-on-surface selection:bg-primary-fixed-dim selection:text-primary-container">
 
   <!-- ══ NAVBAR ══ -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-surface-variant">
+  <header id="site-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
     <nav class="flex justify-between items-center w-full px-margin-edge py-4 max-w-container-max mx-auto">
       <div class="flex items-center gap-4">
         <a href="#">
@@ -142,10 +142,11 @@
     </a>
   </div>
 
-  <main class="pt-20">
+  <main>
 
     <!-- ══ HERO ══ -->
-    <section id="hero" class="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-margin-edge">
+    <section id="hero"
+      class="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-margin-edge pt-16 pb-16">
       <!-- TODO: Reemplazar src con la imagen real de construcción (mínimo 1920px de ancho) -->
       <div id="hero-bg" class="absolute inset-0 z-0">
         <img src="/assets/images/services/fondoHero.webp" alt="fondo" class="w-full h-full object-cover" loading="eager"
@@ -153,7 +154,7 @@
       </div>
       <!-- Overlay oscuro para legibilidad -->
       <div class="absolute inset-0 z-[1] bg-gradient-to-b from-black/70 via-black/60 to-background"></div>
-      <div class="relative z-[2] text-center max-w-4xl">
+      <div class="relative z-[2] text-center max-w-4xl mt-4 md:mt-8">
         <img id="hero-logo" alt="ZC Construction Emblem" width="800" height="533"
           class="w-72 sm:w-80 md:w-96 lg:w-[28rem] mx-auto mb-4 md:mb-8 opacity-90 drop-shadow-[0_0_30px_rgba(201,198,197,0.2)]"
           src="assets/images/services/logo-hero.webp" />
@@ -161,7 +162,7 @@
           <span class="lang-en">We Build & Protect Your Home</span>
           <span class="lang-es">Construimos y Protegemos tu Hogar</span>
         </h1>
-        <p id="hero-subtitle" class="font-body-lg text-body-lg text-outline-variant max-w-2xl mx-auto mb-10">
+        <p id="hero-subtitle" class="font-body-lg text-body-lg text-outline-white max-w-2xl mx-auto mb-10 text-center px-4 sm:px-0">
           <span class="lang-en">Quality, precision, and results that last. Schedule your free inspection today and get a
             clear, no-obligation estimate. Contact us now and secure your spot on our schedule.</span>
           <span class="lang-es">Calidad, precisión y resultados duraderos. Agenda tu inspección gratuita hoy y obtén un
@@ -171,7 +172,7 @@
     </section>
 
     <!-- ══ SERVICES ══ -->
-    <section class="pt-section-padding pb-16 px-margin-edge max-w-container-max mx-auto" id="services">
+    <section class="pt-section-padding pb-16 px-margin-edge max-w-container-max mx-auto overflow-hidden" id="services">
       <div class="mb-16">
         <h2 class="font-h2 text-h2 text-on-background uppercase mb-2">
           <span class="lang-en">Core Services</span>
@@ -260,7 +261,8 @@
     </section>
 
     <!-- ══ OUR WORK ══ -->
-    <section class="pt-16 py-section-padding pb-16 px-margin-edge max-w-container-max mx-auto" id="portfolio">
+    <section class="pt-16 py-section-padding pb-16 px-margin-edge max-w-container-max mx-auto overflow-hidden"
+      id="portfolio">
       <div class="mb-16">
         <h2 class="font-h2 text-h2 text-on-background uppercase mb-2">
           <span class="lang-en">Our Work</span>
@@ -356,9 +358,8 @@
     </section>
 
     <!-- ══ INSURANCE & WARRANTY ══ -->
-    <section class="pt-16 py-section-padding pb-16 px-margin-edge bg-[#1a1a1a] border-y border-surface-variant"
-      id="insurance">
-      <div class="max-w-container-max mx-auto">
+    <section class="pt-16 py-section-padding pb-16 bg-[#1a1a1a] border-y border-surface-variant" id="insurance">
+      <div class="max-w-container-max mx-auto px-margin-edge">
         <div class="mb-16">
           <h2 class="font-h2 text-h2 text-on-background uppercase mb-2">
             <span class="lang-en">Insurance &amp; Warranty</span>
@@ -677,6 +678,7 @@
   </div>
 
   <script type="module" src="assets/js/main.js"></script>
+  <script src="assets/js/navbar-scroll.js"></script>
   <script defer src="assets/js/warranty-modal.js"></script>
 
   <!-- ══ WARRANTY MODAL ══ -->
