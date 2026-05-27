@@ -87,5 +87,14 @@ export default {
       },
     },
   },
+  safelist: [
+    // Classes added dynamically by navbar-scroll.js
+    'bg-background/80',
+    'backdrop-blur-md',
+    'border-b',
+    'border-transparent',
+    'border-surface-variant',
+    'shadow-sm',
+  ],
   plugins: [],
 };

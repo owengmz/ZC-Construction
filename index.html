@@ -4,6 +4,8 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <!-- Disable browser scroll restoration so GSAP hero animations always start from top -->
+  <script>if ('scrollRestoration' in history) history.scrollRestoration = 'manual';</script>
   <meta name="description"
     content="Zycor Construction LLC — Expert Framing, Interior & Exterior Renovation and Roofing in New Jersey. Licensed & Insured." />
   <title>ZYCOR CONSTRUCTION | Framing, Roofing & Renovation in New Jersey</title>
@@ -40,7 +42,7 @@
 <body class="bg-background text-on-surface selection:bg-primary-fixed-dim selection:text-primary-container">
 
   <!-- ══ NAVBAR ══ -->
-  <header id="site-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <header id="site-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent">
     <nav class="flex justify-between items-center w-full px-margin-edge py-4 max-w-container-max mx-auto">
       <div class="flex items-center gap-4">
         <a href="#">
@@ -126,8 +128,8 @@
       </a>
       <a class="font-h2 text-h2 text-outline hover:text-primary transition-colors uppercase tracking-widest"
         href="#insurance">
-        <span class="lang-en">Insurance</span>
-        <span class="lang-es">Seguro</span>
+        <span class="lang-en">Insurance & Warranty</span>
+        <span class="lang-es">Seguro y Garantía</span>
       </a>
       <a class="font-h2 text-h2 text-outline hover:text-primary transition-colors uppercase tracking-widest"
         href="#contact">
@@ -149,7 +151,7 @@
       class="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-margin-edge pt-16 pb-16">
       <!-- TODO: Reemplazar src con la imagen real de construcción (mínimo 1920px de ancho) -->
       <div id="hero-bg" class="absolute inset-0 z-0">
-        <img src="/assets/images/services/fondoHero.webp" alt="fondo" class="w-full h-full object-cover" loading="eager"
+        <img src="assets/images/services/fondoHero.webp" alt="fondo" class="w-full h-full object-cover" loading="eager"
           decoding="async" />
       </div>
       <!-- Overlay oscuro para legibilidad -->
@@ -158,11 +160,11 @@
         <img id="hero-logo" alt="ZC Construction Emblem" width="800" height="533"
           class="w-72 sm:w-80 md:w-96 lg:w-[28rem] mx-auto mb-4 md:mb-8 opacity-90 drop-shadow-[0_0_30px_rgba(201,198,197,0.2)]"
           src="assets/images/services/logo-hero.webp" />
-        <h1 id="hero-title" class="font-h1 text-h1 text-on-background mb-6 tracking-tighter uppercase">
+        <h1 id="hero-title" class="font-h1 text-h1 text-on-background mb-10 tracking-tighter uppercase">
           <span class="lang-en">We Build & Protect Your Home</span>
           <span class="lang-es">Construimos y Protegemos tu Hogar</span>
         </h1>
-        <p id="hero-subtitle" class="font-body-lg text-body-lg text-outline-white max-w-2xl mx-auto mb-10 text-center px-4 sm:px-0">
+        <p id="hero-subtitle" class="font-body-lg text-body-lg text-white max-w-2xl mx-auto mb-10 text-center px-4 sm:px-0">
           <span class="lang-en">Quality, precision, and results that last. Schedule your free inspection today and get a
             clear, no-obligation estimate. Contact us now and secure your spot on our schedule.</span>
           <span class="lang-es">Calidad, precisión y resultados duraderos. Agenda tu inspección gratuita hoy y obtén un
@@ -678,8 +680,6 @@
   </div>
 
   <script type="module" src="assets/js/main.js"></script>
-  <script src="assets/js/navbar-scroll.js"></script>
-  <script defer src="assets/js/warranty-modal.js"></script>
 
   <!-- ══ WARRANTY MODAL ══ -->
   <div id="warranty-modal" class="fixed inset-0 z-[200] hidden items-center justify-center">

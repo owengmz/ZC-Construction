@@ -30,16 +30,5 @@ export function initHeroEntrance() {
       },
       '-=0.6'
     )
-    .from(
-      '#hero-ctas > *',
-      {
-        opacity: 0,
-        y: 24,
-        scale: 0.94,
-        duration: HERO.duration.ctas,
-        stagger: 0.2,
-        ease: 'back.out(1.5)',
-      },
-      '-=0.5'
-    );
+    ;
 }

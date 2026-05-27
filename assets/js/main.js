@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { initNavbarScroll } from './navbar-scroll.js';
 import './lang-toggle.js';
 import './whatsapp-fab.js';
 import './mobile-menu.js';
@@ -19,8 +20,13 @@ import { initLightbox } from './lightbox.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Safety net: always start at the top so heroExit ScrollTrigger
+// doesn't conflict with heroEntrance on page refresh
+window.scrollTo(0, 0);
+
 document.getElementById('copyright-year').textContent = new Date().getFullYear();
 
+initNavbarScroll();
 initLightbox();
 
 const mm = gsap.matchMedia();
