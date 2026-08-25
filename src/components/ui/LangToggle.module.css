@@ -1,0 +1,49 @@
+/**
+ * Selector de idioma EN | ES de la barra de navegación.
+ *
+ * Equivale al bloque `.flex.items-center.border.border-outline-variant.p-1`
+ * del sitio actual. Los dos botones son ahora enlaces, pero el aspecto no
+ * cambia: mismo recuadro, mismo separador y misma subrayado en el activo.
+ */
+
+.grupo {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-lang-toggle-size);
+  line-height: var(--text-lang-toggle-height);
+  letter-spacing: var(--text-lang-toggle-spacing);
+  font-weight: var(--text-lang-toggle-weight);
+}
+
+.opcion {
+  padding: 0.25rem 0.5rem;
+  /* El sitio actual aplicaba el subrayado del activo sobre el <span> interior.
+   * Aquí va sobre el propio enlace: se reserva el borde en ambos estados para
+   * que activar una opción no desplace la otra un par de píxeles. */
+  border-bottom: 2px solid transparent;
+  color: var(--color-outline);
+  opacity: 0.5;
+  transition:
+    opacity 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.opcion:hover {
+  opacity: 1;
+}
+
+.activa {
+  color: var(--color-on-surface);
+  opacity: 1;
+  border-bottom-color: var(--color-primary-fixed);
+}
+
+.separador {
+  margin-inline: 0.25rem;
+  color: var(--color-outline);
+}

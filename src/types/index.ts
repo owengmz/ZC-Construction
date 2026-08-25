@@ -36,14 +36,25 @@
 export type Lang = 'en' | 'es';
 
 /**
- * Clave de `localStorage` donde se persiste el idioma elegido.
+ * Nombre de la cookie donde se recuerda el idioma elegido.
  *
- * Se tipa como literal (y no como `string`) para que el valor sea el mismo
- * en el contexto y en el hook, y para conservar la compatibilidad con el
- * sitio actual: quien ya visitó el sitio en español lo sigue viendo en
- * español tras la migración.
+ * Es una cookie y no `localStorage` porque quien necesita leer la preferencia
+ * es el middleware, que decide a qué idioma redirigir `/` antes de que exista
+ * ningún JavaScript de cliente. `localStorage` sólo es visible desde el
+ * navegador, así que el servidor no podría consultarlo.
+ *
+ * Se conserva el nombre `zc-lang` del sitio actual por continuidad conceptual,
+ * aunque el mecanismo de almacenamiento haya cambiado.
  */
-export type LangStorageKey = 'zc-lang';
+export type LangCookieName = 'zc-lang';
+
+/**
+ * Ruta raíz de cada idioma.
+ *
+ * El tipo de plantilla ata las URLs a la unión `Lang`: `/fr` no compila
+ * mientras el francés no exista como idioma soportado.
+ */
+export type LangRoute = `/${Lang}`;
 
 /* ────────────────────────────────────────────────────────────────────────────
  * 2. Identificadores (uniones literales cerradas)
@@ -494,15 +505,18 @@ export interface SiteContent {
 export type ContentByLang = Record<Lang, SiteContent>;
 
 /**
- * Valor expuesto por `LangContext` (se implementa en la Etapa 2).
+ * Valor expuesto por `LangContext`.
  *
  * `content` se incluye junto a `lang` para que un componente resuelva su texto
  * con un único `useLang()`, sin tener que importar además el diccionario y
  * indexarlo por su cuenta.
+ *
+ * No hay `setLang`. Con el idioma en la ruta (`/en`, `/es`), cambiarlo es
+ * navegar, no mutar estado: el selector es un enlace y quien decide el idioma
+ * es el servidor al resolver el segmento. El contexto queda como simple
+ * portador de lo que ya viene resuelto desde arriba.
  */
 export interface LangContextValue {
   readonly lang: Lang;
   readonly content: SiteContent;
-  /** Cambia el idioma y lo persiste en `localStorage`. */
-  readonly setLang: (lang: Lang) => void;
 }

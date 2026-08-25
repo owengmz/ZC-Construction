@@ -1,0 +1,77 @@
+/**
+ * Menú desplegable de móvil.
+ *
+ * Equivale al `<div id="mobile-menu">` del sitio actual: capa a pantalla
+ * completa con los enlaces centrados y la llamada a la acción abajo. Se
+ * mantiene la misma transición de opacidad de 0,3 s.
+ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-mobile-menu);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  background-color: var(--color-background);
+  /* Cerrado: invisible y transparente a los clics, pero presente en el DOM
+   * para que la transición tenga entre qué interpolar. */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.abierto {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Por encima de 768px la barra de escritorio ya muestra los enlaces. */
+@media (min-width: 768px) {
+  .overlay {
+    display: none;
+  }
+}
+
+.enlaces {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.enlace {
+  font-family: var(--font-heading);
+  font-size: var(--text-h2-size);
+  line-height: var(--text-h2-height);
+  font-weight: var(--text-h2-weight);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-outline);
+  transition: color 0.3s ease;
+}
+
+.enlace:hover {
+  color: var(--color-primary);
+}
+
+.cta {
+  padding: 1.25rem 2.5rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-btn-primary-bg);
+  color: var(--color-btn-primary-fg);
+  font-family: var(--font-body);
+  font-size: var(--text-label-caps-size);
+  line-height: var(--text-label-caps-height);
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.cta:hover {
+  background-color: var(--color-btn-primary-bg-hover);
+  transform: translateY(-2px);
+}
