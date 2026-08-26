@@ -1,0 +1,175 @@
+/**
+ * Pie del sitio: marca, redes, enlaces corporativos y línea de créditos.
+ */
+
+.pie {
+  background-color: var(--color-surface-container-lowest);
+  border-top: 1px solid var(--color-surface-variant);
+}
+
+/* ── Franja principal ── */
+
+.principal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  width: 100%;
+  max-width: var(--spacing-container-max);
+  margin-inline: auto;
+  padding-inline: var(--spacing-margin-edge);
+  padding-block: var(--spacing-gutter);
+}
+
+@media (min-width: 768px) {
+  .principal {
+    flex-direction: row;
+  }
+}
+
+.marca {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .marca {
+    align-items: flex-start;
+  }
+}
+
+.marcaFila {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  height: 2rem;
+  width: auto;
+}
+
+.nombre {
+  font-family: var(--font-heading);
+  font-size: var(--text-h3-size);
+  line-height: var(--text-h3-height);
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: var(--color-on-surface);
+}
+
+.ubicacion {
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-height);
+  color: var(--color-outline);
+}
+
+/* ── Columnas ── */
+
+.columnas {
+  display: flex;
+  gap: 3rem;
+  font-family: var(--font-body);
+  font-size: var(--text-label-caps-size);
+  line-height: var(--text-label-caps-height);
+  letter-spacing: var(--text-label-caps-spacing);
+  font-weight: var(--text-label-caps-weight);
+}
+
+.columna {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tituloColumna {
+  margin-bottom: 0.5rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.redes {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Los SVG de las redes son negros; `invert` los pasa a blanco, que es como los
+ * usa el sitio actual en lugar de mantener dos versiones de cada icono. */
+.iconoRed {
+  width: 1.5rem;
+  height: 1.5rem;
+  filter: invert(1);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.enlaceRed:hover .iconoRed,
+.enlaceRed:focus-visible .iconoRed {
+  opacity: 1;
+}
+
+.enlaceLegal {
+  color: var(--color-outline);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.enlaceLegal:hover,
+.enlaceLegal:focus-visible {
+  color: var(--color-secondary-fixed);
+  opacity: 1;
+}
+
+/* ── Franja inferior ── */
+
+.inferior {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: var(--spacing-container-max);
+  margin-inline: auto;
+  padding-inline: var(--spacing-margin-edge);
+  padding-block: 2rem;
+  border-top: 1px solid var(--color-surface-variant);
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .inferior {
+    flex-direction: row;
+    text-align: left;
+  }
+}
+
+.copyright,
+.creditos {
+  font-family: var(--font-body);
+  font-size: var(--text-label-caps-size);
+  line-height: var(--text-label-caps-height);
+  letter-spacing: var(--text-label-caps-spacing);
+  font-weight: var(--text-label-caps-weight);
+  color: var(--color-outline);
+  opacity: 0.6;
+}
+
+.creditos {
+  transition: all 0.3s ease;
+}
+
+.creditos:hover,
+.creditos:focus-visible {
+  opacity: 1;
+  color: var(--color-primary);
+}
+
+.desarrollador {
+  font-weight: 700;
+}

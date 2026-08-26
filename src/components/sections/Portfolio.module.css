@@ -1,0 +1,135 @@
+/**
+ * Nuestros Trabajos: galería antes/después por proyecto.
+ *
+ * Paridad visual con el sitio actual. El rediseño de esta sección es una fase
+ * aparte, así que aquí no hay más criterio que reproducir lo que ya hay.
+ */
+
+.seccion {
+  max-width: var(--spacing-container-max);
+  margin-inline: auto;
+  padding-block: 4rem;
+  padding-inline: var(--spacing-margin-edge);
+  /* La cabecera entra desde la izquierda y las columnas desde abajo. */
+  overflow: hidden;
+}
+
+/* ── Cabecera ── */
+
+.cabecera {
+  margin-bottom: 4rem;
+}
+
+.tituloSeccion {
+  margin-bottom: 0.5rem;
+  font-size: var(--text-h2-size);
+  line-height: var(--text-h2-height);
+  letter-spacing: var(--text-h2-spacing);
+  font-weight: var(--text-h2-weight);
+  text-transform: uppercase;
+  color: var(--color-on-background);
+}
+
+.subrayado {
+  width: 6rem;
+  height: 0.25rem;
+  background-color: var(--color-primary);
+}
+
+.intro {
+  margin-top: 1rem;
+  max-width: 42rem;
+  font-family: var(--font-body);
+  font-size: var(--text-body-lg-size);
+  line-height: var(--text-body-lg-height);
+  font-weight: var(--text-body-lg-weight);
+  color: var(--color-outline-variant);
+}
+
+/* ── Rejilla de proyectos ── */
+
+.rejilla {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-gutter);
+}
+
+@media (min-width: 640px) {
+  .rejilla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .rejilla {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.etiqueta {
+  margin-bottom: 0.75rem;
+  font-family: var(--font-body);
+  font-size: var(--text-label-caps-size);
+  line-height: var(--text-label-caps-height);
+  letter-spacing: var(--text-label-caps-spacing);
+  font-weight: var(--text-label-caps-weight);
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+/* Par antes/después de cada proyecto. */
+.par {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.disparador {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.imagen {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+/* El zoom responde al proyecto entero, no a cada foto: al pasar por encima de
+ * cualquiera de las dos, ambas se amplían a la vez. Es el `group-hover` del
+ * sitio actual. */
+.proyecto:hover .imagen {
+  transform: scale(1.05);
+}
+
+/* ── Pies "antes" y "después" ── */
+
+.pie {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-block: 0.25rem;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  font-weight: var(--text-label-caps-weight);
+  text-transform: uppercase;
+}
+
+.pieAntes {
+  background-color: rgb(0 0 0 / 0.7);
+  color: var(--color-outline);
+}
+
+.pieDespues {
+  /* El gris de marca al 80 %, que es como el sitio actual distingue el
+   * resultado del estado previo. */
+  background-color: rgb(201 198 197 / 0.8);
+  color: var(--color-on-primary);
+}

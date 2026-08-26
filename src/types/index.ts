@@ -127,6 +127,16 @@ export interface ImageAsset {
   readonly width: number;
   /** Alto intrínseco en píxeles. */
   readonly height: number;
+  /**
+   * Miniatura incrustada como data URI para el `placeholder="blur"` de
+   * `next/image`.
+   *
+   * Opcional porque sólo compensa en imágenes grandes y visibles de entrada.
+   * En una foto de tarjeta que carga en diferido no aporta nada; en el fondo
+   * del hero, que pesa 1,4 MB y es el elemento LCP, evita que el visitante
+   * mire un rectángulo vacío mientras descarga.
+   */
+  readonly blurDataURL?: string;
 }
 
 /** Icono SVG servido desde `public/icons/`. */

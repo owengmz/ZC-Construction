@@ -1,38 +1,36 @@
+import { Footer } from '@/components/layout/Footer';
 import { Navbar } from '@/components/layout/Navbar';
-import { ORDEN_SECCIONES } from '@/data/navigation';
+import { WhatsAppFab } from '@/components/layout/WhatsAppFab';
+import { Contact } from '@/components/sections/Contact';
+import { Hero } from '@/components/sections/Hero';
+import { Insurance } from '@/components/sections/Insurance';
+import { Portfolio } from '@/components/sections/Portfolio';
+import { Services } from '@/components/sections/Services';
 
 /**
  * Landing de un idioma.
  *
- * Ahora mismo sólo monta la barra de navegación; las secciones son marcadores
- * con el `id` correcto para que los anclas de la barra y el efecto de scroll
- * se puedan probar de verdad. Cada marcador se irá sustituyendo por su
- * componente real conforme avance la Etapa 2.
+ * Estructura completa del sitio: las cinco secciones ancladas de
+ * `ORDEN_SECCIONES` dentro de `<main>`, con la barra, el pie y el botón
+ * flotante de WhatsApp fuera, en el mismo orden que en el sitio actual.
+ *
+ * Barra, pie y botón flotante viven aquí y no en el layout porque de momento
+ * sólo hay una página. Si la Etapa 3 añadiera rutas —una página de privacidad,
+ * por ejemplo—, su sitio natural pasaría a ser `app/[lang]/layout.tsx`.
  */
 export default function Home() {
   return (
     <>
       <Navbar />
       <main>
-        {ORDEN_SECCIONES.map((seccion) => (
-          <section
-            key={seccion}
-            id={seccion}
-            style={{
-              minHeight: '80vh',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderBottom: '1px solid var(--color-surface-variant)',
-              color: 'var(--color-outline)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-            }}
-          >
-            {seccion}
-          </section>
-        ))}
+        <Hero />
+        <Services />
+        <Portfolio />
+        <Insurance />
+        <Contact />
       </main>
+      <Footer />
+      <WhatsAppFab />
     </>
   );
 }

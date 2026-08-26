@@ -1,0 +1,127 @@
+/**
+ * Botón flotante de WhatsApp con panel de contactos.
+ *
+ * El panel se mantiene siempre en el DOM y se muestra con opacidad, igual que
+ * el sitio actual: así la transición de 0,3 s tiene entre qué interpolar.
+ */
+
+.contenedor {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: var(--z-whatsapp-fab);
+}
+
+.panel {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transform-origin: bottom right;
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.panelAbierto {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.tarjeta {
+  min-width: 240px;
+  padding: 1rem;
+  background-color: var(--color-surface-container-high);
+  border: 1px solid var(--color-surface-variant);
+  border-radius: var(--radius-sm);
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 0.25),
+    0 8px 10px -6px rgb(0 0 0 / 0.25);
+}
+
+.titulo {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-surface-variant);
+  font-family: var(--font-body);
+  font-size: var(--text-label-caps-size);
+  line-height: var(--text-label-caps-height);
+  letter-spacing: var(--text-label-caps-spacing);
+  font-weight: var(--text-label-caps-weight);
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.contacto {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.3s ease;
+}
+
+.contacto:hover,
+.contacto:focus-visible {
+  background-color: var(--color-surface-variant);
+}
+
+.contacto + .contacto {
+  margin-top: 0.5rem;
+}
+
+/* Disco verde con el icono, delante del nombre del contacto. */
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background-color: var(--color-whatsapp);
+  /* El icono usa `fill="currentColor"`, así que el blanco tiene que venir de
+   * aquí: sin esto heredaría el gris del texto y se perdería sobre el verde. */
+  color: #ffffff;
+}
+
+.datosContacto {
+  display: flex;
+  flex-direction: column;
+}
+
+.rol {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.numero {
+  font-size: 10px;
+  color: var(--color-outline);
+  opacity: 0.7;
+}
+
+.boton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 9999px;
+  background-color: var(--color-whatsapp);
+  color: #ffffff;
+  /* Halo verde difuso, que es lo que despega el botón del fondo oscuro. */
+  box-shadow: 0 10px 30px rgb(37 211 102 / 0.4);
+  transition: transform 0.3s ease;
+}
+
+.boton:active {
+  transform: scale(0.95);
+}

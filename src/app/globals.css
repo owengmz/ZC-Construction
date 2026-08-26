@@ -243,6 +243,14 @@ html {
   /* Igual que en el sitio actual: evita la barra horizontal que provocan las
    * animaciones de entrada de GSAP, que desplazan elementos fuera del viewport. */
   overflow-x: hidden;
+
+  /* Interlineado base heredado por todo lo que no defina el suyo.
+   *
+   * El 1.5 no es arbitrario: es lo que el `preflight` de Tailwind ponía en el
+   * `html` del sitio actual, y de ahí lo heredaban las tarjetas de seguro, los
+   * campos del formulario y el modal de garantía, que no llevan `text-body-md`.
+   * Sin esta línea heredarían `normal`, que en Inter no da exactamente 1.5. */
+  line-height: 1.5;
 }
 
 body {
@@ -251,9 +259,14 @@ body {
   color: var(--color-on-surface);
   font-family: var(--font-body);
   font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-height);
+  /* Sin `line-height` propio: se hereda el 1.5 del `html`. Fijar aquí el 1.6 de
+   * `--text-body-md-height` lo propagaba a todo lo que no define el suyo
+   * —tarjetas de seguro, campos del formulario, modal de garantía— y hacía
+   * esos bloques varios píxeles más altos que en el original.
+   *
+   * Tampoco se declara `-webkit-font-smoothing`: el sitio actual no lo hace y
+   * altera el grosor aparente del texto. */
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
@@ -283,9 +296,23 @@ img {
   max-width: 100%;
 }
 
-button {
+/**
+ * Controles de formulario.
+ *
+ * Los navegadores no heredan tipografía en `input`, `select`, `textarea` ni
+ * `button`: les asignan la suya. El `preflight` de Tailwind lo corregía en el
+ * sitio actual, así que sin esta regla los campos del formulario salían con un
+ * interlineado distinto y unos píxeles más bajos que en el original.
+ */
+button,
+input,
+select,
+textarea {
   font: inherit;
   color: inherit;
+}
+
+button {
   background: none;
   border: none;
   padding: 0;

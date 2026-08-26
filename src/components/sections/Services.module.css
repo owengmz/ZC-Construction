@@ -1,0 +1,225 @@
+/**
+ * Servicios Principales: rejilla asimétrica de tres tarjetas.
+ *
+ * La asimetría la marca la clase de disposición que lleva cada tarjeta
+ * (`.wide`, `.narrow`, `.full`), que viene del campo `layout` de
+ * `data/services.ts`. Esa única clase gobierna ancho, alto, opacidad de la
+ * fotografía, dirección del degradado y anchura del párrafo, así que el
+ * componente no necesita saber nada de estilos.
+ */
+
+.seccion {
+  max-width: var(--spacing-container-max);
+  margin-inline: auto;
+  padding-top: 3.5rem;
+  padding-bottom: 4rem;
+  padding-inline: var(--spacing-margin-edge);
+  /* Las tarjetas entran desde abajo y la cabecera desde la izquierda: sin esto
+   * el desplazamiento inicial generaría barra horizontal. */
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .seccion {
+    padding-top: var(--spacing-section-padding);
+  }
+}
+
+/* ── Cabecera ── */
+
+.cabecera {
+  margin-bottom: 4rem;
+}
+
+.tituloSeccion {
+  margin-bottom: 0.5rem;
+  font-size: var(--text-h2-size);
+  line-height: var(--text-h2-height);
+  letter-spacing: var(--text-h2-spacing);
+  font-weight: var(--text-h2-weight);
+  text-transform: uppercase;
+  color: var(--color-on-background);
+}
+
+/* Filete bajo el título, presente en las cuatro secciones del sitio. */
+.subrayado {
+  width: 6rem;
+  height: 0.25rem;
+  background-color: var(--color-primary);
+}
+
+/* ── Rejilla ── */
+
+.rejilla {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-gutter);
+}
+
+@media (min-width: 768px) {
+  .rejilla {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+/* ── Tarjeta ── */
+
+.tarjeta {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  transition: border-color 0.3s ease;
+}
+
+.tarjeta:hover {
+  border-color: var(--color-card-border-hover);
+}
+
+.imagen {
+  object-fit: cover;
+  opacity: 0.6;
+  transition: transform 0.7s ease;
+}
+
+.tarjeta:hover .imagen {
+  transform: scale(1.05);
+}
+
+/* Degradado de legibilidad por defecto: de negro abajo a transparente arriba. */
+.velo {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to top, #000000, transparent, transparent);
+}
+
+.texto {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  /* En móvil el texto no cabe en las tarjetas bajas, así que se limita a dos
+   * tercios de la altura y se hace desplazable. En escritorio sobra sitio. */
+  max-height: 65%;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  .texto {
+    padding: 2.5rem;
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+
+/* Barra de desplazamiento discreta, sólo donde hace falta. */
+.texto::-webkit-scrollbar {
+  width: 3px;
+}
+
+.texto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.texto::-webkit-scrollbar-thumb {
+  background: rgb(201 198 197 / 0.3);
+  border-radius: 3px;
+}
+
+@media (min-width: 768px) {
+  .texto::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.marcador {
+  display: block;
+  margin-bottom: 1rem;
+  font-family: var(--font-body);
+  font-size: var(--text-label-caps-size);
+  line-height: var(--text-label-caps-height);
+  letter-spacing: var(--text-label-caps-spacing);
+  font-weight: var(--text-label-caps-weight);
+  color: var(--color-primary);
+}
+
+.titulo {
+  margin-bottom: 1rem;
+  font-size: var(--text-h3-size);
+  line-height: var(--text-h3-height);
+  font-weight: var(--text-h3-weight);
+  text-transform: uppercase;
+}
+
+.descripcion {
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-height);
+  color: var(--color-on-surface-variant);
+}
+
+/* Sombra inferior que insinúa que el texto continúa al desplazarse. */
+.desvanecido {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2rem;
+  background-image: linear-gradient(to top, rgb(0 0 0 / 0.6), transparent);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .desvanecido {
+    display: none;
+  }
+}
+
+/* ── Variantes de disposición ── */
+
+.wide,
+.narrow {
+  height: 280px;
+}
+
+.full {
+  height: 240px;
+}
+
+@media (min-width: 768px) {
+  .wide {
+    grid-column: span 8;
+    height: 500px;
+  }
+
+  .narrow {
+    grid-column: span 4;
+    height: 500px;
+  }
+
+  .full {
+    grid-column: span 12;
+    height: 400px;
+  }
+}
+
+/* La tarjeta ancha acota el párrafo para que no se estire de lado a lado. */
+.wide .descripcion {
+  max-width: 28rem;
+}
+
+/* Techado ocupa las doce columnas: la fotografía se ve más y el degradado va
+ * de izquierda a derecha en lugar de de abajo arriba. */
+.full .imagen {
+  opacity: 0.5;
+}
+
+.full .velo {
+  background-image: linear-gradient(to right, rgb(0 0 0 / 0.8), rgb(0 0 0 / 0.4), transparent);
+}
+
+.full .descripcion {
+  max-width: 32rem;
+}

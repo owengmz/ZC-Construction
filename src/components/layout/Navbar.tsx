@@ -48,12 +48,20 @@ export function Navbar() {
                 className={styles.logo}
                 /**
                  * El logo es visible desde el primer instante, así que no debe
-                 * cargarse en diferido: aparecería con un salto. `sizes` acota
-                 * lo que se descarga a lo que realmente ocupa en pantalla
-                 * (72 px de ancho en móvil, 84 px a partir de 768 px), no a los
-                 * 1536 px del archivo maestro.
+                 * cargarse en diferido: aparecería con un salto.
+                 *
+                 * No lleva `priority`, que está reservado al fondo del hero
+                 * (el elemento LCP). Aun así React 19 le añade un
+                 * `<link rel="preload">` por el simple hecho de ser `eager`
+                 * —comprobado quitándolo: las precargas bajan de 3 a 2—, así
+                 * que sí compite con el hero. Lo que ordena esa competencia es
+                 * el `fetchPriority="high"` que sólo lleva el fondo.
+                 *
+                 * `sizes` acota lo que se descarga a lo que realmente ocupa en
+                 * pantalla (72 px de ancho en móvil, 84 px a partir de 768 px),
+                 * no a los 1536 px del archivo maestro.
                  */
-                priority
+                loading="eager"
                 sizes="(max-width: 767px) 72px, 84px"
               />
             </a>

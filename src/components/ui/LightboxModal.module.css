@@ -1,0 +1,96 @@
+/**
+ * Galería a pantalla completa.
+ *
+ * Traducción del marcado que `legacy/assets/js/lightbox.js` inyectaba en el
+ * `<body>` como cadena de texto. Mismas posiciones, mismos tamaños de icono y
+ * mismo velo al 90 % con desenfoque.
+ */
+
+.raiz {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.velo {
+  position: absolute;
+  inset: 0;
+  background-color: rgb(0 0 0 / 0.9);
+  backdrop-filter: blur(4px);
+}
+
+/* ── Controles ── */
+
+.control {
+  position: absolute;
+  z-index: 20;
+  color: var(--color-outline);
+  transition: color 0.3s ease;
+}
+
+.control:hover,
+.control:focus-visible {
+  color: #ffffff;
+}
+
+.cerrar {
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+.anterior,
+.siguiente {
+  padding: 0.5rem;
+}
+
+.anterior {
+  left: 1rem;
+}
+
+.siguiente {
+  right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .anterior {
+    left: 2rem;
+  }
+
+  .siguiente {
+    right: 2rem;
+  }
+}
+
+/* ── Imagen ── */
+
+.figura {
+  position: relative;
+  z-index: 10;
+  margin: 0 1rem;
+  max-width: 64rem;
+}
+
+.imagen {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+.pie {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--color-outline);
+  font-family: var(--font-body);
+  font-size: var(--text-label-caps-size);
+  line-height: var(--text-label-caps-height);
+  letter-spacing: 0.1em;
+  font-weight: var(--text-label-caps-weight);
+  text-transform: uppercase;
+}
