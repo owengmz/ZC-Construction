@@ -32,6 +32,8 @@ export const contentEs: SiteContent = {
     twitterDescription:
       'Expertos en estructuras, remodelación interior y exterior y techado en New Jersey.',
     ogLocale: 'es_US',
+    ogImageAlt:
+      'Zycor Construction LLC — contratistas de estructuras, remodelación y techado en New Jersey.',
   },
 
   nav: {

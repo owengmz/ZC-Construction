@@ -1,6 +1,21 @@
 import type { SiteConfig } from '@/types';
 
 /**
+ * Color de la barra del navegador y del fondo de arranque de la aplicación
+ * instalada (`<meta name="theme-color">` y `theme_color` del manifiesto).
+ *
+ * Es el valor de `--color-background` de `globals.css`, repetido aquí como
+ * literal: ambos consumidores se resuelven en el servidor —los metadatos al
+ * prerenderizar y el manifiesto al generarse—, donde el CSS todavía no existe
+ * y la custom property no se puede leer. Si cambia la paleta, este es el único
+ * punto del proyecto que hay que sincronizar a mano con la hoja de estilos.
+ *
+ * El sitio anterior declaraba `#ffffff` en su manifiesto pese a ser de tema
+ * oscuro único, lo que pintaba de blanco la barra del navegador en Android.
+ */
+export const COLOR_TEMA = '#141313';
+
+/**
  * Constantes del sitio que no dependen del idioma: URLs canónicas, datos de
  * contacto e integraciones de terceros.
  *
@@ -30,6 +45,25 @@ export const siteConfig: SiteConfig = {
     src: '/images/logo-zycor.webp',
     width: 1536,
     height: 1024,
+  },
+
+  /**
+   * Imagen de la tarjeta de compartición.
+   *
+   * 1200×630 es la proporción 1.91:1 que esperan Facebook, LinkedIn y WhatsApp,
+   * y la misma que usa la tarjeta `summary_large_image` de Twitter: una sola
+   * imagen sirve para todas.
+   *
+   * PENDIENTE: el archivo todavía no existe en `public/images/`. El sitio
+   * anterior declaraba `assets/images/og-image.jpg` en su `<head>` pero nunca
+   * lo subió, así que hoy los enlaces compartidos salen sin imagen. La ruta
+   * queda declarada aquí para que baste con depositar el archivo final; ni el
+   * build ni el sitio fallan mientras tanto, sólo la previsualización.
+   */
+  ogImage: {
+    src: '/images/og-image.jpg',
+    width: 1200,
+    height: 630,
   },
 
   email: 'zycorconstruction@gmail.com',

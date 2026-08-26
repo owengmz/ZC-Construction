@@ -28,6 +28,10 @@ export const contentEn: SiteContent = {
     twitterDescription:
       'Expert Framing, Interior & Exterior Renovation and Roofing in New Jersey.',
     ogLocale: 'en_US',
+    // NUEVO: el sitio actual nunca declaró `og:image:alt`. Descripción neutra
+    // de marca, válida para cualquier composición: conviene ajustarla si la
+    // imagen final muestra una obra concreta.
+    ogImageAlt: 'Zycor Construction LLC — framing, renovation and roofing contractors in New Jersey.',
   },
 
   nav: {

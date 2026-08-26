@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 import { LangProvider } from '@/context/LangContext';
 import { contentByLang } from '@/data/content';
 import { esLang, IDIOMAS } from '@/data/langs';
-import { siteConfig } from '@/data/site';
+import { COLOR_TEMA, siteConfig } from '@/data/site';
 
 import '../globals.css';
 
@@ -48,12 +48,31 @@ export function generateStaticParams() {
 export const dynamicParams = false;
 
 /**
+ * Ajustes del viewport y del `<head>` que no dependen del idioma.
+ *
+ * En Next.js 15 `themeColor` y `colorScheme` viajan en su propio export y no en
+ * `metadata`: son directivas de presentación del navegador, no descripción del
+ * documento. Ninguno de los dos existía en el sitio anterior.
+ *
+ *  - `themeColor` tiñe la barra del navegador en Android y la barra de estado
+ *    en iOS; sin él, el sistema pinta blanco sobre un sitio negro.
+ *  - `colorScheme: 'dark'` declara que el sitio SÓLO tiene tema oscuro. El
+ *    navegador lo usa para pintar en oscuro los controles nativos —los del
+ *    formulario de contacto y las barras de desplazamiento—, que hasta ahora
+ *    salían claros sobre fondo negro.
+ */
+export const viewport: Viewport = {
+  themeColor: COLOR_TEMA,
+  colorScheme: 'dark',
+};
+
+/**
  * Metadatos por idioma.
  *
- * Es la pieza de la Metadata API que el enrutado por idioma obliga a adelantar:
- * las etiquetas `canonical` y `hreflang` sólo tienen sentido cuando cada idioma
- * vive en su propia URL. El resto de metadatos (iconos, manifiesto, verificación)
- * queda para la Etapa 3.
+ * Cubre las tres familias de etiquetas del `<head>`: identidad del documento
+ * (título, descripción), enrutado por idioma (`canonical` y `hreflang`, que
+ * sólo tienen sentido porque cada idioma vive en su propia URL) e iconos y
+ * previsualización al compartir.
  *
  * @param params Parámetros de ruta con el idioma.
  * @returns Metadatos del documento en el idioma correspondiente.
@@ -68,10 +87,46 @@ export async function generateMetadata({
 
   const { meta } = contentByLang[lang];
 
+  /**
+   * Imagen de compartición en el formato que espera la Metadata API.
+   *
+   * Se declara una vez y se reutiliza en Open Graph y en Twitter: el sitio
+   * anterior repetía la misma URL en dos etiquetas, con el riesgo de cambiar
+   * una y olvidar la otra.
+   */
+  const ogImage = {
+    url: siteConfig.ogImage.src,
+    width: siteConfig.ogImage.width,
+    height: siteConfig.ogImage.height,
+    alt: meta.ogImageAlt,
+  };
+
   return {
     metadataBase: new URL(siteConfig.url),
     title: meta.title,
     description: meta.description,
+
+    /**
+     * Iconos servidos desde `public/`, tal y como los dejó el generador de
+     * favicons del sitio anterior. No se usa la convención de archivo de
+     * Next.js (`app/icon.png`, `app/apple-icon.png`) a propósito: obligaría a
+     * mover los archivos dentro de `app/` y a renombrarlos, y aquí el objetivo
+     * es que los mismos bytes que hoy están en producción sigan sirviéndose en
+     * las mismas URLs.
+     *
+     * `favicon.ico` contiene tres resoluciones (16, 32 y 48 px) y es el que
+     * usan los navegadores de escritorio; los PNG son el respaldo moderno.
+     */
+    icons: {
+      icon: [
+        { url: '/favicon.ico', sizes: '16x16 32x32 48x48', type: 'image/x-icon' },
+        { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+        { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      ],
+      // Icono del atajo en la pantalla de inicio de iOS, que no lee el
+      // manifiesto: Safari sólo mira esta etiqueta.
+      apple: { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    },
     alternates: {
       canonical: `/${lang}`,
       /**
@@ -91,12 +146,21 @@ export async function generateMetadata({
       description: meta.ogDescription,
       url: `/${lang}`,
       locale: meta.ogLocale,
+      /**
+       * Declara la existencia de la otra versión lingüística. Facebook y
+       * LinkedIn lo usan para servir la tarjeta en el idioma del lector cuando
+       * pueden; el sitio anterior sólo lo declaraba desde el inglés, porque no
+       * tenía una URL española que anunciar.
+       */
+      alternateLocale: lang === 'en' ? 'es_US' : 'en_US',
       siteName: siteConfig.legalName,
+      images: [ogImage],
     },
     twitter: {
       card: 'summary_large_image',
       title: meta.twitterTitle,
       description: meta.twitterDescription,
+      images: [ogImage],
     },
   };
 }

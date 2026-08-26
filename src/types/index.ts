@@ -236,6 +236,19 @@ export interface SiteConfig {
   readonly brandName: string;
   /** Logo único consolidado, usado en navbar, hero y footer. */
   readonly logo: ImageAsset;
+  /**
+   * Imagen de previsualización al compartir el enlace (Open Graph y Twitter).
+   *
+   * Es estructura y no contenido: el archivo es idéntico en inglés y en
+   * español, y sólo cambia su `alt`, que vive en `MetaContent.ogImageAlt`.
+   *
+   * Se reutiliza `ImageAsset` aunque esta imagen no pase por `next/image`:
+   * `width` y `height` siguen siendo obligatorios porque las etiquetas
+   * `og:image:width` y `og:image:height` permiten a las redes reservar el hueco
+   * de la tarjeta antes de descargar el archivo, y sin ellas algunas muestran
+   * el enlace sin imagen en la primera comparición.
+   */
+  readonly ogImage: ImageAsset;
   readonly email: string;
   /** Dirección postal; no se traduce (es un topónimo estadounidense). */
   readonly address: string;
@@ -315,6 +328,15 @@ export interface MetaContent {
   readonly twitterDescription: string;
   /** Locale de Open Graph correspondiente al idioma. */
   readonly ogLocale: 'en_US' | 'es_US';
+  /**
+   * Texto alternativo de la imagen de previsualización (`og:image:alt`).
+   *
+   * Vive aquí y no junto al archivo en `SiteConfig` porque es texto que leen
+   * personas —lectores de pantalla, y clientes de correo o chat que muestran el
+   * enlace sin descargar la imagen—, así que se traduce. El archivo es el mismo
+   * en ambos idiomas; su descripción no.
+   */
+  readonly ogImageAlt: string;
 }
 
 /** Navbar de escritorio, menú hamburguesa y selector de idioma. */
