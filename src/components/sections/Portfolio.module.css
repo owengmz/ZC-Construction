@@ -1,135 +1,308 @@
 /**
- * Nuestros Trabajos: galería antes/después por proyecto.
+ * Nuestros Trabajos: panel de vídeo a la izquierda y fichas de proyecto a la
+ * derecha.
  *
- * Paridad visual con el sitio actual. El rediseño de esta sección es una fase
- * aparte, así que aquí no hay más criterio que reproducir lo que ya hay.
+ * Rediseño «Expediente de Obra». La rejilla de tres proyectos iguales del
+ * sitio anterior se sustituye por una composición jerárquica: una pieza
+ * principal —el vídeo de obra— y, al lado, una selección de expedientes. El
+ * resto vive en la galería completa, a la que lleva el enlace del pie.
  */
 
 .seccion {
+  position: relative;
+  padding-block: 3.5rem 4rem;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .seccion {
+    padding-block: var(--spacing-section-padding) var(--spacing-section-padding);
+  }
+}
+
+/**
+ * Trama de plano, un punto más marcada que en Servicios (4,1 % frente a
+ * 2,9 %).
+ *
+ * La intensidad sube conforme el documento avanza hacia la prueba material:
+ * esta es la sección donde se enseñan los trabajos, y la retícula refuerza la
+ * lectura de registro fotográfico. Sigue muy por debajo del umbral en el que
+ * una trama compite con una fotografía.
+ *
+ * Como en Servicios, la opacidad se recalculó al pasar del azul al acero para
+ * conservar el mismo salto de luminancia, no el mismo número.
+ */
+.seccion::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.041;
+  background-image:
+    linear-gradient(var(--color-steel) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-steel) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+.contenedor {
+  position: relative;
   max-width: var(--spacing-container-max);
   margin-inline: auto;
-  padding-block: 4rem;
   padding-inline: var(--spacing-margin-edge);
-  /* La cabecera entra desde la izquierda y las columnas desde abajo. */
-  overflow: hidden;
 }
 
 /* ── Cabecera ── */
 
 .cabecera {
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
 .tituloSeccion {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
   font-size: var(--text-h2-size);
   line-height: var(--text-h2-height);
-  letter-spacing: var(--text-h2-spacing);
-  font-weight: var(--text-h2-weight);
+  letter-spacing: 0.01em;
+  font-weight: 700;
   text-transform: uppercase;
   color: var(--color-on-background);
 }
 
-.subrayado {
-  width: 6rem;
-  height: 0.25rem;
-  background-color: var(--color-primary);
+.filete {
+  height: 1px;
+  /* Los primeros 96 px van en ember y el resto en gris de regla. Es un
+   * degradado de dos paradas duras en el mismo punto, no una transición: se
+   * busca un tramo de color y un corte, no un desvanecido. */
+  background-image: linear-gradient(
+    90deg,
+    var(--color-ember) 0 96px,
+    var(--color-rule) 96px
+  );
 }
 
 .intro {
-  margin-top: 1rem;
   max-width: 42rem;
+  margin-top: 1.25rem;
   font-family: var(--font-body);
   font-size: var(--text-body-lg-size);
   line-height: var(--text-body-lg-height);
-  font-weight: var(--text-body-lg-weight);
-  color: var(--color-outline-variant);
+  color: var(--color-text-body);
+  text-wrap: pretty;
 }
 
-/* ── Rejilla de proyectos ── */
+/* ── Cuerpo ── */
 
-.rejilla {
+.cuerpo {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-gutter);
 }
 
-@media (min-width: 640px) {
-  .rejilla {
+@media (min-width: 1024px) {
+  .cuerpo {
+    /* El vídeo pesa algo más que la columna de fichas, pero no la domina: son
+     * dos formas distintas de mostrar lo mismo, no una principal y una
+     * secundaria. */
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  }
+}
+
+/* ── Panel de vídeo ── */
+
+.video {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 260px;
+  padding: 2rem;
+  background-color: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-rule);
+}
+
+/**
+ * Retícula interior del panel.
+ *
+ * Aquí la trama sí se ve (5,9 % sobre el panel, que es más oscuro que el
+ * fondo) y es deliberado: el panel está vacío a la espera de la pieza real, y
+ * una superficie lisa y negra parecería un fallo de carga. La retícula lo
+ * declara como marco preparado.
+ */
+.video::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.059;
+  background-image:
+    linear-gradient(var(--color-steel) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-steel) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+/**
+ * Ángulos de visor del panel, los cuatro y permanentes.
+ *
+ * Es la única pieza del sitio que los lleva siempre visibles, y por eso
+ * funciona: el panel de vídeo ES el visor de inspección del expediente. En las
+ * fichas de servicio los mismos ángulos aparecen sólo al pasar el cursor,
+ * precisamente para que este no pierda su carácter.
+ */
+.esquina {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.esquinaSupIzq {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid var(--color-ember);
+  border-left: 1px solid var(--color-ember);
+}
+
+.esquinaSupDer {
+  top: -1px;
+  right: -1px;
+  border-top: 1px solid var(--color-ember);
+  border-right: 1px solid var(--color-ember);
+}
+
+.esquinaInfIzq {
+  bottom: -1px;
+  left: -1px;
+  border-bottom: 1px solid var(--color-ember);
+  border-left: 1px solid var(--color-ember);
+}
+
+.esquinaInfDer {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1px solid var(--color-ember);
+  border-right: 1px solid var(--color-ember);
+}
+
+/**
+ * Rótulo del marco, arriba a la izquierda, dentro de los ángulos.
+ *
+ * Es una etiqueta, y en el reparto de acentos las etiquetas son del acero del
+ * logo: relleno al 22 %, filete al 45 % y texto en la variante legible. Antes
+ * era gris de Material sobre gris y se perdía contra el panel; ahora se lee
+ * como una placa atornillada al marco, sin disputarle la atención al ember de
+ * los ángulos, precisamente porque el acero no señala acción.
+ *
+ * Contraste del texto sobre el fondo compuesto real (#211f1f): 6,01:1.
+ */
+.videoTag {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  padding: 0.25rem 0.5rem;
+  background-color: rgb(100 93 93 / 0.22);
+  border: 1px solid rgb(100 93 93 / 0.45);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  color: var(--color-steel-text);
+}
+
+.videoIcono {
+  position: relative;
+  color: var(--color-ember);
+}
+
+.videoTexto {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  /* Texto de servicio, del mismo acero que el rótulo del marco. Lo que separa
+   * a los dos no es el color sino la placa: el rótulo va sobre relleno y
+   * filete, y esto no. */
+  color: var(--color-steel-text);
+}
+
+/* ── Columna de fichas ── */
+
+.fichas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-gutter);
+  /* Las dos fichas reparten el alto de la fila a partes iguales, de modo que
+   * la columna termina exactamente a la altura del panel de vídeo. */
+  align-content: stretch;
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .fichas {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 1024px) {
-  .rejilla {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+/* ── Pie de sección ── */
+
+.pieSeccion {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--color-rule);
 }
 
-.etiqueta {
-  margin-bottom: 0.75rem;
-  font-family: var(--font-body);
-  font-size: var(--text-label-caps-size);
-  line-height: var(--text-label-caps-height);
-  letter-spacing: var(--text-label-caps-spacing);
-  font-weight: var(--text-label-caps-weight);
-  text-transform: uppercase;
-  color: var(--color-primary);
-}
-
-/* Par antes/después de cada proyecto. */
-.par {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
-}
-
-.disparador {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.imagen {
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-/* El zoom responde al proyecto entero, no a cada foto: al pasar por encima de
- * cualquiera de las dos, ambas se amplían a la vez. Es el `group-hover` del
- * sitio actual. */
-.proyecto:hover .imagen {
-  transform: scale(1.05);
-}
-
-/* ── Pies "antes" y "después" ── */
-
-.pie {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding-block: 0.25rem;
-  text-align: center;
-  font-family: var(--font-body);
-  font-size: 10px;
+/**
+ * Enlace a la galería completa.
+ *
+ * Contorno y no relleno: la acción principal del sitio es pedir presupuesto, y
+ * un botón sólido aquí competiría con ella. El ember del borde basta para que
+ * se lea como acción sin subir de rango.
+ */
+.galeriaCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  border: 1px solid var(--color-ember);
+  font-family: var(--font-heading);
+  font-size: 13px;
   line-height: 1;
   letter-spacing: 0.1em;
-  font-weight: var(--text-label-caps-weight);
+  font-weight: 700;
   text-transform: uppercase;
+  color: var(--color-on-background);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
-.pieAntes {
-  background-color: rgb(0 0 0 / 0.7);
-  color: var(--color-outline);
+.galeriaCta:hover {
+  background-color: rgb(255 91 26 / 0.14);
+  color: var(--color-ember-hover);
 }
 
-.pieDespues {
-  /* El gris de marca al 80 %, que es como el sitio actual distingue el
-   * resultado del estado previo. */
-  background-color: rgb(201 198 197 / 0.8);
-  color: var(--color-on-primary);
+.galeriaCta:focus-visible {
+  outline: 2px solid var(--color-steel-text);
+  outline-offset: 2px;
+}
+
+.flecha {
+  transition: transform 0.16s ease-out;
+}
+
+.galeriaCta:hover .flecha {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flecha,
+  .galeriaCta:hover .flecha {
+    transition: none;
+    transform: none;
+  }
 }

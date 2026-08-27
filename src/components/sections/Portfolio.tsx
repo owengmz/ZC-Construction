@@ -1,11 +1,13 @@
 'use client';
 
-import Image from 'next/image';
+import Link from 'next/link';
 import { useMemo, useRef } from 'react';
 
 import { LightboxModal } from '@/components/ui/LightboxModal';
+import { ProjectCard, type DesplazamientoFoto } from '@/components/ui/ProjectCard';
 import { useLang } from '@/context/LangContext';
-import { projects } from '@/data/projects';
+import { gallery, textosDeEntrada } from '@/data/gallery';
+import { rutaDePagina } from '@/data/routes';
 import { useGsapReveal } from '@/hooks/useGsapReveal';
 import { useLightbox } from '@/hooks/useLightbox';
 import type { LightboxItem } from '@/types';
@@ -21,42 +23,73 @@ import styles from './Portfolio.module.css';
 const FOTOS_POR_PROYECTO = 2;
 
 /**
+ * Cuántas fichas caben en la composición aprobada, junto al panel de vídeo.
+ *
+ * No recorta la lista —de eso se encarga `featured` en `data/gallery.ts`— sino
+ * que documenta el límite del diseño y sirve de red: si alguien marca tres
+ * obras como destacadas, la tercera desbordaría la columna y rompería la
+ * alineación con el panel de vídeo. Antes que dejar que eso ocurra en
+ * producción, la portada enseña las dos primeras y el resto se lee en la
+ * galería completa, que es exactamente para lo que existe.
+ */
+const FICHAS_EN_PORTADA = 2;
+
+/** Anchos de las fotos: media ficha, y la ficha es algo menos de media pantalla. */
+const SIZES_FOTO = '(max-width: 639px) 50vw, (max-width: 1023px) 25vw, 300px';
+
+/**
  * Sección de Nuestros Trabajos.
  *
- * Paridad visual con el sitio actual: rejilla de proyectos, par antes/después
- * por cada uno y galería a pantalla completa al pulsar cualquier foto. El
- * rediseño de esta sección es una fase posterior.
+ * Rediseño «Expediente de Obra»: panel de vídeo a la izquierda —marco de visor
+ * con los cuatro ángulos, a la espera de la pieza real— y una selección de dos
+ * expedientes a la derecha, cada uno con su ubicación y su par antes/después.
  */
 export function Portfolio() {
   const { content } = useLang();
 
   const seccionRef = useRef<HTMLElement>(null);
   const cabeceraRef = useRef<HTMLDivElement>(null);
-  const proyectosRef = useRef<(HTMLElement | null)[]>([]);
+  const videoRef = useRef<HTMLDivElement>(null);
+  const fichasRef = useRef<(HTMLElement | null)[]>([]);
+  const pieRef = useRef<HTMLDivElement>(null);
 
   /**
-   * Lista plana de las seis fotos, en el orden en que se navegan con las
+   * Los expedientes que se enseñan aquí. El resto queda para la galería.
+   *
+   * Quien decide cuáles son es el campo `featured` de cada obra en
+   * `data/gallery.ts`, no este componente: así se cambia la selección de la
+   * portada editando un `true` en el catálogo, sin abrir código de React.
+   */
+  const destacados = useMemo(
+    () => gallery.filter((obra) => obra.featured).slice(0, FICHAS_EN_PORTADA),
+    [],
+  );
+
+  /**
+   * Lista plana de las fotos VISIBLES, en el orden en que se navegan con las
    * flechas: proyecto 1 antes, proyecto 1 después, proyecto 2 antes…
    *
-   * El sitio actual escribía este orden a mano en el atributo `data-index` de
-   * cada botón (`0` a `5`). Derivarlo de los datos elimina la posibilidad de
-   * que un índice quede desincronizado con la galería al reordenar proyectos.
+   * Se deriva de `destacados` y no de `projects` a propósito: si incluyera los
+   * seis, quien abriera una foto y avanzara con las flechas acabaría viendo
+   * proyectos que no están en pantalla, sin entender de dónde salen.
    */
   const fotos = useMemo<LightboxItem[]>(
     () =>
-      projects.flatMap((proyecto) => {
-        const copy = content.portfolio.items[proyecto.id];
+      destacados.flatMap((obra) => {
+        const copy = textosDeEntrada(obra, content);
         return [
-          { image: proyecto.before, alt: copy.beforeAlt, caption: content.portfolio.beforeLabel },
-          { image: proyecto.after, alt: copy.afterAlt, caption: content.portfolio.afterLabel },
+          { image: obra.before, alt: copy.beforeAlt, caption: content.portfolio.beforeLabel },
+          { image: obra.after, alt: copy.afterAlt, caption: content.portfolio.afterLabel },
         ];
       }),
-    [content],
+    [content, destacados],
   );
 
   const lightbox = useLightbox(fotos.length);
 
-  // Mismos valores que `animPortfolio.js`.
+  // Un solo despliegue orquestado para toda la sección: cabecera desde la
+  // izquierda, y después el panel de vídeo y las fichas desde abajo,
+  // escalonados. El pie cierra la secuencia.
   useGsapReveal(seccionRef, [
     {
       elementos: () => [cabeceraRef.current],
@@ -65,69 +98,107 @@ export function Portfolio() {
       duracion: 0.7,
     },
     {
-      elementos: () => proyectosRef.current,
+      elementos: () => [videoRef.current, ...fichasRef.current],
       inicio: 'cards',
       desde: { y: 45 },
       duracion: 0.7,
       escalonado: 0.15,
     },
+    {
+      elementos: () => [pieRef.current],
+      inicio: 'cards',
+      desde: { y: 20 },
+      duracion: 0.6,
+      retardo: 0.45,
+    },
   ]);
 
   return (
     <section id="portfolio" ref={seccionRef} className={styles.seccion}>
-      <div ref={cabeceraRef} className={styles.cabecera}>
-        <h2 className={styles.tituloSeccion}>{content.portfolio.sectionTitle}</h2>
-        <div className={styles.subrayado} />
-        <p className={styles.intro}>{content.portfolio.intro}</p>
-      </div>
+      <div className={styles.contenedor}>
+        <div ref={cabeceraRef} className={styles.cabecera}>
+          <h2 className={styles.tituloSeccion}>{content.portfolio.sectionTitle}</h2>
+          <div className={styles.filete} />
+          <p className={styles.intro}>{content.portfolio.intro}</p>
+        </div>
 
-      <div className={styles.rejilla}>
-        {projects.map((proyecto, indiceProyecto) => {
-          const copy = content.portfolio.items[proyecto.id];
-          const indiceAntes = indiceProyecto * FOTOS_POR_PROYECTO;
+        <div className={styles.cuerpo}>
+          <div ref={videoRef} className={styles.video}>
+            <span className={`${styles.esquina} ${styles.esquinaSupIzq}`} aria-hidden="true" />
+            <span className={`${styles.esquina} ${styles.esquinaSupDer}`} aria-hidden="true" />
+            <span className={`${styles.esquina} ${styles.esquinaInfIzq}`} aria-hidden="true" />
+            <span className={`${styles.esquina} ${styles.esquinaInfDer}`} aria-hidden="true" />
 
-          return (
-            <div
-              key={proyecto.id}
-              ref={(elemento) => {
-                proyectosRef.current[indiceProyecto] = elemento;
-              }}
-              className={styles.proyecto}
+            <span className={styles.videoTag}>{content.portfolio.videoTag}</span>
+
+            {/* Triángulo de reproducción dibujado en SVG: escala y recolorea
+                con el texto, cosa que un carácter tipográfico no hace. */}
+            <svg
+              className={styles.videoIcono}
+              width="44"
+              height="44"
+              viewBox="0 0 44 44"
+              fill="none"
+              aria-hidden="true"
             >
-              <p className={styles.etiqueta}>{copy.label}</p>
+              <circle cx="22" cy="22" r="21" stroke="currentColor" strokeWidth="1" />
+              <path d="M18 15L29 22L18 29V15Z" fill="currentColor" />
+            </svg>
 
-              <div className={styles.par}>
-                {/* Antes y después comparten estructura; se recorren para no
-                    duplicar el marcado. El desplazamiento respecto al índice
-                    del proyecto es 0 para el antes y 1 para el después. */}
-                {(
-                  [
-                    { imagen: proyecto.before, alt: copy.beforeAlt, pie: content.portfolio.beforeLabel, clasePie: styles.pieAntes, desplazamiento: 0 },
-                    { imagen: proyecto.after, alt: copy.afterAlt, pie: content.portfolio.afterLabel, clasePie: styles.pieDespues, desplazamiento: 1 },
-                  ] as const
-                ).map((foto) => (
-                  <button
-                    key={foto.desplazamiento}
-                    type="button"
-                    className={styles.disparador}
-                    onClick={() => lightbox.abrir(indiceAntes + foto.desplazamiento)}
-                  >
-                    <Image
-                      src={foto.imagen.src}
-                      alt={foto.alt}
-                      fill
-                      /* Tres columnas sobre 1440 px, menos el espacio entre
-                         ellas, y cada tarjeta partida en dos fotos. */
-                      sizes="(max-width: 639px) 50vw, (max-width: 1023px) 25vw, 230px"
-                      className={styles.imagen}
-                    />
-                    <span className={`${styles.pie} ${foto.clasePie}`}>{foto.pie}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          );
-        })}
+            <p className={styles.videoTexto}>{content.portfolio.videoPlaceholder}</p>
+          </div>
+
+          <div className={styles.fichas}>
+            {destacados.map((obra, indiceProyecto) => {
+              const indiceAntes = indiceProyecto * FOTOS_POR_PROYECTO;
+
+              return (
+                <div
+                  key={obra.id}
+                  ref={(elemento) => {
+                    fichasRef.current[indiceProyecto] = elemento;
+                  }}
+                >
+                  <ProjectCard
+                    before={obra.before}
+                    after={obra.after}
+                    copy={textosDeEntrada(obra, content)}
+                    beforeLabel={content.portfolio.beforeLabel}
+                    afterLabel={content.portfolio.afterLabel}
+                    sizes={SIZES_FOTO}
+                    onFotoClick={(desplazamiento: DesplazamientoFoto) =>
+                      lightbox.abrir(indiceAntes + desplazamiento)
+                    }
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div ref={pieRef} className={styles.pieSeccion}>
+          {/* El segmento de la galería cambia con el idioma (`/en/our-work`,
+              `/es/nuestros-trabajos`), así que la ruta no se interpola aquí:
+              la resuelve `routeSlugs`, que es su única fuente. */}
+          <Link href={rutaDePagina('ourWork', content.lang)} className={styles.galeriaCta}>
+            {content.portfolio.galleryCtaLabel}
+            <svg
+              className={styles.flecha}
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M3 8H13M13 8L9 4M13 8L9 12"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="square"
+              />
+            </svg>
+          </Link>
+        </div>
       </div>
 
       {lightbox.abierto && (

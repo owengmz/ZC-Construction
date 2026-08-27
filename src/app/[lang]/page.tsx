@@ -1,6 +1,3 @@
-import { Footer } from '@/components/layout/Footer';
-import { Navbar } from '@/components/layout/Navbar';
-import { WhatsAppFab } from '@/components/layout/WhatsAppFab';
 import { Contact } from '@/components/sections/Contact';
 import { Hero } from '@/components/sections/Hero';
 import { Insurance } from '@/components/sections/Insurance';
@@ -10,27 +7,21 @@ import { Services } from '@/components/sections/Services';
 /**
  * Landing de un idioma.
  *
- * Estructura completa del sitio: las cinco secciones ancladas de
- * `ORDEN_SECCIONES` dentro de `<main>`, con la barra, el pie y el botón
- * flotante de WhatsApp fuera, en el mismo orden que en el sitio actual.
+ * Las cinco secciones ancladas de `ORDEN_SECCIONES` dentro de `<main>`.
  *
- * Barra, pie y botón flotante viven aquí y no en el layout porque de momento
- * sólo hay una página. Si la Etapa 3 añadiera rutas —una página de privacidad,
- * por ejemplo—, su sitio natural pasaría a ser `app/[lang]/layout.tsx`.
+ * Barra, pie y botón flotante ya no están aquí: se movieron a
+ * `app/[lang]/layout.tsx` al aparecer la segunda ruta del sitio, la galería
+ * completa. Es el movimiento que anticipaba la nota que había en este archivo
+ * cuando la portada era la única página.
  */
 export default function Home() {
   return (
-    <>
-      <Navbar />
-      <main>
-        <Hero />
-        <Services />
-        <Portfolio />
-        <Insurance />
-        <Contact />
-      </main>
-      <Footer />
-      <WhatsAppFab />
-    </>
+    <main>
+      <Hero />
+      <Services />
+      <Portfolio />
+      <Insurance />
+      <Contact />
+    </main>
   );
 }

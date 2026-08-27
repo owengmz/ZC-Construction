@@ -1,0 +1,80 @@
+/**
+ * Cabecera de la página de galería completa.
+ *
+ * Mismo tratamiento tipográfico que las cabeceras de sección de la portada
+ * —Oswald en versalitas, filete a todo el ancho con arranque en ember— con dos
+ * diferencias que vienen de que esto es una página y no una sección: el título
+ * es un `h1` con la escala mayor, y por encima lleva el rótulo de expediente.
+ */
+
+.pagina {
+  max-width: var(--spacing-container-max);
+  margin-inline: auto;
+  /* El navbar es fijo: sin este margen superior el rótulo nace debajo de él. */
+  padding-block: 9rem 5rem;
+  padding-inline: var(--spacing-margin-edge);
+}
+
+@media (max-width: 767px) {
+  .pagina {
+    padding-block: 7rem 3.5rem;
+  }
+}
+
+.cabecera {
+  margin-bottom: 3rem;
+}
+
+/**
+ * Rótulo de expediente, sobre el título.
+ *
+ * En ember y no en acero: es un marcador, y los marcadores son del acento
+ * brillante, igual que los "01/02/03" de las fichas de servicio. El acero
+ * rotula datos; esto cataloga el documento entero.
+ *
+ * Contraste sobre el fondo: 5,97:1, AA con holgura para sus 12 px.
+ */
+.eyebrow {
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--color-ember);
+}
+
+.titulo {
+  margin-bottom: 1.25rem;
+  font-size: var(--text-h1-size);
+  line-height: var(--text-h1-height);
+  letter-spacing: 0.01em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-on-background);
+}
+
+/**
+ * Filete de cabecera, idéntico al de las secciones de la portada: los primeros
+ * 96 px en ember y el resto en gris de regla, con dos paradas duras en el mismo
+ * punto para que haya corte y no desvanecido.
+ */
+.filete {
+  height: 1px;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-ember) 0 96px,
+    var(--color-rule) 96px
+  );
+}
+
+.intro {
+  max-width: 42rem;
+  margin-top: 1.25rem;
+  font-family: var(--font-body);
+  font-size: var(--text-body-lg-size);
+  line-height: var(--text-body-lg-height);
+  color: var(--color-text-body);
+  text-wrap: pretty;
+}

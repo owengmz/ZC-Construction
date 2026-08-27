@@ -95,6 +95,9 @@ export const contentEs: SiteContent = {
     // también con el idioma en español.
     beforeLabel: 'Antes',
     afterLabel: 'Después',
+    videoTag: 'VIDEO',
+    videoPlaceholder: 'Recorrido de obra próximamente', // PROVISIONAL
+    galleryCtaLabel: 'Ver toda la galería',
     items: {
       'framing-newark': {
         label: 'Estructuras — Newark, NJ',
@@ -111,6 +114,25 @@ export const contentEs: SiteContent = {
         beforeAlt: 'Baño desmontado hasta la estructura, con la fontanería a la vista', // NUEVO
         afterAlt: 'Ducha terminada con alicatado de aspecto mármol', // NUEVO
       },
+    },
+  },
+
+  // NUEVO: página de galería completa (/es/nuestros-trabajos).
+  gallery: {
+    eyebrow: 'ARCHIVO DE EXPEDIENTES',
+    filtersLabel: 'Filtrar proyectos por servicio',
+    allFilterLabel: 'Todos',
+    emptyState: 'Todavía no hay proyectos en esta categoría',
+    // Los marcadores {category} y {location} los sustituye `textosDeEntrada()`.
+    // La plantilla arranca con "Proyecto de" porque las tres categorías reales
+    // son sustantivos femeninos o plurales ("Estructuras", "Remodelación…",
+    // "Techado") y así se evita tener que concordar el artículo con cada una.
+    beforeAltTemplate: 'Proyecto de {category} en {location}, antes del trabajo',
+    afterAltTemplate: 'Proyecto de {category} en {location}, ya terminado',
+    meta: {
+      title: 'Nuestros Trabajos — Galería de Proyectos',
+      description:
+        'Fotos de antes y después de proyectos de estructuras, techado y remodelación en New Jersey.',
     },
   },
 

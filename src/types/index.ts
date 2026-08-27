@@ -182,6 +182,83 @@ export interface Project {
 }
 
 /**
+ * Entrada de la galería completa (`data/gallery.ts`).
+ *
+ * Rompe a propósito con el patrón `Record<Id, Copy>` sobre unión cerrada que
+ * rige el resto del archivo, y conviene entender por qué antes de "corregirlo".
+ *
+ * Aquel patrón existe para que olvidar una traducción sea un error de
+ * compilación. Funciona porque `ServiceId`, `InsuranceCardId` y compañía son
+ * listas cerradas que cambian una vez al año. La galería no: crece cada vez que
+ * la empresa termina una obra, y quien la mantiene es el dueño del negocio, no
+ * quien escribe TypeScript. Con el patrón anterior, añadir una foto obligaría a
+ * tocar la unión de identificadores, el array de datos y los DOS archivos de
+ * idioma; olvidar cualquiera de los cuatro rompe el build.
+ *
+ * Por eso aquí no hay unión de identificadores ni comprobación de cobertura:
+ * `id` es un `string` libre y la lista es un array abierto. La garantía de
+ * traducción no se pierde, se traslada: los textos visibles se COMPONEN a
+ * partir de `category` —cuya etiqueta ya está traducida en
+ * `ContactFormContent.serviceOptions`— y de `location`, que es un topónimo y no
+ * se traduce en ningún idioma. Añadir una obra son seis líneas aquí y nada más.
+ */
+export interface GalleryEntry {
+  /**
+   * Identificador estable de la entrada, usado como `key` de React y como
+   * ancla si algún día se enlaza a una obra concreta.
+   *
+   * `string` libre y no una unión: es el punto donde esta lista se aparta del
+   * resto del modelo, y hacerlo cerrado devolvería el problema que se acaba de
+   * describir. La unicidad la mantiene quien edita el archivo.
+   */
+  readonly id: string;
+  /**
+   * Servicio al que pertenece la obra. Es lo que gobierna los filtros.
+   *
+   * Se reutiliza `ServiceOptionValue` —el mismo tipo del `<select>` de
+   * contacto— en lugar de inventar una unión de categorías. Así el pin de la
+   * galería y la opción del formulario comparten vocabulario, y la etiqueta
+   * visible sale ya traducida de `serviceOptions` sin escribir texto nuevo.
+   */
+  readonly category: ServiceOptionValue;
+  /** Ciudad y estado, tal cual se muestran: "Newark, NJ". No se traduce. */
+  readonly location: string;
+  /** Fotografía del estado previo a la intervención. */
+  readonly before: ImageAsset;
+  /** Fotografía del resultado final. */
+  readonly after: ImageAsset;
+  /** Si aparece en la selección de la portada. Hoy son dos. */
+  readonly featured: boolean;
+  /**
+   * Vía de escape para las entradas que ya tienen textos escritos a mano.
+   *
+   * Los tres proyectos migrados desde `data/projects.ts` traen textos
+   * alternativos redactados uno a uno ("Roof framing under construction before
+   * completion"), que describen la foto mucho mejor de lo que puede hacerlo
+   * una plantilla. Declarando aquí su `ProjectId`, la entrada sigue usando
+   * `PortfolioContent.items` y no pierde esa calidad.
+   *
+   * Es OPCIONAL y está pensado para no crecer: las obras nuevas se limitan a
+   * omitirlo y se conforman con el texto compuesto, que es correcto aunque sea
+   * genérico. Si algún día se quiere texto artesanal para una obra nueva,
+   * habrá que añadir su id a `ProjectId` y sus textos a los dos idiomas, que es
+   * exactamente el trabajo que este campo permite NO hacer por defecto.
+   */
+  readonly copyId?: ProjectId;
+}
+
+/**
+ * Valor del filtro activo de la galería.
+ *
+ * Es una categoría concreta o `'all'`, que no es una categoría sino la ausencia
+ * de filtro. Se modela junto a las demás y no como `ServiceOptionValue | null`
+ * porque el pin "Todos" es un botón más de la fila, con el mismo aspecto y el
+ * mismo comportamiento que los otros cuatro: tratarlo como caso nulo obligaría
+ * a duplicar esa lógica en el componente.
+ */
+export type GalleryFilter = ServiceOptionValue | 'all';
+
+/**
  * Entrada del lightbox: una imagen individual navegable con flechas.
  *
  * No se escribe a mano. Se deriva de `projects` aplanando cada proyecto en sus
@@ -401,6 +478,26 @@ export interface PortfolioContent {
   readonly beforeLabel: string;
   /** Pie común de todas las fotos "después": "After" / "Después". */
   readonly afterLabel: string;
+  /**
+   * Rótulo mono del panel de vídeo. Es dato, no prosa, y por eso va en
+   * versalitas monoespaciadas dentro del marco.
+   */
+  readonly videoTag: string;
+  /**
+   * Texto del panel de vídeo mientras no haya vídeo real.
+   *
+   * COPIA PROVISIONAL: se escribió al construir la sección y está pendiente de
+   * aprobación. Desaparece en cuanto se incruste la pieza definitiva.
+   */
+  readonly videoPlaceholder: string;
+  /**
+   * Enlace a la galería completa, al pie de la sección.
+   *
+   * La sección muestra sólo una selección de proyectos; el resto vive en
+   * `/[lang]/our-work`. Sin este enlace, los proyectos que no entran en la
+   * portada no tendrían ninguna vía de acceso.
+   */
+  readonly galleryCtaLabel: string;
   readonly items: Record<ProjectId, ProjectCopy>;
 }
 
@@ -504,6 +601,57 @@ export interface LightboxContent {
 }
 
 /**
+ * Página de galería completa (`/en/our-work`, `/es/nuestros-trabajos`).
+ *
+ * Deliberadamente corto. El título y la introducción NO están aquí: se
+ * reutilizan `PortfolioContent.sectionTitle` e `intro`, que ya dicen lo que hay
+ * que decir en ambos idiomas. Sólo se declara lo que la página añade de nuevo,
+ * y las etiquetas de los filtros salen de `ContactFormContent.serviceOptions`.
+ */
+export interface GalleryContent {
+  /**
+   * Rótulo superior de la cabecera, sobre el título.
+   *
+   * Va en monoespaciada porque es la marca de expediente del documento, no
+   * prosa: "PROJECT ARCHIVE" / "ARCHIVO DE EXPEDIENTES".
+   */
+  readonly eyebrow: string;
+  /** `aria-label` del grupo de pines, que sin él sería una fila de botones sueltos. */
+  readonly filtersLabel: string;
+  /**
+   * Etiqueta del pin que desactiva el filtro: "All" / "Todos".
+   *
+   * Es el único texto de filtro que no sale de `serviceOptions`, porque "todos"
+   * no es un servicio que la empresa preste.
+   */
+  readonly allFilterLabel: string;
+  /**
+   * Mensaje cuando la categoría elegida no tiene obras todavía.
+   *
+   * No es un caso hipotético: la galería está arrancando y hoy "Otro" tiene
+   * cero entradas. Sin este texto, filtrar por ahí daría una página en blanco
+   * indistinguible de un fallo de carga.
+   */
+  readonly emptyState: string;
+  /**
+   * Plantillas del texto alternativo compuesto, con los marcadores
+   * `{category}` y `{location}`.
+   *
+   * Sólo se usan en las entradas de `gallery.ts` que NO declaran `copyId`. Son
+   * plantillas y no concatenación en el componente porque el orden de las
+   * piezas cambia entre idiomas, y resolverlo en código obligaría a poner una
+   * condición por idioma dentro de un componente.
+   */
+  readonly beforeAltTemplate: string;
+  readonly afterAltTemplate: string;
+  /** Metaetiquetas propias de la página. */
+  readonly meta: {
+    readonly title: string;
+    readonly description: string;
+  };
+}
+
+/**
  * Contrato completo del contenido del sitio en un idioma.
  *
  * `content.en.ts` y `content.es.ts` exportan cada uno un objeto anotado como
@@ -519,6 +667,8 @@ export interface SiteContent {
   readonly hero: HeroContent;
   readonly services: ServicesContent;
   readonly portfolio: PortfolioContent;
+  /** Página de galería completa. Es la única clave que no describe una sección de la portada. */
+  readonly gallery: GalleryContent;
   readonly insurance: InsuranceContent;
   readonly warranty: WarrantyModalContent;
   readonly contact: ContactContent;

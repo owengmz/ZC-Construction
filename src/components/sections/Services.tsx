@@ -6,45 +6,31 @@ import { useRef } from 'react';
 import { useLang } from '@/context/LangContext';
 import { services } from '@/data/services';
 import { useGsapReveal } from '@/hooks/useGsapReveal';
-import type { ServiceLayout } from '@/types';
 
 import styles from './Services.module.css';
 
 /**
- * Clase de disposición de cada tarjeta.
+ * Anchos que ocupará cada fotografía, para que `next/image` elija bien del
+ * srcset.
  *
- * Se escribe como `Record<ServiceLayout, string>` en lugar de indexar
- * `styles[servicio.layout]` para que el compilador exija una entrada nueva si
- * algún día se añade una cuarta variante. Indexando el objeto de estilos, una
- * variante sin clase daría `undefined` en silencio y la tarjeta saldría sin
- * ancho ni alto.
+ * Todas las fichas son iguales desde el rediseño, así que basta un valor: a
+ * partir de 768 px la columna de imagen son 5 de 12 columnas sobre un
+ * contenedor de 1440 px, unos 580 px; por debajo ocupa el ancho de la ventana.
+ * El sitio anterior necesitaba un valor por variante de rejilla.
  */
-const CLASE_LAYOUT: Record<ServiceLayout, string> = {
-  wide: styles.wide,
-  narrow: styles.narrow,
-  full: styles.full,
-};
-
-/**
- * Anchos que ocupará cada tarjeta, para que `next/image` elija bien del srcset.
- *
- * Se derivan de la rejilla: sobre un contenedor máximo de 1440 px, la tarjeta
- * ancha ocupa 8 de 12 columnas, la estrecha 4 y la completa las 12. Por debajo
- * de 768 px todas ocupan el ancho de la ventana.
- */
-const SIZES_LAYOUT: Record<ServiceLayout, string> = {
-  wide: '(max-width: 767px) 100vw, (max-width: 1440px) 66vw, 933px',
-  narrow: '(max-width: 767px) 100vw, (max-width: 1440px) 33vw, 453px',
-  full: '(max-width: 1440px) 100vw, 1440px',
-};
+const SIZES_IMAGEN = '(max-width: 767px) 100vw, (max-width: 1440px) 42vw, 580px';
 
 /**
  * Sección de Servicios Principales.
  *
- * Recorre `data/services.ts` —que aporta imagen, marcador y disposición— y
- * resuelve los textos de cada tarjeta contra el contenido del idioma activo.
- * Los dos conjuntos se cruzan por el `id` del servicio, así que no hay forma
- * de emparejar la foto de un servicio con la descripción de otro.
+ * Recorre `data/services.ts` —que aporta imagen y número de expediente— y
+ * resuelve los textos de cada ficha contra el contenido del idioma activo. Los
+ * dos conjuntos se cruzan por el `id` del servicio, así que no hay forma de
+ * emparejar la foto de un servicio con la descripción de otro.
+ *
+ * Rediseño «Expediente de Obra»: tres fichas horizontales apiladas, cada una
+ * con su número arriba a la izquierda. La composición y el detalle visual
+ * viven en el CSS Module; aquí sólo queda la estructura.
  */
 export function Services() {
   const { content } = useLang();
@@ -53,8 +39,9 @@ export function Services() {
   const cabeceraRef = useRef<HTMLDivElement>(null);
   const tarjetasRef = useRef<(HTMLElement | null)[]>([]);
 
-  // Mismos valores que `animServices.js`: la cabecera entra desde la izquierda
-  // y las tarjetas desde abajo, escalonadas 0,18 s.
+  // Un solo despliegue orquestado: la cabecera entra desde la izquierda y las
+  // fichas desde abajo, escalonadas. Mismos valores que antes del rediseño,
+  // porque el ritmo de entrada es el mismo en las cuatro secciones del sitio.
   useGsapReveal(seccionRef, [
     {
       elementos: () => [cabeceraRef.current],
@@ -73,44 +60,43 @@ export function Services() {
 
   return (
     <section id="services" ref={seccionRef} className={styles.seccion}>
-      <div ref={cabeceraRef} className={styles.cabecera}>
-        <h2 className={styles.tituloSeccion}>{content.services.sectionTitle}</h2>
-        <div className={styles.subrayado} />
-      </div>
+      <div className={styles.contenedor}>
+        <div ref={cabeceraRef} className={styles.cabecera}>
+          <h2 className={styles.tituloSeccion}>{content.services.sectionTitle}</h2>
+          <div className={styles.filete} />
+        </div>
 
-      <div className={styles.rejilla}>
-        {services.map((servicio, indice) => {
-          const copy = content.services.items[servicio.id];
+        <div className={styles.lista}>
+          {services.map((servicio, indice) => {
+            const copy = content.services.items[servicio.id];
 
-          return (
-            <article
-              key={servicio.id}
-              ref={(elemento) => {
-                tarjetasRef.current[indice] = elemento;
-              }}
-              className={`${styles.tarjeta} ${CLASE_LAYOUT[servicio.layout]}`}
-            >
-              <Image
-                src={servicio.image.src}
-                alt={copy.imageAlt}
-                fill
-                sizes={SIZES_LAYOUT[servicio.layout]}
-                className={styles.imagen}
-              />
+            return (
+              <article
+                key={servicio.id}
+                ref={(elemento) => {
+                  tarjetasRef.current[indice] = elemento;
+                }}
+                className={styles.tarjeta}
+              >
+                <div className={styles.columnaImagen}>
+                  <Image
+                    src={servicio.image.src}
+                    alt={copy.imageAlt}
+                    fill
+                    sizes={SIZES_IMAGEN}
+                    className={styles.imagen}
+                  />
+                </div>
 
-              {/* Sólo aporta contraste, no información. */}
-              <div className={styles.velo} aria-hidden="true" />
-
-              <div className={styles.texto}>
-                <span className={styles.marcador}>{servicio.marker}</span>
-                <h3 className={styles.titulo}>{copy.title}</h3>
-                <p className={styles.descripcion}>{copy.description}</p>
-              </div>
-
-              <div className={styles.desvanecido} aria-hidden="true" />
-            </article>
-          );
-        })}
+                <div className={styles.columnaTexto}>
+                  <span className={styles.marcador}>{servicio.marker}</span>
+                  <h3 className={styles.titulo}>{copy.title}</h3>
+                  <p className={styles.descripcion}>{copy.description}</p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

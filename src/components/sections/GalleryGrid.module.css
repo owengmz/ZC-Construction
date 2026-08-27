@@ -1,0 +1,184 @@
+/**
+ * Filtros y rejilla de la galería completa.
+ *
+ * Sin vocabulario visual nuevo: los pines toman el reparto de acentos ya
+ * fijado —ember para lo que está activo, acero para lo que está disponible— y
+ * las fichas son las mismas de la portada. Lo único propio de este archivo es
+ * la rejilla y el estado vacío.
+ */
+
+/* ── Fila de pines ── */
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-bottom: 2.5rem;
+}
+
+/**
+ * Pin de categoría en reposo.
+ *
+ * Filete de acero y texto de acero: está disponible, no activo. Monoespaciada
+ * y versalitas porque un filtro es un valor del expediente, no prosa.
+ *
+ * `border` de 1 px en TODOS los estados, activo incluido: si el pin activo
+ * cambiara de grosor o lo perdiera, la fila entera se recolocaría un píxel al
+ * pulsar, y ese salto se lee como un fallo.
+ */
+.pin {
+  padding: 0.625rem 1.125rem;
+  border: 1px solid var(--color-steel);
+  background-color: transparent;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--color-steel-text);
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.pin:hover {
+  border-color: var(--color-steel-text);
+  color: var(--color-on-background);
+}
+
+.pin:focus-visible {
+  outline: 2px solid var(--color-steel-text);
+  outline-offset: 2px;
+}
+
+/**
+ * Pin activo: relleno sólido de ember.
+ *
+ * El texto va en `--color-background` y no en blanco porque sobre el ember da
+ * 5,97:1 frente a los 3,11:1 del blanco. Es la misma regla que gobierna
+ * cualquier superficie rellena de ember en el sitio.
+ *
+ * Es el único relleno sólido de acento de toda la página, y ahí está su
+ * trabajo: de un vistazo se sabe qué se está viendo sin leer los cinco pines.
+ */
+.pinActivo {
+  border-color: var(--color-ember);
+  background-color: var(--color-ember);
+  color: var(--color-background);
+}
+
+.pinActivo:hover {
+  border-color: var(--color-ember-hover);
+  background-color: var(--color-ember-hover);
+  color: var(--color-background);
+}
+
+/* ── Rejilla de obras ── */
+
+/**
+ * Disposición en columnas, no en rejilla.
+ *
+ * Es un cambio de mecanismo, no de valores. Una rejilla (`display: grid`)
+ * alinea sus elementos en FILAS: todas las fichas de una fila comparten alto, y
+ * la que sobra queda con un hueco debajo. Eso funcionaba mientras las fotos
+ * salían recortadas a 4:3 y todas las fichas medían lo mismo. Desde que cada
+ * foto conserva su proporción real, las fichas miden cosas distintas y la
+ * rejilla dejaría escalones vacíos entre filas.
+ *
+ * Con `column-count` no hay filas: el navegador reparte las fichas por columnas
+ * y cada una se apila justo debajo de la anterior, sea cual sea su alto. Es el
+ * comportamiento de tablón de fotos que pedía un catálogo de obras verticales.
+ *
+ * El precio a pagar es el orden de lectura: en columnas se lee de arriba abajo
+ * y luego se salta a la siguiente columna, no de izquierda a derecha. En una
+ * galería sin orden cronológico relevante no molesta, y el orden de tabulación
+ * con el teclado sigue el del documento, que sí es el orden lógico.
+ *
+ * Se descartó la alternativa —rejilla con `grid-auto-rows` y `span` calculado—
+ * porque exige medir cada ficha con JavaScript después de pintar y recalcular
+ * al cambiar el tamaño de la ventana, para un resultado que aquí se consigue
+ * con tres declaraciones.
+ */
+.rejilla {
+  column-count: 1;
+  column-gap: var(--spacing-gutter);
+}
+
+/**
+ * Dos columnas, y no tres, desde escritorio.
+ *
+ * La rejilla anterior llegaba a tres porque las fichas eran apaisadas. Ahora
+ * cada ficha lleva DOS fotos verticales (3:4) una al lado de la otra, así que a
+ * tres columnas cada foto se quedaría en unos 215 px de ancho: demasiado poco
+ * para apreciar una obra, que es justo lo que la página viene a hacer. A dos
+ * columnas rondan los 340 px.
+ */
+@media (min-width: 1024px) {
+  .rejilla {
+    column-count: 2;
+  }
+}
+
+/**
+ * Cada ficha dentro de su columna.
+ *
+ * `break-inside: avoid` es imprescindible: sin él el navegador parte una ficha
+ * por la mitad al final de una columna y continúa en la siguiente, dejando el
+ * encabezado en una y las fotos en otra.
+ *
+ * La separación vertical va en `margin-bottom` y no en `gap` porque
+ * `column-gap` sólo separa columnas; entre elementos de una misma columna no
+ * interviene.
+ */
+.celda {
+  break-inside: avoid;
+  margin-bottom: var(--spacing-gutter);
+}
+
+/* ── Estado vacío ── */
+
+/**
+ * Lo que se ve al filtrar por una categoría que todavía no tiene obras.
+ *
+ * Tiene el mismo peso visual que una ficha —fondo de tarjeta, filete, altura
+ * generosa— en lugar de ser una línea de texto suelta. El motivo es que ocupa
+ * el lugar de la rejilla: una frase flotando sobre el fondo se lee como que la
+ * página se ha roto, mientras que un bloque construido se lee como una
+ * respuesta.
+ *
+ * Lleva la marca de ember de las fichas de proyecto por lo mismo: es la señal
+ * de que esto sigue siendo un expediente, sólo que sin entradas.
+ */
+.vacio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 220px;
+  padding: 2rem 1.5rem;
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-rule);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-steel-text);
+}
+
+/** Misma marca cuadrada de 6 px que encabeza cada ficha de proyecto. */
+.marcaVacio {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-ember);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin {
+    transition: none;
+  }
+}

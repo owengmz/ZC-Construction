@@ -13,7 +13,7 @@ import type { ImageAsset } from '@/types';
  * hueco mientras llega la imagen definitiva.
  */
 export const heroBackground: ImageAsset = {
-  src: '/images/hero-background.webp',
+  src: '/fondo-hero.png',
   width: 2048,
   height: 1172,
   blurDataURL:

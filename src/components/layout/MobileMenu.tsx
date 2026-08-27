@@ -1,9 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 import { useLang } from '@/context/LangContext';
 import { ORDEN_SECCIONES } from '@/data/navigation';
+import { anclaDeSeccion } from '@/data/routes';
 
 import styles from './MobileMenu.module.css';
 
@@ -24,7 +26,7 @@ interface MobileMenuProps {
  * @param onClose Cierre solicitado por el usuario.
  */
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
-  const { content } = useLang();
+  const { lang, content } = useLang();
 
   /**
    * Bloquea el desplazamiento del fondo mientras el menú está abierto, y cierra
@@ -61,28 +63,31 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       // DOM por la transición, pero no debe ser navegable.
       aria-hidden={!isOpen}
     >
+      {/* Mismo criterio que en la barra de escritorio: ruta absoluta con el
+          prefijo de idioma, para que el menú funcione igual desde la portada
+          que desde la galería. Ver el comentario de `Navbar.tsx`. */}
       <nav className={styles.enlaces}>
         {ORDEN_SECCIONES.map((seccion) => (
-          <a
+          <Link
             key={seccion}
-            href={`#${seccion}`}
+            href={anclaDeSeccion(seccion, lang)}
             className={styles.enlace}
             onClick={onClose}
             tabIndex={isOpen ? undefined : -1}
           >
             {content.nav.links[seccion]}
-          </a>
+          </Link>
         ))}
       </nav>
 
-      <a
-        href="#contact"
+      <Link
+        href={anclaDeSeccion('contact', lang)}
         className={styles.cta}
         onClick={onClose}
         tabIndex={isOpen ? undefined : -1}
       >
         {content.nav.ctaMobile}
-      </a>
+      </Link>
     </div>
   );
 }

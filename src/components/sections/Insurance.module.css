@@ -89,14 +89,25 @@
   flex-shrink: 0;
 }
 
-/* Distintivo del ángulo superior derecho: gris de marca muy diluido. */
+/**
+ * Distintivo del ángulo superior derecho.
+ *
+ * Es una etiqueta, y las etiquetas van en el acero del logo, con el mismo
+ * reparto que el rótulo del panel de vídeo: relleno al 22 %, filete al 45 % y
+ * texto en la variante legible. Antes usaba el gris de marca heredado de
+ * Material (#c9c6c5) muy diluido, que no venía de ninguna parte y se leía como
+ * un gris de sistema operativo.
+ *
+ * Contraste del texto sobre el fondo compuesto real (#2a2929): 5,32:1, con AA
+ * de sobra para sus 10 px.
+ */
 .distintivo {
   padding: 0.25rem 0.75rem;
   font-family: var(--font-body);
   font-size: 10px;
-  background-color: rgb(201 198 197 / 0.1);
-  color: var(--color-primary);
-  border: 1px solid rgb(201 198 197 / 0.2);
+  background-color: rgb(100 93 93 / 0.22);
+  color: var(--color-steel-text);
+  border: 1px solid rgb(100 93 93 / 0.45);
 }
 
 .tituloTarjeta {

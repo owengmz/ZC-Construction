@@ -1,13 +1,55 @@
 import type { Metadata, Viewport } from 'next';
+import { IBM_Plex_Mono, Oswald, Work_Sans } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+import { Footer } from '@/components/layout/Footer';
+import { Navbar } from '@/components/layout/Navbar';
+import { WhatsAppFab } from '@/components/layout/WhatsAppFab';
 import { LangProvider } from '@/context/LangContext';
 import { contentByLang } from '@/data/content';
 import { esLang, IDIOMAS } from '@/data/langs';
 import { COLOR_TEMA, siteConfig } from '@/data/site';
 
 import '../globals.css';
+
+/**
+ * Las tres familias del rediseño, servidas por `next/font`.
+ *
+ * `next/font/google` descarga los archivos en tiempo de build y los sirve desde
+ * el propio dominio: no hay petición a fonts.gstatic.com en tiempo de ejecución
+ * y por tanto no hay salto de estilo ni fuga de IP del visitante a un tercero.
+ * Sustituyen a los cuatro `@font-face` de Inter y Montserrat que había en
+ * `globals.css`, escritos a mano.
+ *
+ * `variable` expone cada familia como custom property, que es lo que consumen
+ * los tokens `--font-heading`, `--font-body` y `--font-mono`. Así ningún
+ * componente nombra una fuente concreta: si mañana cambia la tipografía, se
+ * cambia aquí y en los tres tokens, no en veinte CSS Modules.
+ *
+ * Se declaran fuera del componente a propósito: `next/font` exige que la
+ * llamada sea estática para poder resolverla en el build.
+ */
+const oswald = Oswald({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['600', '700'],
+  display: 'swap',
+  variable: '--font-oswald',
+});
+
+const workSans = Work_Sans({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500'],
+  display: 'swap',
+  variable: '--font-work-sans',
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500'],
+  display: 'swap',
+  variable: '--font-plex-mono',
+});
 
 /**
  * Layout raíz de cada idioma.
@@ -173,9 +215,27 @@ export default async function LangLayout({ children, params }: LangLayoutProps) 
   if (!esLang(lang)) notFound();
 
   return (
-    <html lang={lang}>
+    /**
+     * Las tres clases de `next/font` van en el `<html>` para que las custom
+     * properties de familia existan en el ámbito raíz, que es donde
+     * `globals.css` las lee al definir `--font-heading`, `--font-body` y
+     * `--font-mono`. Puestas en el `<body>` funcionarían igual para el
+     * contenido, pero no para nada que se pinte fuera de él.
+     */
+    <html lang={lang} className={`${oswald.variable} ${workSans.variable} ${plexMono.variable}`}>
       <body>
-        <LangProvider lang={lang}>{children}</LangProvider>
+        <LangProvider lang={lang}>
+          {/*
+           * Barra, pie y botón flotante viven aquí desde que el sitio tiene más
+           * de una ruta: la galería completa (`/[lang]/our-work`) necesita la
+           * misma envoltura que la portada. Estaban en `page.tsx` con una nota
+           * que anticipaba exactamente este movimiento.
+           */}
+          <Navbar />
+          {children}
+          <Footer />
+          <WhatsAppFab />
+        </LangProvider>
       </body>
     </html>
   );

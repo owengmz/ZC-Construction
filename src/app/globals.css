@@ -13,55 +13,20 @@
  */
 
 /* ─────────────────────────────────────────────────────────────────────────
- * Fuentes autoalojadas
+ * Fuentes
  *
- * Copiadas tal cual del sitio actual, incluidos los `unicode-range`: separan
- * el subconjunto latino del extendido para que un visitante que sólo usa
- * caracteres latinos básicos no descargue el archivo extendido. Son los
- * mismos .woff2, ahora servidos desde /fonts/.
+ * Ya no se declaran aquí. Las tres familias del rediseño —Oswald, Work Sans e
+ * IBM Plex Mono— las carga `next/font/google` desde `app/[lang]/layout.tsx`,
+ * que las descarga en el build, las sirve desde el propio dominio y expone
+ * cada una como custom property (`--font-oswald`, `--font-work-sans`,
+ * `--font-plex-mono`). Los tokens de más abajo son quienes las reparten por
+ * papel, para que ningún componente nombre una fuente concreta.
+ *
+ * Los cuatro `@font-face` de Inter y Montserrat que había aquí se eliminaron
+ * con el rediseño. Sus .woff2 siguen en `public/fonts/` y ya no los usa nadie:
+ * conviene borrarlos cuando el rediseño esté cerrado, no antes, por si hay que
+ * volver atrás en alguna sección.
  * ───────────────────────────────────────────────────────────────────────── */
-
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url('/fonts/inter-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
-    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
-    U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url('/fonts/inter-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
-    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 700 800;
-  font-display: swap;
-  src: url('/fonts/montserrat-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
-    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
-    U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 700 800;
-  font-display: swap;
-  src: url('/fonts/montserrat-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
-    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
 
 /* ─────────────────────────────────────────────────────────────────────────
  * Tokens de diseño
@@ -138,6 +103,106 @@
   --color-card-border-hover: #b0b0b0;
   --color-whatsapp: #25d366;
 
+  /* ── Acentos del rediseño «Expediente de Obra» ──
+   *
+   * La paleta heredada de arriba es enteramente gris: el sitio anterior no
+   * tenía color de marca en la interfaz. El rediseño trabaja con dos colores,
+   * y cada uno tiene un trabajo que conviene no mezclar:
+   *
+   *  - `ember` es el naranja del logo, y es el ÚNICO acento brillante del
+   *    sitio: títulos, marcadores de expediente, llamadas a la acción y
+   *    marcadores de estado. Si algo brilla, es porque hay que mirarlo.
+   *  - `steel` es el gris metálico del propio logo, y es el color
+   *    ESTRUCTURAL: etiquetas, ubicaciones, bordes, distintivos, tramas de
+   *    plano y anillo de foco. No compite nunca con ember porque no señala
+   *    acción; sólo organiza.
+   *
+   * ── De dónde sale `steel`, y por qué no es un gris elegido a mano ──
+   *
+   * Está muestreado de `public/images/logo-zycor.webp` con sharp. El
+   * procedimiento es reproducible: se recortan las zonas de metal del emblema
+   * —la arista clara del tejado, la banda derecha del tejado y el remate de la
+   * chimenea—, se descartan los píxeles con alfa parcial (el borde
+   * antialiaseado lleva color del fondo mezclado) y los que superan el 14 % de
+   * saturación HSL (el fénix, el ladrillo de la chimenea y el dorado del
+   * alero), y se toma la mediana de los que quedan.
+   *
+   * De las tres zonas, la del remate de la chimenea es la muestra buena: 2752
+   * píxeles neutros sobre 4862, un 57 %, frente al 2 % que sobrevive en la
+   * arista del tejado, rodeada del dorado del alero. Su mediana es #645d5d,
+   * que en HSL es hsl(0° 3,6 % 37,8 %): un gris con apenas un asomo cálido,
+   * que es justo lo que cabe esperar de un metal iluminado por una escena
+   * naranja. No se neutraliza a R = G = B a propósito: ese asomo es lo que lo
+   * hace del logo y no de una paleta cualquiera, y además va en la misma
+   * dirección cálida que el fondo (#141313) y que los textos.
+   *
+   * `--color-steel` es ese valor, literal. `--color-steel-text` es el mismo
+   * tono y la misma saturación subidos al 62 % de luminosidad, que es donde el
+   * gris alcanza el AA como texto pequeño. El token base, a 2,88:1, no se
+   * escribe nunca: es para tramas, rellenos translúcidos y filetes.
+   *
+   * El azul `blueprint` (#2f6fed) que ocupaba este papel se retiró del
+   * sistema. Era un color fuerte, ajeno a la marca, compitiendo por un trabajo
+   * —el de estructura— que no pide fuerza sino neutralidad.
+   *
+   * ── Contraste medido, con la fórmula de WCAG 2.1 ──
+   *
+   * Sobre `--color-background` (#141313):
+   *
+   *    ember          #ff5b1a   5,97:1   AA
+   *    ember-hover    #ff7a3d   7,16:1   AA
+   *    steel-text     #a29b9b   6,80:1   AA
+   *    steel          #645d5d   2,88:1   sólo relleno, trama y filete
+   *
+   * Y `steel-text` donde de verdad se usa: 6,38:1 sobre la tarjeta (#1a1a1a),
+   * 7,08:1 sobre el panel (#0e0e0e), 6,01:1 sobre el rótulo del panel de vídeo
+   * y 5,32:1 sobre el distintivo de Seguro. Todos por encima del 4,5:1 que
+   * exige el AA para texto pequeño. Como anillo de foco da 6,80:1, muy por
+   * encima del 3:1 del SC 1.4.11.
+   *
+   * Ember sube desde el #e8571f del logo —hsl(17° 81 % 52 %)— hasta hsl(17°
+   * 100 % 55 %). El tono no se mueve, así que sigue siendo el naranja de la
+   * marca; lo que sube es la saturación y la luminosidad. El valor original se
+   * apagaba sobre el fondo, y un acento que sólo aparece en marcadores,
+   * filetes y ángulos necesita filo: si se ve tímido, no cumple su trabajo.
+   *
+   * Lo que se rellena de ember lleva texto `--color-background` encima
+   * (5,97:1) y no blanco, que se queda en 3,11:1.
+   */
+  --color-ember: #ff5b1a;
+  --color-ember-hover: #ff7a3d;
+  --color-steel: #645d5d;
+  --color-steel-text: #a29b9b;
+
+  /* ── Texto del rediseño ──
+   *
+   * La paleta heredada de Material trae `--color-on-surface-variant` (#c4c7c7)
+   * y `--color-outline` (#8e9192) para el texto secundario. Los dos tiran a
+   * frío —verde y azul por encima del rojo— y sobre un fondo cálido como
+   * #141313 el ojo los lee como texto lavado aunque el contraste medido sea
+   * alto: #c4c7c7 da 10,90:1 y aun así parece apagado. El defecto era de
+   * temperatura, no de contraste, y por eso no se corregía subiendo el brillo.
+   *
+   * Estos dos tokens son la corrección: mismo lugar en la jerarquía, sesgo
+   * cálido (R ≥ G ≥ B, la misma dirección que los títulos en #e5e2e1) y
+   * contraste verificado. Los tokens de Material se dejan intactos como
+   * registro del sitio anterior; las secciones ya rediseñadas consumen estos.
+   *
+   * `text-body` cubre párrafos y descripciones: 11,98:1 sobre el fondo y
+   * 11,24:1 sobre la tarjeta (#1a1a1a).
+   *
+   * No hay un segundo gris de apoyo. Ese papel —pies técnicos, texto de
+   * servicio— lo cumple `--color-steel-text`, que sale del logo. Tener dos
+   * grises claros con nombres distintos y tres puntos de diferencia era una
+   * distinción que no llegaba a verse en pantalla.
+   */
+  --color-text-body: #d3cfcc;
+
+  /* Filete de separación entre bloques de documento. Más oscuro que
+   * `--color-outline-variant`, que sobre el fondo nuevo resultaba una raya
+   * gris evidente en lugar de una separación. */
+  --color-rule: #2a2828;
+
   /* ── Espaciado ── */
   --spacing-unit: 8px;
   --spacing-gutter: 24px;
@@ -152,9 +217,19 @@
   --radius-xl: 0.5rem;
   --radius-full: 0.75rem;
 
-  /* ── Tipografía: familias ── */
-  --font-heading: 'Montserrat', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  /* ── Tipografía: familias ──
+   *
+   * Reparto por papel, no por nombre. Las familias llegan de `next/font` como
+   * `--font-oswald`, `--font-work-sans` y `--font-plex-mono`; estos tres
+   * tokens deciden qué papel cumple cada una, y son los únicos que consumen
+   * los componentes.
+   *
+   * `--font-mono` es nuevo y no es decorativo: en el concepto «Expediente de
+   * Obra» la monoespaciada marca lo que es DATO —ubicaciones, fechas, números
+   * de expediente, etiquetas de estado—, frente al texto de lectura. */
+  --font-heading: var(--font-oswald), 'Impact', sans-serif;
+  --font-body: var(--font-work-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, 'Courier New', monospace;
 
   /* ── Tipografía: escala ──
    * Cada estilo lleva tamaño, interlineado, espaciado y grosor, igual que en

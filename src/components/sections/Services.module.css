@@ -1,225 +1,276 @@
 /**
- * Servicios Principales: rejilla asimétrica de tres tarjetas.
+ * Servicios Principales: tres fichas horizontales apiladas.
  *
- * La asimetría la marca la clase de disposición que lleva cada tarjeta
- * (`.wide`, `.narrow`, `.full`), que viene del campo `layout` de
- * `data/services.ts`. Esa única clase gobierna ancho, alto, opacidad de la
- * fotografía, dirección del degradado y anchura del párrafo, así que el
- * componente no necesita saber nada de estilos.
+ * Rediseño «Expediente de Obra». La rejilla asimétrica de 12 columnas del
+ * sitio anterior se sustituye por tres bandas iguales, una debajo de otra: un
+ * expediente se lee en orden, no en mosaico. Cada banda es una ficha con su
+ * número, su fotografía y su descripción.
+ *
+ * El campo `layout` de `data/services.ts` (`wide` / `narrow` / `full`) ya no se
+ * consume: gobernaba el ancho de columna de aquella rejilla. Se deja en los
+ * datos porque el rediseño todavía no está cerrado y borrarlo obligaría a
+ * tocar el tipo `Service` y su comprobación de cobertura.
  */
 
 .seccion {
-  max-width: var(--spacing-container-max);
-  margin-inline: auto;
-  padding-top: 3.5rem;
-  padding-bottom: 4rem;
-  padding-inline: var(--spacing-margin-edge);
+  position: relative;
+  padding-block: 3.5rem 4rem;
   /* Las tarjetas entran desde abajo y la cabecera desde la izquierda: sin esto
-   * el desplazamiento inicial generaría barra horizontal. */
+   * el desplazamiento inicial de GSAP generaría barra horizontal. */
   overflow: hidden;
 }
 
 @media (min-width: 768px) {
   .seccion {
-    padding-top: var(--spacing-section-padding);
+    padding-block: var(--spacing-section-padding) var(--spacing-section-padding);
   }
+}
+
+/**
+ * Trama de plano del fondo.
+ *
+ * Intensidad deliberadamente baja: la retícula se percibe como textura de
+ * papel técnico, no como cuadrícula. Es la sección de entrada al cuerpo del
+ * documento, así que marca el tono sin competir con las fotos.
+ *
+ * El 2,9 % no es un número redondeado a ojo. La trama era azul al 2,5 %, y el
+ * acero es más oscuro que aquel azul: a la misma opacidad la retícula se
+ * habría visto MENOS. Se resolvió la opacidad que reproduce el mismo salto de
+ * luminancia respecto al fondo que tenía la versión azul, para que el peso de
+ * la composición aprobada no cambie al cambiar el color.
+ *
+ * Va en un pseudo-elemento y no en el fondo de `.seccion` porque necesita su
+ * propia opacidad sin arrastrar el contenido.
+ */
+.seccion::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.029;
+  background-image:
+    linear-gradient(var(--color-steel) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-steel) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+.contenedor {
+  position: relative;
+  max-width: var(--spacing-container-max);
+  margin-inline: auto;
+  padding-inline: var(--spacing-margin-edge);
 }
 
 /* ── Cabecera ── */
 
 .cabecera {
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
 .tituloSeccion {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
   font-size: var(--text-h2-size);
   line-height: var(--text-h2-height);
-  letter-spacing: var(--text-h2-spacing);
-  font-weight: var(--text-h2-weight);
+  letter-spacing: 0.01em;
+  font-weight: 700;
   text-transform: uppercase;
   color: var(--color-on-background);
 }
 
-/* Filete bajo el título, presente en las cuatro secciones del sitio. */
-.subrayado {
-  width: 6rem;
-  height: 0.25rem;
-  background-color: var(--color-primary);
+/**
+ * Filete de sección a todo el ancho.
+ *
+ * Sustituye al subrayado corto de 6 rem del sitio anterior. Una regla que
+ * cruza la página entera es lo que separa apartados en un documento técnico;
+ * un subrayado corto bajo el título es un recurso de landing.
+ */
+.filete {
+  height: 1px;
+  /* Los primeros 96 px van en ember y el resto en gris de regla. Es un
+   * degradado de dos paradas duras en el mismo punto, no una transición: se
+   * busca un tramo de color y un corte, no un desvanecido. */
+  background-image: linear-gradient(
+    90deg,
+    var(--color-ember) 0 96px,
+    var(--color-rule) 96px
+  );
 }
 
-/* ── Rejilla ── */
+/* ── Lista de fichas ── */
 
-.rejilla {
-  display: grid;
-  grid-template-columns: 1fr;
+.lista {
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-gutter);
 }
 
-@media (min-width: 768px) {
-  .rejilla {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-  }
-}
-
-/* ── Tarjeta ── */
-
 .tarjeta {
   position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-lg);
+  display: grid;
+  grid-template-columns: 1fr;
   background-color: var(--color-card-bg);
-  border: 1px solid var(--color-card-border);
+  border: 1px solid var(--color-rule);
   transition: border-color 0.3s ease;
 }
 
+@media (min-width: 768px) {
+  .tarjeta {
+    /* La fotografía ocupa poco más de un tercio: la ficha es texto con una
+     * imagen de apoyo, no una imagen con un pie. */
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    min-height: 300px;
+  }
+}
+
 .tarjeta:hover {
-  border-color: var(--color-card-border-hover);
+  border-color: rgb(255 91 26 / 0.45);
+}
+
+/**
+ * Ángulos de visor de inspección, en las dos esquinas opuestas.
+ *
+ * Dos y no cuatro: con las cuatro, tres fichas apiladas suman doce marcas y el
+ * recurso pasa de sugerir un encuadre a parecer un marco decorativo. Con la
+ * diagonal superior-izquierda / inferior-derecha basta para leer el gesto.
+ *
+ * Se dibujan con pseudo-elementos para no añadir nodos vacíos al DOM por cada
+ * ficha, y aparecen sólo al pasar el cursor: en reposo la ficha es un
+ * rectángulo limpio.
+ */
+.tarjeta::before,
+.tarjeta::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  transition:
+    opacity 0.16s ease-out,
+    transform 0.16s ease-out;
+  pointer-events: none;
+}
+
+.tarjeta::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid var(--color-ember);
+  border-left: 1px solid var(--color-ember);
+  transform: translate(4px, 4px);
+}
+
+.tarjeta::after {
+  right: -1px;
+  bottom: -1px;
+  border-right: 1px solid var(--color-ember);
+  border-bottom: 1px solid var(--color-ember);
+  transform: translate(-4px, -4px);
+}
+
+.tarjeta:hover::before,
+.tarjeta:hover::after,
+.tarjeta:focus-within::before,
+.tarjeta:focus-within::after {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* ── Columna de imagen ── */
+
+.columnaImagen {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .columnaImagen {
+    height: auto;
+  }
 }
 
 .imagen {
   object-fit: cover;
-  opacity: 0.6;
+  /* Las fotos de origen son verticales (1200×1600) y aquí entran en una caja
+   * apaisada, así que el recorte es fuerte. Encuadrar por el centro es lo
+   * menos malo mientras no se recorten los originales, que es una tarea
+   * pendiente del rediseño. */
+  object-position: center;
   transition: transform 0.7s ease;
 }
 
 .tarjeta:hover .imagen {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
-/* Degradado de legibilidad por defecto: de negro abajo a transparente arriba. */
-.velo {
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(to top, #000000, transparent, transparent);
-}
+/* ── Columna de texto ── */
 
-.texto {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 2rem;
-  /* En móvil el texto no cabe en las tarjetas bajas, así que se limita a dos
-   * tercios de la altura y se hace desplazable. En escritorio sobra sitio. */
-  max-height: 65%;
-  overflow-y: auto;
+.columnaTexto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.75rem;
 }
 
 @media (min-width: 768px) {
-  .texto {
+  .columnaTexto {
+    justify-content: center;
     padding: 2.5rem;
-    max-height: none;
-    overflow-y: visible;
   }
 }
 
-/* Barra de desplazamiento discreta, sólo donde hace falta. */
-.texto::-webkit-scrollbar {
-  width: 3px;
-}
-
-.texto::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.texto::-webkit-scrollbar-thumb {
-  background: rgb(201 198 197 / 0.3);
-  border-radius: 3px;
-}
-
-@media (min-width: 768px) {
-  .texto::-webkit-scrollbar {
-    display: none;
-  }
-}
-
+/**
+ * Número de expediente de la ficha.
+ *
+ * Sale del campo `marker` de `data/services.ts` ("01", "02", "03"), que ya
+ * existía: no es numeración inventada para el rediseño, es el orden real de
+ * los servicios. Va en monoespaciada porque es dato.
+ */
 .marcador {
-  display: block;
   margin-bottom: 1rem;
-  font-family: var(--font-body);
-  font-size: var(--text-label-caps-size);
-  line-height: var(--text-label-caps-height);
-  letter-spacing: var(--text-label-caps-spacing);
-  font-weight: var(--text-label-caps-weight);
-  color: var(--color-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  color: var(--color-ember);
 }
 
 .titulo {
-  margin-bottom: 1rem;
+  margin-bottom: 0.875rem;
   font-size: var(--text-h3-size);
   line-height: var(--text-h3-height);
-  font-weight: var(--text-h3-weight);
+  letter-spacing: 0.02em;
+  font-weight: 600;
   text-transform: uppercase;
+  color: var(--color-on-background);
 }
 
 .descripcion {
+  max-width: 34rem;
   font-family: var(--font-body);
   font-size: var(--text-body-md-size);
   line-height: var(--text-body-md-height);
-  color: var(--color-on-surface-variant);
+  /* Texto de lectura: gris claro cálido, nunca el gris frío de Material. Es el
+   * párrafo que hay que leer, y va al máximo contraste que admite la
+   * jerarquía (11,24:1 sobre la tarjeta). */
+  color: var(--color-text-body);
+  text-wrap: pretty;
 }
 
-/* Sombra inferior que insinúa que el texto continúa al desplazarse. */
-.desvanecido {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2rem;
-  background-image: linear-gradient(to top, rgb(0 0 0 / 0.6), transparent);
-  pointer-events: none;
-}
-
-@media (min-width: 768px) {
-  .desvanecido {
-    display: none;
-  }
-}
-
-/* ── Variantes de disposición ── */
-
-.wide,
-.narrow {
-  height: 280px;
-}
-
-.full {
-  height: 240px;
-}
-
-@media (min-width: 768px) {
-  .wide {
-    grid-column: span 8;
-    height: 500px;
+/**
+ * Sin movimiento preferido: se anulan las transiciones que desplazan algo.
+ * Los cambios de color y de opacidad se conservan, porque no producen
+ * movimiento y son los que comunican el estado.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta::before,
+  .tarjeta::after,
+  .imagen {
+    transition-property: opacity;
+    transform: none;
   }
 
-  .narrow {
-    grid-column: span 4;
-    height: 500px;
+  .tarjeta:hover .imagen {
+    transform: none;
   }
-
-  .full {
-    grid-column: span 12;
-    height: 400px;
-  }
-}
-
-/* La tarjeta ancha acota el párrafo para que no se estire de lado a lado. */
-.wide .descripcion {
-  max-width: 28rem;
-}
-
-/* Techado ocupa las doce columnas: la fotografía se ve más y el degradado va
- * de izquierda a derecha en lugar de de abajo arriba. */
-.full .imagen {
-  opacity: 0.5;
-}
-
-.full .velo {
-  background-image: linear-gradient(to right, rgb(0 0 0 / 0.8), rgb(0 0 0 / 0.4), transparent);
-}
-
-.full .descripcion {
-  max-width: 32rem;
 }

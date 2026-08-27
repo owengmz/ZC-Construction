@@ -92,6 +92,9 @@ export const contentEn: SiteContent = {
     intro: 'Real results from real projects. See the transformation our clients experience.',
     beforeLabel: 'Before',
     afterLabel: 'After',
+    videoTag: 'VIDEO', // NUEVO: rótulo del marco del panel de vídeo
+    videoPlaceholder: 'Site walkthrough coming soon', // NUEVO Y PROVISIONAL
+    galleryCtaLabel: 'See full gallery', // NUEVO: enlace a /en/our-work
     items: {
       'framing-newark': {
         label: 'Framing — Newark, NJ',
@@ -110,6 +113,25 @@ export const contentEn: SiteContent = {
         beforeAlt: 'Bathroom stripped to the studs with plumbing rough-in', // NUEVO
         afterAlt: 'Finished shower tiled in marble-look stone', // NUEVO
       },
+    },
+  },
+
+  // NUEVO: página de galería completa (/en/our-work). Sólo lo que la página
+  // añade; el título y la introducción se reutilizan de `portfolio`, y las
+  // etiquetas de los filtros salen de `contact.form.serviceOptions`.
+  gallery: {
+    eyebrow: 'PROJECT ARCHIVE',
+    filtersLabel: 'Filter projects by service',
+    allFilterLabel: 'All',
+    emptyState: 'No projects in this category yet',
+    // Los marcadores {category} y {location} los sustituye `textosDeEntrada()`
+    // en data/gallery.ts. Sólo se usan en las obras SIN texto artesanal.
+    beforeAltTemplate: '{category} project in {location}, before the work',
+    afterAltTemplate: '{category} project in {location}, after completion',
+    meta: {
+      title: 'Our Work — Project Gallery',
+      description:
+        'Before and after photos from framing, roofing and renovation projects across New Jersey.',
     },
   },
 

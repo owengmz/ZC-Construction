@@ -1,0 +1,222 @@
+/**
+ * Ficha de proyecto: ubicación arriba, par antes/después debajo.
+ *
+ * Se comparte entre la sección «Nuestros Trabajos» de la portada y la galería
+ * completa, así que no fija ancho ni alto propios: se adapta a la caja donde
+ * la coloque quien la use.
+ */
+
+.ficha {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-rule);
+  transition: border-color 0.3s ease;
+}
+
+.ficha:hover {
+  border-color: rgb(255 91 26 / 0.45);
+}
+
+/* ── Encabezado de la ficha ── */
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--color-rule);
+}
+
+/**
+ * Marca de ubicación.
+ *
+ * Un cuadrado sólido de 6 px en ember, no un icono de chincheta: en un
+ * documento técnico la referencia es una marca, no una ilustración.
+ */
+.marca {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-ember);
+}
+
+/**
+ * Servicio y ciudad, tal como llegan del contenido ("Framing — Newark, NJ").
+ * Monoespaciada porque es dato: identifica el expediente, no lo describe.
+ *
+ * Y en el acero del logo, porque la ubicación es justo el trabajo del gris
+ * estructural: rotula el expediente, no llama la atención sobre él. Va con la
+ * variante de texto (6,38:1 sobre la tarjeta) y no con `--color-steel`, que a
+ * 11 px se quedaría en 2,70:1. El cuadrado de ember que la precede queda como
+ * marca: ember señala, el acero rotula.
+ */
+.ubicacion {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--color-steel-text);
+}
+
+/* ── Par antes / después ── */
+
+.par {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* 1px de separación, no un hueco: las dos fotos son el mismo expediente en
+   * dos momentos, y el filete entre ellas las lee como una comparación. */
+  gap: 1px;
+  background-color: var(--color-rule);
+}
+
+/**
+ * El par en modo natural (galería completa): separación real, no un filete.
+ *
+ * El filete de 1 px de arriba funciona con fotos recortadas al mismo molde:
+ * dos rectángulos idénticos con una raya en medio se leen como una comparación
+ * y el conjunto sigue pareciendo una sola pieza.
+ *
+ * Con las fotos enteras deja de funcionar. Cada una trae su propio encuadre,
+ * su propio horizonte y su propio borde, y a 1 px de distancia se tocan: lo que
+ * en la portada era una comparación, aquí se lee como una imagen partida por la
+ * mitad. La separación las devuelve a ser dos fotografías de la misma obra.
+ *
+ * El `padding` acompaña al `gap` por necesidad, no por simetría: con hueco
+ * entre ellas pero ninguno contra el borde de la ficha, las fotos quedarían
+ * flotando en el centro y pegadas a los cantos, que es peor que el defecto
+ * original.
+ */
+.parNatural {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.foto {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: var(--color-surface-container-lowest);
+}
+
+/**
+ * Hueco de la foto en modo natural (galería completa).
+ *
+ * Sin `aspect-ratio` y sin alto: los define la propia imagen, que entra con sus
+ * dimensiones intrínsecas. Es lo que distingue este modo del de arriba —allí la
+ * caja manda sobre la foto; aquí la foto manda sobre la caja.
+ *
+ * Conserva `position: relative` porque el pie «Antes»/«Después» va posicionado
+ * dentro, y `overflow: hidden` como red: en reposo no recorta nada, ya que la
+ * imagen encaja exactamente.
+ *
+ * Se deja que el grid lo estire (`align-self` por defecto). Si algún día una
+ * foto de «antes» y su «después» no comparten proporción, la más corta dejará
+ * ver el fondo debajo en lugar de recortarse. Ese hueco es deliberado: es la
+ * señal visible de que ese par necesita una decisión, en vez de un recorte
+ * silencioso que nadie llega a notar.
+ */
+.fotoNatural {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-surface-container-lowest);
+}
+
+/* Cuando la foto abre la galería es un botón; cuando no, una figura inerte. */
+.disparador {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.imagen {
+  object-fit: cover;
+  /* Los originales son verticales (1200×1600) dentro de una caja apaisada:
+   * recorte pendiente del rediseño, encuadrado al centro mientras tanto. */
+  object-position: center;
+  transition: transform 0.5s ease;
+}
+
+.disparador:hover .imagen {
+  transform: scale(1.05);
+}
+
+/**
+ * La imagen en modo natural: ocupa el ancho disponible y calcula su alto.
+ *
+ * `height: auto` es lo que preserva la proporción. `display: block` quita el
+ * espacio de línea base que los navegadores reservan bajo una imagen en línea,
+ * que aquí dejaría una franja de fondo de tres o cuatro píxeles entre la foto y
+ * el borde inferior de la ficha.
+ */
+.imagenNatural {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: filter 0.3s ease;
+}
+
+/**
+ * Al pasar el cursor sube el brillo; NO hay ampliación.
+ *
+ * El zoom de la ficha de portada empuja los bordes de la foto fuera del hueco,
+ * y aunque sólo dure el hover, sigue siendo un recorte. En una página cuyo
+ * propósito es enseñar la obra entera, la señal de que la foto es pulsable no
+ * puede consistir en tapar parte de la obra.
+ */
+.disparador:hover .imagenNatural {
+  filter: brightness(1.09);
+}
+
+.disparador:focus-visible {
+  outline: 2px solid var(--color-steel-text);
+  outline-offset: -2px;
+}
+
+/**
+ * Pie de la foto.
+ *
+ * «Antes» y «Después» son estado, así que van en monoespaciada sobre una
+ * banda opaca: se leen igual sobre cualquier zona de la fotografía, sin
+ * depender de un degradado que funcione en unas fotos y en otras no.
+ */
+.pie {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 0.375rem 0.625rem;
+  background-color: rgb(20 19 19 / 0.85);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--color-on-surface);
+}
+
+/* El «después» se distingue con el acento: es el resultado, que es lo que la
+ * sección viene a demostrar. */
+.pieDespues {
+  color: var(--color-ember);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .imagen,
+  .disparador:hover .imagen {
+    transition: none;
+    transform: none;
+  }
+
+  /* El brillo del modo natural no desplaza nada, así que se conserva el efecto
+   * y sólo se quita la transición que lo anima. */
+  .imagenNatural {
+    transition: none;
+  }
+}
