@@ -78,63 +78,56 @@
 /* ── Rejilla de obras ── */
 
 /**
- * Disposición en columnas, no en rejilla.
+ * Una rejilla corriente de columnas iguales, y eso es exactamente la noticia.
  *
- * Es un cambio de mecanismo, no de valores. Una rejilla (`display: grid`)
- * alinea sus elementos en FILAS: todas las fichas de una fila comparten alto, y
- * la que sobra queda con un hueco debajo. Eso funcionaba mientras las fotos
- * salían recortadas a 4:3 y todas las fichas medían lo mismo. Desde que cada
- * foto conserva su proporción real, las fichas miden cosas distintas y la
- * rejilla dejaría escalones vacíos entre filas.
+ * Aquí hubo antes un tablón de `column-count`, y antes de eso se llegó a
+ * diseñar un empaquetado justificado por filas. Las dos existían por el mismo
+ * motivo: mientras cada foto conservaba su encuadre original, cada ficha medía
+ * un alto distinto y hacía falta maquinaria para que el conjunto no se leyera
+ * como un montón de piezas sueltas.
  *
- * Con `column-count` no hay filas: el navegador reparte las fichas por columnas
- * y cada una se apila justo debajo de la anterior, sea cual sea su alto. Es el
- * comportamiento de tablón de fotos que pedía un catálogo de obras verticales.
+ * Desde que la ficha lleva un marco cuadrado, esa maquinaria sobra. Todas las
+ * fichas tienen el mismo ancho, y como su alto se deduce del ancho, todas miden
+ * lo mismo: no hay escalones que repartir ni filas que justificar. El orden de
+ * lectura vuelve a ser el natural —de izquierda a derecha, fila por fila—, que
+ * es el que el tablón de columnas obligaba a sacrificar.
  *
- * El precio a pagar es el orden de lectura: en columnas se lee de arriba abajo
- * y luego se salta a la siguiente columna, no de izquierda a derecha. En una
- * galería sin orden cronológico relevante no molesta, y el orden de tabulación
- * con el teclado sigue el del documento, que sí es el orden lógico.
- *
- * Se descartó la alternativa —rejilla con `grid-auto-rows` y `span` calculado—
- * porque exige medir cada ficha con JavaScript después de pintar y recalcular
- * al cambiar el tamaño de la ventana, para un resultado que aquí se consigue
- * con tres declaraciones.
+ * Tres declaraciones, y ninguna de ellas depende de las fotos que traiga el
+ * cliente.
  */
 .rejilla {
-  column-count: 1;
-  column-gap: var(--spacing-gutter);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--spacing-gutter);
 }
 
 /**
- * Dos columnas, y no tres, desde escritorio.
+ * Dos columnas en tableta.
  *
- * La rejilla anterior llegaba a tres porque las fichas eran apaisadas. Ahora
- * cada ficha lleva DOS fotos verticales (3:4) una al lado de la otra, así que a
- * tres columnas cada foto se quedaría en unos 215 px de ancho: demasiado poco
- * para apreciar una obra, que es justo lo que la página viene a hacer. A dos
- * columnas rondan los 340 px.
+ * A 768 px cada ficha se queda en unos 332 px de marco, que es donde una obra
+ * todavía se distingue. Por debajo se pasa a una sola columna en vez de
+ * apretarlas más: media pantalla de móvil no da para leer un antes y un
+ * después.
  */
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .rejilla {
-    column-count: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 /**
- * Cada ficha dentro de su columna.
+ * Tres columnas desde 1280 px.
  *
- * `break-inside: avoid` es imprescindible: sin él el navegador parte una ficha
- * por la mitad al final de una columna y continúa en la siguiente, dejando el
- * encabezado en una y las fotos en otra.
- *
- * La separación vertical va en `margin-bottom` y no en `gap` porque
- * `column-gap` sólo separa columnas; entre elementos de una misma columna no
- * interviene.
+ * El marco queda entre 384 px (a 1280) y 437 px (con el contenedor ya topado en
+ * 1440). Son las medidas que hacen que valga la pena la tercera columna: con la
+ * ficha anterior, que partía su ancho entre dos fotos, tres columnas dejaban
+ * cada foto en unos 215 px y por eso la rejilla se quedaba en dos. Un solo
+ * marco por ficha cambia esa cuenta por completo.
  */
-.celda {
-  break-inside: avoid;
-  margin-bottom: var(--spacing-gutter);
+@media (min-width: 1280px) {
+  .rejilla {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* ── Estado vacío ── */

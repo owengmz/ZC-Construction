@@ -1,0 +1,141 @@
+/**
+ * Comparador antes/después.
+ *
+ * No fija tamaño propio: llena por completo la caja de quien lo monta, que es
+ * quien decide la proporción. Hoy esa caja es el marco cuadrado de
+ * `ProjectCard`; si mañana la proporción cambia, este archivo no se entera.
+ */
+
+.comparador {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: ew-resize;
+  /**
+   * `pan-y` y NO `none`.
+   *
+   * Con `none` el navegador deja de gestionar cualquier gesto sobre el marco, y
+   * en móvil la ficha ocupa el ancho entero de la pantalla: quien intentara
+   * desplazar la página apoyando el dedo sobre una foto se encontraría con que
+   * no se mueve nada. `pan-y` cede el gesto vertical al navegador y se queda
+   * sólo con el horizontal, que es el único que este control necesita.
+   */
+  touch-action: pan-y;
+}
+
+.comparador:focus-visible {
+  /* Hacia dentro: un anillo por fuera quedaría tapado por el marco, que recorta
+     lo que se sale de él. */
+  outline: 2px solid var(--color-steel-text);
+  outline-offset: -2px;
+}
+
+/**
+ * Las dos fotografías, recortadas al marco.
+ *
+ * `object-position` lo escribe el componente a partir del campo opcional
+ * `focus` de cada foto, así que aquí no se declara: un valor por defecto en la
+ * hoja competiría con el estilo en línea y sólo serviría para confundir.
+ *
+ * `pointer-events: none` es funcional, no cosmético: sin él, arrastrar sobre la
+ * foto inicia el arrastre nativo de imagen del navegador, que se lleva el
+ * puntero y deja el divisor congelado a media carrera.
+ */
+.foto {
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+/**
+ * La capa del «antes», recortada por la derecha.
+ *
+ * `clip-path` y no `width`: el recorte no reescala nada, así que esta foto y la
+ * de debajo siguen coincidiendo píxel a píxel para cualquier posición del
+ * divisor. Con un ancho variable, la de arriba se iría comprimiendo y las dos
+ * dejarían de casar en cuanto el divisor se moviese.
+ */
+.capaAntes {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 calc(100% - var(--posicion)) 0 0);
+}
+
+/**
+ * Filete del divisor.
+ *
+ * En el gris del logo, no en ember: traza por dónde va el corte, y trazar es
+ * trabajo del acero. La sombra no es decoración —es lo que mantiene el filete
+ * visible cuando cae sobre una zona clara de la fotografía, como un tejado al
+ * sol o una pared recién pintada.
+ */
+.divisor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--posicion);
+  width: 1px;
+  background-color: var(--color-steel-text);
+  box-shadow: 0 0 9px rgb(0 0 0 / 0.7);
+  pointer-events: none;
+}
+
+/**
+ * El agarre.
+ *
+ * Es lo único accionable del marco y por eso es lo único que lleva ember: la
+ * regla de acentos del sitio dice que si algo brilla, es porque hay que
+ * mirarlo. Cuadrado y no redondo, como el resto de marcas del expediente.
+ *
+ * Los 40 px son visuales; el objetivo táctil real es el marco entero, que
+ * responde a la pulsación en cualquier punto, así que no hay ningún blanco de
+ * 40 px al que haya que apuntar.
+ */
+.agarre {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background-color: rgb(20 19 19 / 0.9);
+  border: 1px solid var(--color-ember);
+  color: var(--color-ember);
+}
+
+/**
+ * Pies de estado, anclados a las esquinas inferiores.
+ *
+ * Antes colgaban de la costura entre las dos fotos. Ahora que no hay costura,
+ * se van a los extremos: enmarcan el recorrido del divisor en lugar de señalar
+ * un punto concreto de él, que es lo que corresponde a un valor que se mueve.
+ */
+.pie {
+  position: absolute;
+  bottom: 0;
+  padding: 0.375rem 0.625rem;
+  background-color: rgb(20 19 19 / 0.85);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.pieAntes {
+  left: 0;
+  color: var(--color-on-surface);
+}
+
+/* El «después» se distingue con el acento: es el resultado, que es lo que la
+ * sección viene a demostrar. */
+.pieDespues {
+  right: 0;
+  color: var(--color-ember);
+}

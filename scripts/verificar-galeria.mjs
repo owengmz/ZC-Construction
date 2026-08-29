@@ -3,21 +3,31 @@
  *
  *     npm run check:gallery
  *
- * Existe por una razón concreta. La galería enseña cada foto ENTERA, sin
- * recortar: el hueco lo define la proporción real del archivo. Eso funciona
- * mientras se cumplan dos condiciones, y ninguna de las dos la puede verificar
- * TypeScript, porque las dos dependen de bytes que están en `public/images/`:
+ * Existe por una razón concreta. La ficha dibuja cada foto en un marco de
+ * proporción fija y la recorta para llenarlo. Eso funciona mientras se cumplan
+ * dos condiciones, y ninguna de las dos la puede verificar TypeScript, porque
+ * las dos dependen de bytes que están en `public/images/`:
  *
  *   1. Que el `width` y el `height` declarados en `data/gallery.ts` sean los
- *      REALES del archivo. Si no lo son, el navegador reserva un hueco de la
- *      proporción equivocada y la página da un salto al cargar la foto.
+ *      REALES del archivo. Aquí ya no hay salto de maquetación —el marco tiene
+ *      proporción propia y reserva su hueco solo—, pero las dimensiones siguen
+ *      alimentando al visor a pantalla completa, que sí dibuja la foto entera,
+ *      y son de donde sale la comprobación de recorte de abajo. Declararlas mal
+ *      hace que esta herramienta mienta.
  *
- *   2. Que el «antes» y el «después» de una misma obra compartan proporción.
- *      Si no, en la ficha una de las dos queda más corta que la otra y deja
- *      ver el fondo debajo. La página NO lo resuelve recortando por su cuenta:
- *      ese hueco es deliberado, y este script está para avisar de él antes de
- *      que llegue a producción, de modo que la decisión —recortar, recuadrar o
- *      dejarlo así— se tome obra por obra y a la vista.
+ *   2. Que ninguna foto se aleje tanto del marco como para que el recorte se
+ *      coma lo que la foto venía a enseñar. Un 3∶4 o un 4∶3 pierden un cuarto
+ *      de una de sus dimensiones y se leen de sobra; una vertical de móvil
+ *      (9∶16) pierde el 44 % del alto, y ahí ya no se sabe qué se está viendo.
+ *
+ * ── Qué sustituye ──
+ *
+ * Hasta el rediseño de la galería, la segunda comprobación miraba otra cosa: si
+ * las DOS fotos de una obra tenían proporciones demasiado dispares entre sí.
+ * Tenía sentido cuando la ficha las ponía una al lado de la otra sin recortar y
+ * repartía el ancho entre ellas. Ahora las dos comparten un único marco
+ * cuadrado, así que da igual cómo se lleven entre ellas: lo que importa es cómo
+ * se lleva cada una con el marco. La comprobación es por foto, no por par.
  *
  * Conviene ejecutarlo después de añadir obras a `data/gallery.ts`. Devuelve
  * código de salida 1 si encuentra algo, así que también sirve en un hook de
@@ -28,20 +38,52 @@ import { readFileSync } from 'node:fs';
 import sharp from 'sharp';
 
 const ARCHIVO_DATOS = 'src/data/gallery.ts';
+
 /**
- * Desvío de proporción por debajo del cual dos fotos se consideran iguales.
+ * Proporción del marco de la ficha, en ancho ÷ alto.
  *
- * El 1 % no es arbitrario: en una columna de galería de unos 340 px, un 1 % de
- * desvío son tres píxeles de diferencia de alto. Por debajo de eso el hueco no
- * se ve, y avisar sería ruido.
+ * Es 1 porque el marco es cuadrado, y está aquí como constante con nombre para
+ * que el día que la ficha cambie de proporción esta herramienta se ajuste
+ * cambiando un número, en lugar de seguir avisando de recortes que ya no son
+ * los que ocurren. Su gemelo vive en `ProjectCard.module.css`, en la regla
+ * `aspect-ratio` de `.marco`.
  */
-const TOLERANCIA = 0.01;
+const PROPORCION_MARCO = 1;
+
+/**
+ * Cuánto puede comerse el recorte, en tanto por uno de la dimensión afectada.
+ *
+ * Con marco cuadrado, un 3∶4 o un 4∶3 pierden exactamente 0,25: es el precio
+ * asumido del rediseño y tiene que pasar sin avisos. El 0,35 deja ese caso
+ * holgado y salta con lo que de verdad preocupa —proporciones más extremas que
+ * unos 1,54∶1, como una panorámica o una vertical de móvil—, donde el centro
+ * recortado deja de contar la obra.
+ */
+const RECORTE_MAXIMO = 0.35;
 
 /** Reduce una proporción a su forma más simple: 1200×1600 → 3:4. */
 function razon(ancho, alto) {
   const mcd = (a, b) => (b === 0 ? a : mcd(b, a % b));
   const d = mcd(ancho, alto);
   return `${ancho / d}:${alto / d}`;
+}
+
+/**
+ * Qué fracción de la foto descarta `object-fit: cover` contra el marco.
+ *
+ * Una foto más estrecha que el marco se recorta por arriba y por abajo, y
+ * conserva la fracción `proporcion / marco` de su alto; una más ancha se recorta
+ * por los lados y conserva `marco / proporcion` de su ancho. En los dos casos lo
+ * que se pierde es uno menos la fracción conservada.
+ *
+ * @param proporcion Ancho ÷ alto de la foto.
+ * @returns Fracción descartada, entre 0 y 1.
+ */
+function recorte(proporcion) {
+  const conservado =
+    proporcion < PROPORCION_MARCO ? proporcion / PROPORCION_MARCO : PROPORCION_MARCO / proporcion;
+
+  return 1 - Math.min(1, conservado);
 }
 
 /**
@@ -85,42 +127,45 @@ const obras = leerObras();
 const problemas = [];
 
 for (const obra of obras) {
-  const lados = {};
-
   for (const lado of ['before', 'after']) {
     const declarada = obra[lado];
     const { width, height } = await sharp('public' + declarada.src).metadata();
-    lados[lado] = { width, height };
 
     if (width !== declarada.width || height !== declarada.height) {
       problemas.push(
         `${obra.id} · ${lado}: ${declarada.src}\n` +
           `    declarado ${declarada.width}×${declarada.height}, real ${width}×${height}\n` +
-          `    Corrija las dimensiones en ${ARCHIVO_DATOS}, o la página saltará al cargar la foto.`,
+          `    Corrija las dimensiones en ${ARCHIVO_DATOS}: de ellas dependen el visor a\n` +
+          '    pantalla completa y la comprobación de recorte de esta misma herramienta.',
+      );
+
+      // Sin dimensiones fiables, el recorte calculado sería el de otra foto.
+      continue;
+    }
+
+    const descartado = recorte(width / height);
+
+    if (descartado > RECORTE_MAXIMO) {
+      const eje = width / height < PROPORCION_MARCO ? 'alto' : 'ancho';
+
+      problemas.push(
+        `${obra.id} · ${lado}: ${declarada.src}\n` +
+          `    ${width}×${height} (${razon(width, height)}) en un marco ${razon(PROPORCION_MARCO * 1000, 1000)}\n` +
+          `    el recorte se lleva el ${(descartado * 100).toFixed(1)} % del ${eje}; el máximo admitido es ${RECORTE_MAXIMO * 100} %.\n` +
+          '    Vuelva a encuadrar la foto en un formato menos extremo, o recórtela a mano\n' +
+          '    eligiendo usted qué parte se queda. Si el encuadre es correcto pero el centro\n' +
+          '    no es el asunto, el campo opcional `focus` mueve el recorte a un extremo.',
       );
     }
-  }
-
-  const pAntes = lados.before.width / lados.before.height;
-  const pDespues = lados.after.width / lados.after.height;
-  const desvio = Math.abs(pAntes - pDespues) / pAntes;
-
-  if (desvio > TOLERANCIA) {
-    problemas.push(
-      `${obra.id} · el antes y el después NO comparten proporción\n` +
-        `    antes   ${lados.before.width}×${lados.before.height}  (${razon(lados.before.width, lados.before.height)})\n` +
-        `    después ${lados.after.width}×${lados.after.height}  (${razon(lados.after.width, lados.after.height)})\n` +
-        `    desvío ${(desvio * 100).toFixed(1)} %. La ficha mostrará la más corta con fondo debajo.\n` +
-        '    Decida qué hacer con esta obra: recortar una de las dos al mismo formato,\n' +
-        '    volver a exportarlas, o dejarlo así si el hueco no molesta.',
-    );
   }
 }
 
 console.log(`\nGalería: ${obras.length} obra(s), ${obras.length * 2} fotos comprobadas.`);
 
 if (problemas.length === 0) {
-  console.log('Todas las fotos tienen sus dimensiones bien declaradas y cada par comparte proporción.\n');
+  console.log(
+    'Dimensiones bien declaradas y ninguna foto se descuadra en el marco de la ficha.\n',
+  );
   process.exit(0);
 }
 

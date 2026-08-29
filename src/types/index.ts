@@ -128,6 +128,22 @@ export interface ImageAsset {
   /** Alto intrínseco en píxeles. */
   readonly height: number;
   /**
+   * Qué parte de la foto conservar cuando el marco la recorta.
+   *
+   * La galería dibuja cada foto en un marco cuadrado con `object-fit: cover`,
+   * así que a una vertical le quita el 25 % del alto y a una apaisada el 25 %
+   * del ancho. Por defecto recorta por el centro, que es lo correcto casi
+   * siempre y es la razón de que este campo sea OPCIONAL: quien añade una obra
+   * no tiene que pensar en él.
+   *
+   * Existe para la excepción: la foto en la que el centro geométrico no es el
+   * asunto —una casa fotografiada en vertical cuya cumbrera queda arriba del
+   * todo, un tejado cuyo remate está en un extremo—. Los valores son los de
+   * `object-position`, así que se escriben tal cual se leen: `'top'` conserva
+   * la parte de arriba, `'left'` la de la izquierda.
+   */
+  readonly focus?: 'top' | 'center' | 'bottom' | 'left' | 'right';
+  /**
    * Miniatura incrustada como data URI para el `placeholder="blur"` de
    * `next/image`.
    *
@@ -227,7 +243,7 @@ export interface GalleryEntry {
   readonly before: ImageAsset;
   /** Fotografía del resultado final. */
   readonly after: ImageAsset;
-  /** Si aparece en la selección de la portada. Hoy son dos. */
+  /** Si aparece en la selección de la portada. Hoy es una sola obra. */
   readonly featured: boolean;
   /**
    * Vía de escape para las entradas que ya tienen textos escritos a mano.
@@ -478,6 +494,16 @@ export interface PortfolioContent {
   readonly beforeLabel: string;
   /** Pie común de todas las fotos "después": "After" / "Después". */
   readonly afterLabel: string;
+  /**
+   * Nombre del comparador antes/después para lectores de pantalla, sin la obra.
+   *
+   * La ficha le añade la ubicación ("Comparador antes y después: Techado —
+   * Trenton, NJ"), de modo que en una página con cinco comparadores cada uno se
+   * anuncia por la obra que compara y no como el quinto control idéntico.
+   */
+  readonly compareLabel: string;
+  /** Rótulo accesible del botón que abre el visor a pantalla completa. */
+  readonly expandLabel: string;
   /**
    * Rótulo mono del panel de vídeo. Es dato, no prosa, y por eso va en
    * versalitas monoespaciadas dentro del marco.

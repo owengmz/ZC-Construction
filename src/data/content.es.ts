@@ -95,6 +95,10 @@ export const contentEs: SiteContent = {
     // también con el idioma en español.
     beforeLabel: 'Antes',
     afterLabel: 'Después',
+    // NUEVO: rótulos accesibles del comparador arrastrable y de su botón de
+    // ampliar. No se ven; los lee quien navega con lector de pantalla.
+    compareLabel: 'Comparador antes y después',
+    expandLabel: 'Ver la fotografía completa',
     videoTag: 'VIDEO',
     videoPlaceholder: 'Recorrido de obra próximamente', // PROVISIONAL
     galleryCtaLabel: 'Ver toda la galería',

@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import { LightboxModal } from '@/components/ui/LightboxModal';
-import { ProjectCard, type DesplazamientoFoto } from '@/components/ui/ProjectCard';
+import { ProjectCard } from '@/components/ui/ProjectCard';
 import { useLang } from '@/context/LangContext';
 import { gallery, textosDeEntrada } from '@/data/gallery';
 import { useLightbox } from '@/hooks/useLightbox';
@@ -46,17 +46,22 @@ export type _CoberturaCategorias = AfirmarCobertura<
 /**
  * Anchos de las fotos para que `next/image` elija bien del srcset.
  *
- * Cada ficha lleva dos fotos a mitad de su ancho, y la ficha ocupa una columna
- * de un tablón que va de una a dos columnas. Por debajo de 1024 px hay una sola
- * columna, así que cada foto es media ventana descontando márgenes; por encima
- * son dos columnas sobre un contenedor que se detiene en 1440 px, de donde
- * salen los 340 px.
+ * Ahora cada ficha lleva UN marco que ocupa su ancho entero, así que la cuenta
+ * es directamente el ancho de columna de la rejilla, tramo por tramo:
  *
- * Importa acertar aquí más que en el modo recortado: sin caja de proporción
- * fija, pedir un archivo más grande de la cuenta no sólo gasta ancho de banda,
- * sino que no aporta un solo píxel visible.
+ *   - hasta 767 px  · una columna, márgenes de 20 px  → 100vw − 40
+ *   - hasta 1279 px · dos columnas, márgenes de 40 px y una calle de 24
+ *                     → (100vw − 104) / 2
+ *   - hasta 1439 px · tres columnas y dos calles      → (100vw − 128) / 3
+ *   - a partir de ahí el contenedor se topa en 1440 px y la columna se queda
+ *     clavada en 437 px.
+ *
+ * Se escribe con `calc()` y no con porcentajes de ventana redondeados porque
+ * las calles y los márgenes son fijos: un `33vw` pediría archivos de más en las
+ * pantallas anchas y de menos en las estrechas del mismo tramo.
  */
-const SIZES_FOTO = '(max-width: 1023px) 48vw, 340px';
+const SIZES_FOTO =
+  '(max-width: 767px) calc(100vw - 40px), (max-width: 1279px) calc((100vw - 104px) / 2), (max-width: 1439px) calc((100vw - 128px) / 3), 437px';
 
 /**
  * Rejilla filtrable de la galería completa.
@@ -181,34 +186,29 @@ export function GalleryGrid() {
         </p>
       ) : (
         <div className={styles.rejilla}>
-          {visibles.map((obra, indiceObra) => {
-            const indiceAntes = indiceObra * FOTOS_POR_OBRA;
-
-            return (
-              /*
-               * La ficha va envuelta porque `break-inside: avoid` y el margen
-               * inferior son propiedades del elemento COLUMNADO, y `ProjectCard`
-               * es un componente compartido: no puede llevar encima reglas que
-               * sólo tienen sentido dentro de un tablón de columnas.
-               */
-              <div key={obra.id} className={styles.celda}>
-                <ProjectCard
-                  before={obra.before}
-                  after={obra.after}
-                  copy={textosDeEntrada(obra, content)}
-                  beforeLabel={content.portfolio.beforeLabel}
-                  afterLabel={content.portfolio.afterLabel}
-                  sizes={SIZES_FOTO}
-                  /* Aquí lo que se enseña ES la obra, así que la foto sale
-                     entera. El teaser de la portada sigue en 'cover'. */
-                  ajuste="natural"
-                  onFotoClick={(desplazamiento: DesplazamientoFoto) =>
-                    lightbox.abrir(indiceAntes + desplazamiento)
-                  }
-                />
-              </div>
-            );
-          })}
+          {visibles.map((obra, indiceObra) => (
+            /*
+             * Ya no hace falta envolver la ficha. El envoltorio existía para
+             * llevar `break-inside: avoid` y el margen inferior, que eran
+             * propiedades del elemento columnado; con una rejilla normal, la
+             * ficha es el elemento de la rejilla y la separación la pone `gap`.
+             */
+            <ProjectCard
+              key={obra.id}
+              before={obra.before}
+              after={obra.after}
+              copy={textosDeEntrada(obra, content)}
+              beforeLabel={content.portfolio.beforeLabel}
+              afterLabel={content.portfolio.afterLabel}
+              compareLabel={content.portfolio.compareLabel}
+              expandLabel={content.portfolio.expandLabel}
+              sizes={SIZES_FOTO}
+              /* El visor abre por el «antes» de esta obra, que es el orden en
+                 que se leen las dos fotos; desde ahí las flechas avanzan al
+                 «después» y a la obra siguiente. */
+              onAmpliar={() => lightbox.abrir(indiceObra * FOTOS_POR_OBRA)}
+            />
+          ))}
         </div>
       )}
 

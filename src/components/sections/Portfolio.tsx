@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useMemo, useRef } from 'react';
 
 import { LightboxModal } from '@/components/ui/LightboxModal';
-import { ProjectCard, type DesplazamientoFoto } from '@/components/ui/ProjectCard';
+import { ProjectCard } from '@/components/ui/ProjectCard';
 import { useLang } from '@/context/LangContext';
 import { gallery, textosDeEntrada } from '@/data/gallery';
 import { rutaDePagina } from '@/data/routes';
@@ -25,24 +25,40 @@ const FOTOS_POR_PROYECTO = 2;
 /**
  * Cuántas fichas caben en la composición aprobada, junto al panel de vídeo.
  *
+ * Una. La portada enseña UN expediente, con sus dos fotos enteras y sin
+ * recortar, y el resto del catálogo se lee en la galería completa, que es
+ * exactamente para lo que existe.
+ *
  * No recorta la lista —de eso se encarga `featured` en `data/gallery.ts`— sino
- * que documenta el límite del diseño y sirve de red: si alguien marca tres
- * obras como destacadas, la tercera desbordaría la columna y rompería la
- * alineación con el panel de vídeo. Antes que dejar que eso ocurra en
- * producción, la portada enseña las dos primeras y el resto se lee en la
- * galería completa, que es exactamente para lo que existe.
+ * que documenta el límite del diseño y sirve de red: la anchura de las columnas
+ * de `.cuerpo` está calculada contra el alto de UNA ficha, así que una segunda
+ * obra marcada como destacada estiraría la columna al doble y dejaría el panel
+ * de vídeo con media altura de fondo vacío debajo de su icono.
  */
-const FICHAS_EN_PORTADA = 2;
+const FICHAS_EN_PORTADA = 1;
 
-/** Anchos de las fotos: media ficha, y la ficha es algo menos de media pantalla. */
-const SIZES_FOTO = '(max-width: 639px) 50vw, (max-width: 1023px) 25vw, 300px';
+/**
+ * Anchos con los que se dibuja el marco, para que `next/image` elija bien.
+ *
+ * Ya no hay que estimar qué fracción del hueco se lleva cada foto: las dos
+ * llenan el mismo marco, y el marco es el ancho de su columna. A partir de
+ * 1024 px la fila se reparte en dos mitades iguales con una calle de 24 px y
+ * márgenes de 40, de donde salen los 668 px con el contenedor ya topado en
+ * 1440. Por debajo, la ficha es la fila entera.
+ */
+const SIZES_FOTO =
+  '(max-width: 767px) calc(100vw - 40px), (max-width: 1023px) calc(100vw - 80px), (max-width: 1439px) calc((100vw - 104px) / 2), 668px';
 
 /**
  * Sección de Nuestros Trabajos.
  *
  * Rediseño «Expediente de Obra»: panel de vídeo a la izquierda —marco de visor
- * con los cuatro ángulos, a la espera de la pieza real— y una selección de dos
- * expedientes a la derecha, cada uno con su ubicación y su par antes/después.
+ * con los cuatro ángulos, a la espera de la pieza real— y un único expediente
+ * destacado a la derecha, con su ubicación y su par antes/después sin recortar.
+ *
+ * Las dos piezas no están puestas una al lado de la otra: están dimensionadas
+ * la una contra la otra. El detalle del cálculo está en `.cuerpo`, en la hoja
+ * de estilos de la sección.
  */
 export function Portfolio() {
   const { content } = useLang();
@@ -165,10 +181,10 @@ export function Portfolio() {
                     copy={textosDeEntrada(obra, content)}
                     beforeLabel={content.portfolio.beforeLabel}
                     afterLabel={content.portfolio.afterLabel}
+                    compareLabel={content.portfolio.compareLabel}
+                    expandLabel={content.portfolio.expandLabel}
                     sizes={SIZES_FOTO}
-                    onFotoClick={(desplazamiento: DesplazamientoFoto) =>
-                      lightbox.abrir(indiceAntes + desplazamiento)
-                    }
+                    onAmpliar={() => lightbox.abrir(indiceAntes)}
                   />
                 </div>
               );

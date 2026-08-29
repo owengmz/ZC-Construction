@@ -92,6 +92,10 @@ export const contentEn: SiteContent = {
     intro: 'Real results from real projects. See the transformation our clients experience.',
     beforeLabel: 'Before',
     afterLabel: 'After',
+    // NUEVO: rótulos accesibles del comparador arrastrable y de su botón de
+    // ampliar. No se ven; los lee quien navega con lector de pantalla.
+    compareLabel: 'Before and after comparison',
+    expandLabel: 'View the full photograph',
     videoTag: 'VIDEO', // NUEVO: rótulo del marco del panel de vídeo
     videoPlaceholder: 'Site walkthrough coming soon', // NUEVO Y PROVISIONAL
     galleryCtaLabel: 'See full gallery', // NUEVO: enlace a /en/our-work

@@ -97,17 +97,51 @@
   gap: var(--spacing-gutter);
 }
 
+/**
+ * Mitad y mitad.
+ *
+ * Aquí hubo 1fr / 2fr, calculado para una ficha que respetaba el encuadre
+ * original de sus dos fotos y por tanto medía poco de alto: se le daban dos
+ * tercios del ancho para que el panel de vídeo, estirado a su altura, quedara
+ * vertical.
+ *
+ * Con el marco cuadrado esa cuenta se invierte. El alto de la ficha ya no es un
+ * resto de las proporciones de sus fotos, sino su propio ancho más la barra de
+ * datos, así que darle dos tercios de la fila la dispararía a 890 px de marco y
+ * la sección entera pasaría de los 1000 px de alto. A mitades queda en su
+ * sitio, y de paso el panel de vídeo deja de ir apretado en una franja de
+ * 445 px.
+ *
+ * El cálculo se sostiene solo. A 1440 px el contenedor deja 1360 px útiles;
+ * menos los 24 px de calle quedan 1336, o sea 668 px por columna. La ficha mide
+ * 668 px de marco más 56 px de barra de datos y 2 px de filetes: 726 px. El
+ * panel de vídeo, estirado a esa misma altura, queda en 668 × 726, proporción
+ * 0,92 —vertical, que es la forma que pide un recorrido de obra—.
+ *
+ * Y aguanta al estrecharse, porque las dos alturas dependen del mismo ancho: a
+ * 1024 px el panel queda en 460 × 518, proporción 0,89. Entre los dos extremos
+ * del rango de escritorio la forma del panel se mueve tres centésimas, así que
+ * las dos piezas se leen como una sola composición en cualquier pantalla, no
+ * sólo en la que se diseñó.
+ */
 @media (min-width: 1024px) {
   .cuerpo {
-    /* El vídeo pesa algo más que la columna de fichas, pero no la domina: son
-     * dos formas distintas de mostrar lo mismo, no una principal y una
-     * secundaria. */
-    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 /* ── Panel de vídeo ── */
 
+/**
+ * El panel no declara proporción propia: la hereda de la ficha de al lado, que
+ * es la que tiene un alto intrínseco —su marco cuadrado más la barra de datos—.
+ * El reparto de columnas de `.cuerpo` está calculado para que ese alto prestado
+ * deje el panel vertical; el detalle, allí.
+ *
+ * El `min-height` es sólo para la columna única de móvil y tableta, donde no
+ * hay ficha al lado de la que copiar el alto. En escritorio nunca actúa: el más
+ * bajo de los casos, a 1024 px, ya son 518 px.
+ */
 .video {
   position: relative;
   display: flex;
@@ -231,19 +265,23 @@
 
 /* ── Columna de fichas ── */
 
+/**
+ * Hueco de la ficha destacada.
+ *
+ * Sigue siendo un grid de una columna y no un `div` a secas porque el
+ * `gap` y el `align-content` son las dos reglas que sostendrían una segunda
+ * ficha si alguna vez se subiera `FICHAS_EN_PORTADA`, y porque el envoltorio
+ * que `Portfolio` pone alrededor de cada ficha —lo necesita para el reveal de
+ * GSAP— tiene que estirarse hasta el alto de la fila.
+ *
+ * Ya no hay regla de dos columnas entre 640 y 1023 px: con una sola ficha
+ * dejaba la mitad derecha de la fila vacía.
+ */
 .fichas {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-gutter);
-  /* Las dos fichas reparten el alto de la fila a partes iguales, de modo que
-   * la columna termina exactamente a la altura del panel de vídeo. */
   align-content: stretch;
-}
-
-@media (min-width: 640px) and (max-width: 1023px) {
-  .fichas {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 /* ── Pie de sección ── */

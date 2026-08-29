@@ -1,17 +1,7 @@
-import Image from 'next/image';
-
+import { CompararFotos } from '@/components/ui/CompararFotos';
 import type { ImageAsset, ProjectCopy } from '@/types';
 
 import styles from './ProjectCard.module.css';
-
-/**
- * Desplazamiento de cada foto dentro del proyecto: 0 el antes, 1 el después.
- *
- * Es el mismo desplazamiento con el que la galería a pantalla completa calcula
- * su índice plano (`indiceProyecto * 2 + desplazamiento`), así que se tipa para
- * que quien reciba el callback no pueda pasarle otra cosa.
- */
-export type DesplazamientoFoto = 0 | 1;
 
 interface ProjectCardProps {
   /**
@@ -33,42 +23,54 @@ interface ProjectCardProps {
   readonly beforeLabel: string;
   /** Pie de la fotografía final, traducido ("After" / "Después"). */
   readonly afterLabel: string;
+  /** Nombre del comparador para lectores de pantalla, sin la obra. */
+  readonly compareLabel: string;
+  /** Rótulo accesible del botón que abre el visor a pantalla completa. */
+  readonly expandLabel: string;
   /** Valor de `sizes` para `next/image`, que depende de la caja de quien la use. */
   readonly sizes: string;
   /**
-   * Qué hacer al pulsar una foto.
+   * Qué hacer al pulsar el botón de ampliar.
    *
-   * Opcional a propósito: en la portada abre la galería a pantalla completa,
-   * pero la página de galería completa todavía no la monta. Sin callback las
-   * fotos se renderizan como figuras inertes en lugar de como botones, que es
-   * lo correcto —un botón que no hace nada es peor que ningún botón.
+   * Opcional a propósito: sin él la ficha no dibuja el botón, que es lo
+   * correcto —un control que no hace nada es peor que ningún control—. Ya no
+   * recibe desplazamiento porque la ficha tiene un solo marco: quien la monta
+   * sabe qué obra es y calcula el índice del visor por su cuenta.
    */
-  readonly onFotoClick?: (desplazamiento: DesplazamientoFoto) => void;
-  /**
-   * Cómo encaja la fotografía en su hueco.
-   *
-   *  - `'cover'` (por defecto): caja de proporción fija —4:3— y la foto
-   *    recortada por el centro para llenarla. Todas las fichas miden lo mismo,
-   *    a costa de perder parte de cada imagen. Es el tratamiento del teaser de
-   *    la portada, donde la ficha compite en altura con el panel de vídeo y esa
-   *    uniformidad sostiene la composición.
-   *  - `'natural'`: sin caja y sin recorte. La foto conserva su proporción
-   *    real y la ficha mide lo que midan sus fotos. Es el tratamiento de la
-   *    galería completa, donde lo que se enseña ES la obra y recortarla
-   *    contradice el propósito de la página.
-   *
-   * El valor por defecto es `'cover'` a propósito: así el teaser de la portada
-   * no cambia por el hecho de que la galería haya adoptado otro criterio.
-   */
-  readonly ajuste?: 'cover' | 'natural';
+  readonly onAmpliar?: () => void;
 }
 
 /**
- * Ficha de un proyecto: ubicación arriba y par antes/después debajo.
+ * Ficha de un proyecto: barra de datos arriba y comparador antes/después
+ * debajo.
  *
- * Componente de servidor: no tiene estado ni efectos. Quien necesite la
- * galería a pantalla completa le pasa `onFotoClick` desde su propio componente
- * de cliente.
+ * ── Por qué un marco cuadrado ──
+ *
+ * Las dos fotos llenan un único marco 1∶1 con `object-fit: cover`, es decir
+ * recortadas. Es una decisión tomada a conciencia después de probar lo
+ * contrario: respetando el encuadre original, cada ficha medía una cosa
+ * distinta y la comparación entre obras se falseaba —una foto apaisada se
+ * mostraba a poco más de la mitad de la altura de una vertical, así que la
+ * misma obra parecía menor por haberse fotografiado de otra manera—.
+ *
+ * De todas las proporciones posibles, 1∶1 es la única que trata igual a una
+ * vertical y a una apaisada, porque es la única que es su propia inversa: a un
+ * 3∶4 le quita el 25 % del alto y a un 4∶3 el 25 % del ancho. Cualquier otra
+ * favorece a una orientación a costa de la otra, y en obra se fotografía lo que
+ * cabe, no lo que cuadra. `scripts/verificar-galeria.mjs` avisa cuando una foto
+ * se aleja tanto del cuadrado que su recorte deja de ser aceptable.
+ *
+ * El encuadre original no se pierde: el visor a pantalla completa que abre el
+ * botón de ampliar sigue mostrando la fotografía entera, con `object-fit:
+ * contain`. El recorte es de la rejilla, no del archivo.
+ *
+ * ── Sobre el botón de ampliar ──
+ *
+ * Antes se abría el visor pulsando la foto. Con el comparador, la pulsación
+ * sobre el marco mueve el divisor, así que abrir el visor necesita un control
+ * propio. Va FUERA del comparador y no dentro: anidar un botón dentro de un
+ * elemento con `role="slider"` deja un control accionable al que la navegación
+ * por teclado llega en un orden que ningún lector de pantalla sabe explicar.
  *
  * @param props Datos, textos y comportamiento de la ficha.
  * @returns La ficha renderizada.
@@ -79,33 +81,11 @@ export function ProjectCard({
   copy,
   beforeLabel,
   afterLabel,
+  compareLabel,
+  expandLabel,
   sizes,
-  onFotoClick,
-  ajuste = 'cover',
+  onAmpliar,
 }: ProjectCardProps) {
-  const natural = ajuste === 'natural';
-
-  /**
-   * Antes y después comparten estructura, así que se recorren en lugar de
-   * duplicar el marcado. El orden del array ES el orden de lectura.
-   */
-  const fotos = [
-    {
-      imagen: before,
-      alt: copy.beforeAlt,
-      pie: beforeLabel,
-      clasePie: '',
-      desplazamiento: 0 as const,
-    },
-    {
-      imagen: after,
-      alt: copy.afterAlt,
-      pie: afterLabel,
-      clasePie: styles.pieDespues,
-      desplazamiento: 1 as const,
-    },
-  ];
-
   return (
     <article className={styles.ficha}>
       <div className={styles.encabezado}>
@@ -113,61 +93,30 @@ export function ProjectCard({
         <p className={styles.ubicacion}>{copy.label}</p>
       </div>
 
-      <div className={natural ? styles.parNatural : styles.par}>
-        {fotos.map((foto) => {
-          /*
-           * Dos formas distintas de pedirle la imagen a `next/image`, no la
-           * misma con otro `object-fit`.
-           *
-           * `fill` obliga a que la imagen llene un contenedor de tamaño
-           * conocido, así que sólo tiene sentido cuando ese contenedor impone
-           * una proporción: es el modo con recorte. En modo natural se pasan
-           * el ancho y el alto INTRÍNSECOS del archivo, y el navegador reserva
-           * el hueco exacto antes de descargar nada. Ese es el mecanismo que
-           * hace que la foto salga entera: no hay caja a la que amoldarse
-           * porque la caja la define la propia foto.
-           */
-          const contenido = (
-            <>
-              {natural ? (
-                <Image
-                  src={foto.imagen.src}
-                  alt={foto.alt}
-                  width={foto.imagen.width}
-                  height={foto.imagen.height}
-                  sizes={sizes}
-                  className={styles.imagenNatural}
-                />
-              ) : (
-                <Image
-                  src={foto.imagen.src}
-                  alt={foto.alt}
-                  fill
-                  sizes={sizes}
-                  className={styles.imagen}
-                />
-              )}
-              <span className={`${styles.pie} ${foto.clasePie}`}>{foto.pie}</span>
-            </>
-          );
+      <div className={styles.marco}>
+        <CompararFotos
+          before={before}
+          after={after}
+          beforeAlt={copy.beforeAlt}
+          afterAlt={copy.afterAlt}
+          beforeLabel={beforeLabel}
+          afterLabel={afterLabel}
+          sizes={sizes}
+          ariaLabel={`${compareLabel}: ${copy.label}`}
+        />
 
-          const claseFoto = natural ? styles.fotoNatural : styles.foto;
-
-          return onFotoClick ? (
-            <button
-              key={foto.desplazamiento}
-              type="button"
-              className={`${claseFoto} ${styles.disparador}`}
-              onClick={() => onFotoClick(foto.desplazamiento)}
-            >
-              {contenido}
-            </button>
-          ) : (
-            <div key={foto.desplazamiento} className={claseFoto}>
-              {contenido}
-            </div>
-          );
-        })}
+        {onAmpliar && (
+          <button type="button" className={styles.ampliar} aria-label={expandLabel} onClick={onAmpliar}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M6 1H1V6M10 15H15V10M1 10V15H6M15 6V1H10"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinecap="square"
+              />
+            </svg>
+          </button>
+        )}
       </div>
     </article>
   );
