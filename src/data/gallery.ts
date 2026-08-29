@@ -19,7 +19,11 @@ import type { GalleryEntry, ProjectCopy, SiteContent } from '@/types';
  *      - `category`  : 'framing' | 'renovation' | 'roofing' | 'other'.
  *      - `location`  : ciudad y estado tal cual se leen: 'Paterson, NJ'.
  *      - `before` / `after` : ruta y dimensiones REALES del archivo.
- *      - `featured`  : `true` sólo si debe salir en la portada.
+ *      - `featured`  : `true` sólo si debe salir en la portada, y sólo en UNA
+ *                      obra a la vez: la composición de la portada está
+ *                      calculada para una sola ficha junto al panel de vídeo.
+ *                      Marcar una segunda no rompe nada —la portada enseña la
+ *                      primera— pero tampoco la muestra.
  *   3. No hace falta `copyId`: es para las tres obras migradas.
  *
  * `width` y `height` deben ser las dimensiones intrínsecas del archivo, no el
@@ -41,7 +45,7 @@ export const gallery: readonly GalleryEntry[] = [
     location: 'Newark, NJ',
     before: { src: '/images/framing.webp', width: 1200, height: 1600 },
     after: { src: '/images/roofing-finished.webp', width: 1200, height: 1600 },
-    featured: true,
+    featured: false,
     copyId: 'framing-newark',
   },
   {
@@ -50,7 +54,7 @@ export const gallery: readonly GalleryEntry[] = [
     location: 'Trenton, NJ',
     before: { src: '/images/roofing.webp', width: 1200, height: 1600 },
     after: { src: '/images/roofing-after.webp', width: 1200, height: 1600 },
-    featured: true,
+    featured: false,
     copyId: 'roofing-trenton',
   },
   {
@@ -61,6 +65,46 @@ export const gallery: readonly GalleryEntry[] = [
     after: { src: '/images/renovation-interior-after.webp', width: 1200, height: 1600 },
     featured: false,
     copyId: 'renovation-jersey-city',
+  },
+  /*
+   * Porche cubierto: la obra que hoy abre la portada.
+   *
+   * Es la primera entrada sin `copyId`, o sea la primera que compone sus textos
+   * con las plantillas del idioma en vez de tirar de `PortfolioContent.items`.
+   * Sirve de ejemplo de cómo se añade una obra sin tocar los archivos de
+   * contenido, que es para lo que se hizo así.
+   *
+   * Y es también el primer par con dos proporciones distintas: el «antes» es
+   * vertical (3∶4) y el «después» apaisado (4∶3), porque en obra se fotografía
+   * lo que cabe, no lo que cuadra. Las dimensiones de abajo son las reales del
+   * archivo y no un redondeo: de ellas sale el reparto de columnas que hace que
+   * las dos salgan enteras y al mismo alto, tanto aquí como en la portada.
+   */
+  {
+    id: 'porch-addition',
+    category: 'framing',
+    location: 'New Jersey',
+    before: { src: '/images/porch-addition-before.webp', width: 1200, height: 1600 },
+    after: { src: '/images/porch-addition-after.webp', width: 1600, height: 1200 },
+    featured: true,
+  },
+  /*
+   * Cubierta de un garaje exento, con sus buhardillas.
+   *
+   * `featured: false` y no es un descuido: la portada enseña UNA obra, y esa
+   * plaza la ocupa el porche de arriba. Esta se ve en la galería completa, que
+   * es donde vive el catálogo entero.
+   *
+   * Las dos fotos son 4∶3, así que el reparto de columnas de la ficha les da
+   * mitad y mitad. No hace falta hacer nada para eso: sale de las dimensiones.
+   */
+  {
+    id: 'garage-roof',
+    category: 'roofing',
+    location: 'New Jersey',
+    before: { src: '/images/garage-roof-before.webp', width: 1600, height: 1200 },
+    after: { src: '/images/garage-roof-after.webp', width: 1600, height: 1200 },
+    featured: false,
   },
 ];
 
