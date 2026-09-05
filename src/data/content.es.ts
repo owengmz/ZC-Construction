@@ -100,7 +100,10 @@ export const contentEs: SiteContent = {
     compareLabel: 'Comparador antes y después',
     expandLabel: 'Ver la fotografía completa',
     videoTag: 'VIDEO',
-    videoPlaceholder: 'Recorrido de obra próximamente', // PROVISIONAL
+    videoDescripcion: 'Recorrido por una obra terminada de Zycor Construction',
+    videoExpandLabel: 'Ver con sonido',
+    videoModalTitle: 'Recorrido de obra',
+    videoCloseLabel: 'Cerrar el recorrido',
     galleryCtaLabel: 'Ver toda la galería',
     items: {
       'framing-newark': {

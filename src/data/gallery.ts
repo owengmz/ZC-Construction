@@ -30,13 +30,17 @@ import type { GalleryEntry, ProjectCopy, SiteContent } from '@/types';
  * tamaño con el que se ve. Si se equivocan, `next/image` reserva un hueco de la
  * proporción incorrecta y la página da un salto al cargar la foto.
  *
- * ── Sobre `data/projects.ts` ──
+ * ── Lo que queda del modelo anterior ──
  *
- * Este archivo lo sustituye. Aquel sigue en el repositorio a petición expresa,
- * pero ya no lo consume nadie: la portada y la galería leen los dos de aquí.
- * Cuando se dé por cerrada la migración, `projects.ts`, el tipo `Project` y la
- * unión `ProjectId` se pueden borrar; lo único que habrá que resolver antes es
- * el `copyId` de las tres entradas de abajo, que apunta a `ProjectId`.
+ * Este archivo sustituyó a `data/projects.ts`, que se borró en la limpieza
+ * previa al merge junto con el tipo `Project`: ya no lo consumía nadie, porque
+ * la portada y la galería leen las dos de aquí.
+ *
+ * Sobrevive la unión `ProjectId`, y no por descuido: la sostienen el `copyId`
+ * de las tres entradas de abajo y el `Record<ProjectId, ProjectCopy>` de
+ * `PortfolioContent.items`, que es donde viven los textos artesanales de esas
+ * tres obras. Retirarla exige antes decidir qué pasa con esos textos, así que
+ * es tarea aparte y no un cabo suelto de aquella.
  */
 export const gallery: readonly GalleryEntry[] = [
   {

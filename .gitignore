@@ -52,3 +52,37 @@ desktop.ini
 .idea/
 *.suo
 *.user
+
+# Vídeos crudos del cliente (raw-assets/)
+# Mismo criterio que los PNG maestros: el máster pesado se queda en disco y
+# al repositorio sólo sube la pieza ya comprimida que vive en public/.
+# Un MP4 de origen ronda los 12 MB y Git no sabe versionar binarios: cada
+# reencode subiría el histórico entero otra vez.
+raw-assets/*.mp4
+raw-assets/*.MP4
+raw-assets/*.mov
+raw-assets/*.MOV
+raw-assets/*.avi
+raw-assets/*.mkv
+raw-assets/*.webm
+raw-assets/*.m4v
+
+# Imágenes crudas del cliente (raw-assets/)
+# Mismo criterio que los vídeos, aplicado tarde: estos ocho másteres llevaban
+# trackeados desde antes de que existiera la regla, y se sacaron del índice en
+# la limpieza previa al merge. Las reglas van ANTES del `git rm --cached` a
+# propósito: sin ellas los archivos reaparecen como no rastreados y el
+# siguiente `git add .` los devuelve al índice.
+# Los originales siguen en disco; al repositorio sólo sube lo ya procesado de
+# public/images/.
+raw-assets/*.png
+raw-assets/*.PNG
+raw-assets/*.jpg
+raw-assets/*.JPG
+raw-assets/*.jpeg
+raw-assets/*.JPEG
+raw-assets/*.tif
+raw-assets/*.tiff
+raw-assets/*.webp
+raw-assets/*.heic
+raw-assets/*.HEIC

@@ -5,7 +5,7 @@
  * (lo que no cambia al cambiar de idioma: imágenes, URLs, orden, layout)
  * del CONTENIDO (lo que sí cambia: títulos, párrafos, etiquetas, textos alt).
  *
- *  - La estructura vive en `data/services.ts`, `data/projects.ts` y `data/site.ts`.
+ *  - La estructura vive en `data/services.ts`, `data/gallery.ts` y `data/site.ts`.
  *  - El contenido vive en `data/content.en.ts` y `data/content.es.ts`, ambos
  *    tipados como `SiteContent`.
  *
@@ -188,15 +188,6 @@ export interface Service {
   readonly layout: ServiceLayout;
 }
 
-/** Datos estructurales de un proyecto de la galería antes/después. */
-export interface Project {
-  readonly id: ProjectId;
-  /** Fotografía del estado previo a la intervención. */
-  readonly before: ImageAsset;
-  /** Fotografía del resultado final. */
-  readonly after: ImageAsset;
-}
-
 /**
  * Entrada de la galería completa (`data/gallery.ts`).
  *
@@ -248,8 +239,8 @@ export interface GalleryEntry {
   /**
    * Vía de escape para las entradas que ya tienen textos escritos a mano.
    *
-   * Los tres proyectos migrados desde `data/projects.ts` traen textos
-   * alternativos redactados uno a uno ("Roof framing under construction before
+   * Las tres obras que venían del sitio anterior traen textos alternativos
+   * redactados uno a uno ("Roof framing under construction before
    * completion"), que describen la foto mucho mejor de lo que puede hacerlo
    * una plantilla. Declarando aquí su `ProjectId`, la entrada sigue usando
    * `PortfolioContent.items` y no pierde esa calidad.
@@ -277,10 +268,11 @@ export type GalleryFilter = ServiceOptionValue | 'all';
 /**
  * Entrada del lightbox: una imagen individual navegable con flechas.
  *
- * No se escribe a mano. Se deriva de `projects` aplanando cada proyecto en sus
- * dos fotos (antes, después), que es exactamente el orden 0..5 que hoy fija a
- * mano el atributo `data-index` del HTML. Derivarlo elimina la posibilidad de
- * que un índice quede desincronizado con la galería.
+ * No se escribe a mano. Se deriva de las obras de `data/gallery.ts` aplanando
+ * cada una en sus dos fotos (antes, después), que es exactamente el orden que
+ * el sitio anterior fijaba a mano con el atributo `data-index` del HTML.
+ * Derivarlo elimina la posibilidad de que un índice quede desincronizado con
+ * la galería.
  */
 export interface LightboxItem {
   readonly image: ImageAsset;
@@ -510,12 +502,26 @@ export interface PortfolioContent {
    */
   readonly videoTag: string;
   /**
-   * Texto del panel de vídeo mientras no haya vídeo real.
+   * Descripción del recorrido de obra, para lectores de pantalla.
    *
-   * COPIA PROVISIONAL: se escribió al construir la sección y está pendiente de
-   * aprobación. Desaparece en cuanto se incruste la pieza definitiva.
+   * Sustituye al antiguo `videoPlaceholder`, que anunciaba la pieza como
+   * «próximamente». Ya incrustada, el campo deja de ser copia visible y pasa a
+   * ser el `aria-label` del `<video>`: el elemento no lleva controles ni audio,
+   * así que sin esto no habría forma de saber qué se está reproduciendo.
    */
-  readonly videoPlaceholder: string;
+  readonly videoDescripcion: string;
+  /**
+   * Rótulo del botón que abre el recorrido a tamaño completo.
+   *
+   * Nombra el sonido y no el tamaño —«Ver con sonido», no «Ampliar»— porque
+   * eso es lo que de verdad cambia al abrir: el panel de fondo ya se ve, pero
+   * es mudo por obligación, y la pieza del modal trae el audio de obra.
+   */
+  readonly videoExpandLabel: string;
+  /** Título del diálogo del recorrido, enlazado por `aria-labelledby`. */
+  readonly videoModalTitle: string;
+  /** Rótulo accesible del botón de cerrar el diálogo del recorrido. */
+  readonly videoCloseLabel: string;
   /**
    * Enlace a la galería completa, al pie de la sección.
    *

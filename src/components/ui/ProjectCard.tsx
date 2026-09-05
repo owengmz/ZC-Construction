@@ -7,12 +7,11 @@ interface ProjectCardProps {
   /**
    * Fotografía del estado previo a la intervención.
    *
-   * Se reciben las dos imágenes sueltas y no el objeto de proyecto entero
-   * porque la ficha la usan dos fuentes de datos distintas: la portada y la
-   * galería completa leen ambas de `data/gallery.ts`, pero mientras dure la
-   * migración `data/projects.ts` sigue existiendo con otra forma. Pidiendo
-   * sólo lo que de verdad se pinta, la ficha no queda atada a ninguna de las
-   * dos y no habrá que tocarla cuando una desaparezca.
+   * Se reciben las dos imágenes sueltas y no el objeto de obra entero. Nació
+   * como precaución para la migración —convivían dos fuentes de datos con
+   * formas distintas— y la precaución acertó: `data/projects.ts` acabó
+   * borrándose y esta ficha no hubo que tocarla. Pidiendo sólo lo que de
+   * verdad se pinta, sigue sin quedar atada a la forma de `GalleryEntry`.
    */
   readonly before: ImageAsset;
   /** Fotografía del resultado final. */

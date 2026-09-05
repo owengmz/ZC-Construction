@@ -97,7 +97,10 @@ export const contentEn: SiteContent = {
     compareLabel: 'Before and after comparison',
     expandLabel: 'View the full photograph',
     videoTag: 'VIDEO', // NUEVO: rótulo del marco del panel de vídeo
-    videoPlaceholder: 'Site walkthrough coming soon', // NUEVO Y PROVISIONAL
+    videoDescripcion: 'Walkthrough of a completed Zycor Construction project',
+    videoExpandLabel: 'Watch with sound',
+    videoModalTitle: 'Site walkthrough',
+    videoCloseLabel: 'Close walkthrough',
     galleryCtaLabel: 'See full gallery', // NUEVO: enlace a /en/our-work
     items: {
       'framing-newark': {

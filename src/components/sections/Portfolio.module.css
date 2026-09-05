@@ -138,40 +138,115 @@
  * El reparto de columnas de `.cuerpo` está calculado para que ese alto prestado
  * deje el panel vertical; el detalle, allí.
  *
- * El `min-height` es sólo para la columna única de móvil y tableta, donde no
- * hay ficha al lado de la que copiar el alto. En escritorio nunca actúa: el más
- * bajo de los casos, a 1024 px, ya son 518 px.
+ * Ya no centra nada con flex ni reserva `min-height`: desde que hay pieza real,
+ * el contenido del panel es un vídeo en posición absoluta que lo llena entero,
+ * y la altura de la columna única la fija la proporción declarada más abajo.
+ *
+ * El `overflow: hidden` es obligatorio, no cosmético: sin él, la parte del
+ * fotograma que `object-fit: cover` deja fuera se saldría del marco.
  */
 .video {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  min-height: 260px;
-  padding: 2rem;
+  overflow: hidden;
   background-color: var(--color-surface-container-lowest);
   border: 1px solid var(--color-rule);
 }
 
 /**
- * Retícula interior del panel.
+ * Proporción del panel en columna única, con el ancho topado.
  *
- * Aquí la trama sí se ve (5,9 % sobre el panel, que es más oscuro que el
- * fondo) y es deliberado: el panel está vacío a la espera de la pieza real, y
- * una superficie lisa y negra parecería un fallo de carga. La retícula lo
- * declara como marco preparado.
+ * Debajo de 1024 px no hay ficha al lado de la que heredar el alto, y aquí eso
+ * pasó de ser un detalle a ser crítico: la ventana que `object-fit: cover`
+ * deja ver depende de la proporción del marco, y el vídeo lleva rótulos
+ * sobreimpresos que no pueden quedar fuera. Si el panel se estirase a los
+ * 943 px de ancho de una tableta manteniendo poca altura, la franja visible
+ * caería justo sobre los títulos y los partiría.
+ *
+ * Se resuelve clavando la MISMA proporción que en escritorio —668/726— y
+ * topando el ancho, en vez de topar la altura. Así el encuadre es idéntico en
+ * todo el rango y el ajuste vertical del `cover` vale para todos los tamaños,
+ * no sólo para aquel en que se comprobó.
+ */
+@media (max-width: 1023px) {
+  .video {
+    /**
+     * `align-self: start` no es cosmético: sin él el panel se queda en 0 px de
+     * alto y desaparece.
+     *
+     * Como celda de `.cuerpo` hereda el `stretch` del grid, que le impone la
+     * altura de su fila y con ello anula el `aspect-ratio`. En escritorio eso
+     * es justo lo que se busca —la altura se la presta la ficha de al lado—,
+     * pero en columna única no hay ficha que la preste y el único contenido del
+     * panel es un vídeo en posición absoluta, que no cuenta para el alto
+     * intrínseco: la fila mide cero y el panel se colapsa con ella.
+     *
+     * Renunciando al estirado, la proporción vuelve a mandar.
+     */
+    align-self: start;
+    aspect-ratio: 668 / 726;
+    /**
+     * El `width: 100%` acompaña obligatoriamente al `margin-inline: auto`.
+     *
+     * Un margen automático desactiva el estirado del grid en ese eje, y como
+     * todo el contenido del panel está en posición absoluta, su ancho
+     * intrínseco es cero: sin ancho declarado el marco se queda en los 2 px de
+     * sus propios filetes. Declarándolo, ocupa la columna, el `max-width` lo
+     * frena en tableta y el margen automático lo centra en el sobrante.
+     */
+    width: 100%;
+    max-width: 460px;
+    margin-inline: auto;
+  }
+}
+
+/**
+ * El recorrido de obra, llenando el marco.
+ *
+ * `object-position` centrado en horizontal pero al 25 % en vertical, y esa
+ * cifra está medida, no elegida a ojo. El vídeo es 9:16 (0,5625) y el panel
+ * 0,92, así que `cover` descarta un 39 % del alto. Centrado, ese descarte cae
+ * de lleno sobre los rótulos sobreimpresos —«COVERED PORCH ADDITION»,
+ * «TONGUE-AND-GROOVE CEILING» y el «ZYCOR CONSTRUCTION» del cierre— y los
+ * decapita. Anclado arriba del todo entran, pero dejan una franja muerta de
+ * cielo encima y se pierde la base de cada toma.
+ *
+ * Al 25 % los tres rótulos entran completos y con aire por encima, que es el
+ * único ajuste que satisface las dos cosas.
+ */
+.videoPieza {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+}
+
+/**
+ * Velo superior, para que el rótulo del marco siga leyéndose.
+ *
+ * Aquí había una retícula de 24 px que declaraba el panel como marco vacío a
+ * la espera de la pieza. Ya no hay espera, así que sobra; pero el hueco que
+ * deja no puede quedar vacío, porque el rótulo `.videoTag` tenía calculado su
+ * contraste (6,01:1) contra el panel liso y ahora se apoya sobre fotograma
+ * vivo, que en esta obra es cielo claro y revestimiento pálido justo en esa
+ * esquina.
+ *
+ * Un degradado que sólo pesa en el tercio superior devuelve esa base oscura
+ * sin apagar la toma entera.
  */
 .video::before {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.059;
-  background-image:
-    linear-gradient(var(--color-steel) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-steel) 1px, transparent 1px);
-  background-size: 24px 24px;
+  z-index: 1;
+  background-image: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 0.55) 0%,
+    rgb(0 0 0 / 0.25) 18%,
+    transparent 38%
+  );
   pointer-events: none;
 }
 
@@ -185,6 +260,9 @@
  */
 .esquina {
   position: absolute;
+  /* Por encima del vídeo y de su velo: los ángulos son el marco del visor y
+     tienen que verse recortados contra la toma, no quedar tapados por ella. */
+  z-index: 2;
   width: 18px;
   height: 18px;
   pointer-events: none;
@@ -227,10 +305,14 @@
  * como una placa atornillada al marco, sin disputarle la atención al ember de
  * los ángulos, precisamente porque el acero no señala acción.
  *
- * Contraste del texto sobre el fondo compuesto real (#211f1f): 6,01:1.
+ * El contraste de 6,01:1 se calculó contra el panel liso (#211f1f). Con el
+ * vídeo detrás, quien lo sostiene es el velo de `.video::before`, que en esta
+ * esquina —el 18 % más alto del marco— mantiene la base por debajo de ese
+ * mismo tono.
  */
 .videoTag {
   position: absolute;
+  z-index: 2;
   top: 1.25rem;
   left: 1.25rem;
   padding: 0.25rem 0.5rem;
@@ -244,23 +326,56 @@
   color: var(--color-steel-text);
 }
 
-.videoIcono {
-  position: relative;
+/**
+ * Botón que abre el recorrido con sonido.
+ *
+ * Va en el eje del rótulo de arriba —misma sangría de 1,25rem, misma placa con
+ * relleno y filete— porque los dos son piezas atornilladas al mismo marco. Lo
+ * que los separa es el color, y ahí el reparto de acentos del sitio es
+ * explícito: el acero nombra y el ember acciona. Este es el único elemento
+ * pulsable del panel, así que es el único que puede llevarlo sin discutirle el
+ * papel a los ángulos.
+ *
+ * El relleno propio no es decorativo: abajo no llega el velo de `::before`, que
+ * sólo pesa en el tercio superior, y el fotograma que hay detrás en esa esquina
+ * va de terreno oscuro a revestimiento claro según el momento del bucle.
+ */
+.videoAmpliar {
+  position: absolute;
+  z-index: 2;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: rgb(0 0 0 / 0.55);
+  border: 1px solid var(--color-ember);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  text-transform: uppercase;
   color: var(--color-ember);
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
-.videoTexto {
-  position: relative;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 1.5;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-align: center;
-  /* Texto de servicio, del mismo acero que el rótulo del marco. Lo que separa
-   * a los dos no es el color sino la placa: el rótulo va sobre relleno y
-   * filete, y esto no. */
-  color: var(--color-steel-text);
+.videoAmpliar:hover,
+.videoAmpliar:focus-visible {
+  background-color: var(--color-ember);
+  /* Sobre relleno ember pleno hace falta un texto que aguante: el propio ember
+   * sobre sí mismo desaparecería. */
+  color: var(--color-surface-container-lowest);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .videoAmpliar {
+    transition: none;
+  }
 }
 
 /* ── Columna de fichas ── */

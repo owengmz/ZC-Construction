@@ -1,15 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { LightboxModal } from '@/components/ui/LightboxModal';
 import { ProjectCard } from '@/components/ui/ProjectCard';
+import { VideoModal } from '@/components/ui/VideoModal';
 import { useLang } from '@/context/LangContext';
 import { gallery, textosDeEntrada } from '@/data/gallery';
 import { rutaDePagina } from '@/data/routes';
 import { useGsapReveal } from '@/hooks/useGsapReveal';
 import { useLightbox } from '@/hooks/useLightbox';
+import { useModalBehavior } from '@/hooks/useModalBehavior';
 import type { LightboxItem } from '@/types';
 
 import styles from './Portfolio.module.css';
@@ -66,6 +68,7 @@ export function Portfolio() {
   const seccionRef = useRef<HTMLElement>(null);
   const cabeceraRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLDivElement>(null);
+  const piezaRef = useRef<HTMLVideoElement>(null);
   const fichasRef = useRef<(HTMLElement | null)[]>([]);
   const pieRef = useRef<HTMLDivElement>(null);
 
@@ -85,9 +88,10 @@ export function Portfolio() {
    * Lista plana de las fotos VISIBLES, en el orden en que se navegan con las
    * flechas: proyecto 1 antes, proyecto 1 después, proyecto 2 antes…
    *
-   * Se deriva de `destacados` y no de `projects` a propósito: si incluyera los
-   * seis, quien abriera una foto y avanzara con las flechas acabaría viendo
-   * proyectos que no están en pantalla, sin entender de dónde salen.
+   * Se deriva de `destacados` y no de `gallery` entera a propósito: si
+   * incluyera todas las obras, quien abriera una foto y avanzara con las
+   * flechas acabaría viendo proyectos que no están en pantalla, sin entender
+   * de dónde salen.
    */
   const fotos = useMemo<LightboxItem[]>(
     () =>
@@ -102,6 +106,54 @@ export function Portfolio() {
   );
 
   const lightbox = useLightbox(fotos.length);
+
+  /**
+   * Apertura del recorrido a tamaño completo.
+   *
+   * El estado vive aquí y no dentro de `VideoModal` por el mismo reparto que
+   * usa `Insurance` con el modal de garantía: el modal se monta sólo mientras
+   * está abierto, así que no puede ser él quien recuerde si lo está.
+   */
+  const [recorridoAbierto, setRecorridoAbierto] = useState(false);
+  const cerrarRecorrido = useCallback(() => setRecorridoAbierto(false), []);
+
+  // Escape y congelado del fondo, comunes a las tres capas modales del sitio.
+  useModalBehavior({ abierto: recorridoAbierto, alCerrar: cerrarRecorrido });
+
+  /**
+   * Detiene el bucle si el sistema pide movimiento reducido.
+   *
+   * El `autoPlay` va en el marcado y no aquí a propósito: así el vídeo arranca
+   * con el HTML del servidor, sin esperar a la hidratación. El precio es que en
+   * el caso de movimiento reducido llega a reproducir unas décimas antes de que
+   * este efecto lo pare; a cambio, el caso normal —que es el de casi todo el
+   * mundo— no paga un parpadeo de póster en cada carga.
+   *
+   * Se vuelve al fotograma cero para que quede exactamente el póster, y no un
+   * cuadro cualquiera del recorrido congelado a media zancada.
+   */
+  useEffect(() => {
+    const pieza = piezaRef.current;
+    if (!pieza) return;
+
+    const consulta = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const aplicar = () => {
+      if (consulta.matches) {
+        pieza.pause();
+        pieza.currentTime = 0;
+      } else {
+        // `play()` devuelve una promesa que el navegador rechaza si la pestaña
+        // está oculta o la política de autoreproducción lo impide. No es un
+        // fallo que haya que tratar: el póster ya cubre ese caso.
+        void pieza.play().catch(() => {});
+      }
+    };
+
+    aplicar();
+    consulta.addEventListener('change', aplicar);
+    return () => consulta.removeEventListener('change', aplicar);
+  }, []);
 
   // Un solo despliegue orquestado para toda la sección: cabecera desde la
   // izquierda, y después el panel de vídeo y las fichas desde abajo,
@@ -145,23 +197,59 @@ export function Portfolio() {
             <span className={`${styles.esquina} ${styles.esquinaInfIzq}`} aria-hidden="true" />
             <span className={`${styles.esquina} ${styles.esquinaInfDer}`} aria-hidden="true" />
 
+            {/* El recorrido de obra, sin pista de audio y en bucle. Va antes
+                que el rótulo en el orden del marcado para que este quede por
+                encima sin necesidad de disputarse el apilamiento.
+
+                `preload="metadata"` y no `auto`: la sección vive bajo el
+                pliegue, así que de entrada sólo se piden las cabeceras y el
+                navegador difiere los 2,7 MB hasta que el panel se acerca a la
+                pantalla. El póster es lo que se ve mientras tanto. */}
+            <video
+              ref={piezaRef}
+              className={styles.videoPieza}
+              src="/videos/zc-teaser.mp4"
+              poster="/images/zc-teaser-poster.webp"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label={content.portfolio.videoDescripcion}
+            />
+
             <span className={styles.videoTag}>{content.portfolio.videoTag}</span>
 
-            {/* Triángulo de reproducción dibujado en SVG: escala y recolorea
-                con el texto, cosa que un carácter tipográfico no hace. */}
-            <svg
-              className={styles.videoIcono}
-              width="44"
-              height="44"
-              viewBox="0 0 44 44"
-              fill="none"
-              aria-hidden="true"
+            {/* Abajo a la izquierda, en el eje del rótulo de arriba: los dos
+                son placas atornilladas al mismo marco. El de arriba nombra la
+                pieza y este ofrece la acción, que es lo que justifica que sea
+                el único ember del panel además de los ángulos. */}
+            <button
+              type="button"
+              onClick={() => setRecorridoAbierto(true)}
+              className={styles.videoAmpliar}
             >
-              <circle cx="22" cy="22" r="21" stroke="currentColor" strokeWidth="1" />
-              <path d="M18 15L29 22L18 29V15Z" fill="currentColor" />
-            </svg>
-
-            <p className={styles.videoTexto}>{content.portfolio.videoPlaceholder}</p>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                {/* Altavoz con una onda: el botón promete sonido, no tamaño. */}
+                <path
+                  d="M1 5v4h2.5L7 11.5v-9L3.5 5H1Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M9.5 4.6a3.2 3.2 0 0 1 0 4.8"
+                  stroke="currentColor"
+                  strokeWidth="1.1"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M11.6 2.8a5.8 5.8 0 0 1 0 8.4"
+                  stroke="currentColor"
+                  strokeWidth="1.1"
+                  strokeLinecap="round"
+                />
+              </svg>
+              {content.portfolio.videoExpandLabel}
+            </button>
           </div>
 
           <div className={styles.fichas}>
@@ -226,6 +314,11 @@ export function Portfolio() {
           onNext={lightbox.siguiente}
         />
       )}
+
+      {/* Montaje condicional, como las otras dos capas: mientras nadie lo abre
+          no existe en el árbol, y con `preload="none"` dentro eso significa que
+          los 12 MB de la pieza con audio no se piden hasta este momento. */}
+      {recorridoAbierto && <VideoModal onClose={cerrarRecorrido} />}
     </section>
   );
 }
