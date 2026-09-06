@@ -15,10 +15,7 @@ import type { Lang } from '@/types';
  *
  * Dos carpetas hermanas en lugar de una regla de reescritura en
  * `next.config.ts`: así la correspondencia entre URL y archivo sigue siendo la
- * que se ve en `app/`, que es donde alguien la va a buscar. El coste es que el
- * build genera también `/es/our-work` y devuelve 404, lo cual es correcto —esa
- * URL no existe en español— y además queda cubierto por la redirección
- * permanente de `next.config.ts`, que la manda al slug español.
+ * que se ve en `app/`, que es donde alguien la va a buscar.
  *
  * Todo el marcado está en `components/sections/GalleryPage`. Aquí sólo queda la
  * guarda de idioma.
@@ -26,6 +23,25 @@ import type { Lang } from '@/types';
 
 /** Único idioma que esta ruta sirve. El resto devuelve 404. */
 const IDIOMA: Lang = 'en';
+
+/**
+ * Restringe el prerenderizado a `/en/our-work`.
+ *
+ * Sin esto se hereda el `generateStaticParams` del layout, que devuelve los dos
+ * idiomas, y el build gastaba una página entera en `/es/our-work` para acabar
+ * llamando a `notFound()`. Nadie la veía nunca —la redirección permanente de
+ * `next.config.ts` intercepta esa URL antes—, así que era trabajo de build sin
+ * destinatario.
+ *
+ * Declarándolo aquí, el segmento genera la única combinación que sirve. La
+ * guarda de `notFound()` de abajo se queda igualmente: cubre el caso de que
+ * alguien alcance la ruta sin pasar por la redirección.
+ *
+ * @returns La única combinación de parámetros que esta ruta prerenderiza.
+ */
+export function generateStaticParams() {
+  return [{ lang: IDIOMA }];
+}
 
 interface GaleriaProps {
   readonly params: Promise<{ lang: string }>;

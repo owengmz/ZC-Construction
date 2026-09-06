@@ -43,6 +43,19 @@ interface CompararFotosProps {
   readonly sizes: string;
   /** Nombre accesible del control, ya compuesto con la obra que compara. */
   readonly ariaLabel: string;
+  /**
+   * Marca la fotografía «después» como candidata a elemento LCP.
+   *
+   * Sólo debe activarla quien sepa que este comparador está sobre el pliegue, y
+   * únicamente en UNO por página: `priority` precarga la imagen y adelantarlas
+   * todas devolvería el problema al revés, compitiendo entre ellas por el ancho
+   * de banda de la primera pantalla.
+   *
+   * Se aplica a la «después» y no a la «antes» porque es la que está debajo y
+   * siempre se ve entera; la «antes» va recortada por el divisor, así que su
+   * parte visible depende de dónde esté el tirador.
+   */
+  readonly prioridad?: boolean;
 }
 
 /** Encierra un porcentaje dentro de los topes del recorrido. */
@@ -92,6 +105,7 @@ export function CompararFotos({
   afterLabel,
   sizes,
   ariaLabel,
+  prioridad = false,
 }: CompararFotosProps) {
   const [posicion, setPosicion] = useState(POSICION_INICIAL);
 
@@ -179,6 +193,7 @@ export function CompararFotos({
         sizes={sizes}
         className={styles.foto}
         style={{ objectPosition: after.focus ?? 'center' }}
+        priority={prioridad}
       />
 
       <div className={styles.capaAntes}>

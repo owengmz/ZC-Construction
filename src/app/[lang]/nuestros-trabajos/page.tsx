@@ -21,6 +21,19 @@ import type { Lang } from '@/types';
 /** Único idioma que esta ruta sirve. El resto devuelve 404. */
 const IDIOMA: Lang = 'es';
 
+/**
+ * Restringe el prerenderizado a `/es/nuestros-trabajos`.
+ *
+ * Gemelo del de `our-work`; el porqué está allí. En resumen: sin él se hereda
+ * el del layout, que devuelve los dos idiomas, y el build fabricaba una página
+ * `/en/nuestros-trabajos` que la redirección permanente nunca deja alcanzar.
+ *
+ * @returns La única combinación de parámetros que esta ruta prerenderiza.
+ */
+export function generateStaticParams() {
+  return [{ lang: IDIOMA }];
+}
+
 interface GaleriaProps {
   readonly params: Promise<{ lang: string }>;
 }

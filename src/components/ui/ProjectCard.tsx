@@ -29,6 +29,17 @@ interface ProjectCardProps {
   /** Valor de `sizes` para `next/image`, que depende de la caja de quien la use. */
   readonly sizes: string;
   /**
+   * Marca la fotografía «después» de esta ficha como candidata a elemento LCP.
+   *
+   * Existe por la galería completa, que no tiene portada por delante: allí la
+   * primera fila de fichas ES lo que se ve al abrir, y sin esto Next.js avisa
+   * en consola de que el elemento LCP se está cargando en diferido.
+   *
+   * En la portada se deja apagada, que es su valor por omisión: allí el LCP es
+   * el fondo del hero y ya lo tiene declarado.
+   */
+  readonly prioridad?: boolean;
+  /**
    * Qué hacer al pulsar el botón de ampliar.
    *
    * Opcional a propósito: sin él la ficha no dibuja el botón, que es lo
@@ -83,6 +94,7 @@ export function ProjectCard({
   compareLabel,
   expandLabel,
   sizes,
+  prioridad = false,
   onAmpliar,
 }: ProjectCardProps) {
   return (
@@ -102,6 +114,7 @@ export function ProjectCard({
           afterLabel={afterLabel}
           sizes={sizes}
           ariaLabel={`${compareLabel}: ${copy.label}`}
+          prioridad={prioridad}
         />
 
         {onAmpliar && (

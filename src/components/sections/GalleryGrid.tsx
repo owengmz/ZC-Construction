@@ -203,6 +203,16 @@ export function GalleryGrid() {
               compareLabel={content.portfolio.compareLabel}
               expandLabel={content.portfolio.expandLabel}
               sizes={SIZES_FOTO}
+              /* Sólo la primera ficha, y sólo ella: es la que cae sobre el
+                 pliegue, así que es el elemento LCP de esta página. Esta
+                 galería no tiene portada delante que se lo lleve, que es lo
+                 que hacía innecesaria la marca en la home.
+
+                 Se compara contra el índice de `visibles`, no del catálogo, y
+                 eso es deliberado: al filtrar por categoría la primera ficha
+                 pasa a ser otra, y la marca tiene que viajar con la posición
+                 en pantalla, no con la obra. */
+              prioridad={indiceObra === 0}
               /* El visor abre por el «antes» de esta obra, que es el orden en
                  que se leen las dos fotos; desde ahí las flechas avanzan al
                  «después» y a la obra siguiente. */
